@@ -1,0 +1,58 @@
+export const messages = [
+  {
+    text: "Hey! Are we still on for the meeting tomorrow?",
+    contact: "Sarah",
+    time: "9:15 am",
+    badge: 3,
+    profile: "/profiles/sarah.jpg",
+  },
+  {
+    text: "Got it, thanks for the update.",
+    contact: "David",
+    time: "11:42 am",
+    badge: 1,
+    profile: "/profiles/david.jpg",
+  },
+  {
+    text: "Can you send over the project files?",
+    contact: "Emily",
+    time: "1:27 pm",
+    badge: 0,
+    profile: "/profiles/emily.jpg",
+  },
+  {
+    text: "I'll call you back in 10 minutes.",
+    contact: "James",
+    time: "4:05 pm",
+    badge: 2,
+    profile: "/profiles/james.jpg",
+  },
+  {
+    text: "Check out the design I just shared!",
+    contact: "Mia",
+    time: "5:33 pm",
+    badge: 5,
+    profile: "/profiles/mia.jpg",
+  },
+  {
+    text: "Let’s grab coffee this weekend.",
+    contact: "Daniel",
+    time: "6:48 pm",
+    badge: 0,
+    profile: "/profiles/daniel.jpg",
+  },
+  {
+    text: "That’s awesome news 🎉",
+    contact: "Sophia",
+    time: "7:22 pm",
+    badge: 4,
+    profile: "/profiles/sophia.jpg",
+  },
+  {
+    text: "Don’t forget to send the invoice.",
+    contact: "Michael",
+    time: "8:10 pm",
+    badge: 1,
+    profile: "/profiles/michael.jpg",
+  },
+];
