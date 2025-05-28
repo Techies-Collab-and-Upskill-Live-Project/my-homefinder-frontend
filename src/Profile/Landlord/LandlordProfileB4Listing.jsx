@@ -2,11 +2,11 @@ import React from "react";
 import '../Assets/styles/LandlordProfileB4Listing.css'
 
 import Pen from "../Assets/images/image9.png"
-import HouseImage from "../Assets/images/House-Image.png" 
+
 import UserImage from "../Assets/images/image8.png"
 
 
-const LandlordProfileListing = () => {
+const LandlordProfileB4Listing = () => {
     return(
         <div className="form-container">
             <div style={{display: 'flex', flexDirection: 'row',}} className="profile-header">  
@@ -63,29 +63,12 @@ const LandlordProfileListing = () => {
             <div className="profile-property">
                 <div>
                     <p>Listed Properties</p>
-                    <a href="">Add Property</a>
+                    <a href="">+ Add Address</a>
                 </div>
                 <div className="profile-line"></div>
-                <div className="profile-property-details-container">
-                    <div className="profile-property-details">
-                        <img src={HouseImage} style={{width: '202px', height: '140px'}} alt="" />
-                        <div>
-                            <p style={{fontSize: '20px', fontWeight: '600', }}>Grace Ville</p>
-                            <p style={{fontSize: '14px', fontWeight: '600', opacity: '40%'}}>142, Lagos road, Apapa Lagos</p>
-                            <p style={{fontSize: '14px', fontWeight: '600', opacity: '40%'}}>2 Bedroom Flat, Balcony, Parking lot, 24/7 power, Constant Water, Nearness to road</p>
-                            <p style={{fontSize: '14px', fontWeight: '600'}}>2,000,000/year</p>
-                        </div>
-                    </div>
-                    <div className="profile-like-icon">
-                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 7.16602C10 7.16602 10 7.16602 10.6333 6.33268C11.3667 5.36602 12.45 4.66602 13.75 4.66602C15.825 4.66602 17.5 6.34102 17.5 8.41602C17.5 9.19102 17.2667 9.90768 16.8667 10.4993C16.1917 11.5077 10 17.9993 10 17.9993C10 17.9993 3.80833 11.5077 3.13333 10.4993C2.73333 9.90768 2.5 9.19102 2.5 8.41602C2.5 6.34102 4.175 4.66602 6.25 4.66602C7.55 4.66602 8.64167 5.36602 9.36667 6.33268C10 7.16602 10 7.16602 10 7.16602Z" fill="black"/>
-                        <path d="M10 7.16602C10 7.16602 10 7.16602 9.36667 6.33268C8.63333 5.36602 7.55 4.66602 6.25 4.66602C4.175 4.66602 2.5 6.34102 2.5 8.41602C2.5 9.19102 2.73333 9.90768 3.13333 10.4993C3.80833 11.5077 10 17.9993 10 17.9993M10 7.16602C10 7.16602 10 7.16602 10.6333 6.33268C11.3667 5.36602 12.45 4.66602 13.75 4.66602C15.825 4.66602 17.5 6.34102 17.5 8.41602C17.5 9.19102 17.2667 9.90768 16.8667 10.4993C16.1917 11.5077 10 17.9993 10 17.9993" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </div>
             </div>
         </div>
     )
 }
 
-export default LandlordProfileListing;
+export default LandlordProfileB4Listing;

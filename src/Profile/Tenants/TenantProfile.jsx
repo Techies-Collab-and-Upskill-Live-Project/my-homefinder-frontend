@@ -1,58 +1,66 @@
 import React from "react"
+import "../Assets/styles/TenantProfile.css"
+import UserImage from "../Assets/images/UserImage.png"
+import Pen from "../Assets/images/image9.png"
+import Mastercard from "../Assets/images/Mastercard.png"
+import Visa from "../Assets/images/Visa-logo.png"
 
 const TenantProfile = () => {
-    <div className="form-container">
-        <div>
-            <div>
-                <img src=" " alt="" />
-                <p></p>
-            </div>
-            <p></p>
-        </div>
-        <div>
-            <div>
-                <p></p>
-                <p></p>
-            </div>
-            <div>
-                <p></p>
-                <img src="" alt="" />
-            </div>
-            <div>
-                <p></p>
-                <img src="" alt="" />
-            </div>
-        </div>
-        <div>
-            <div>
-                <p></p>
-                <p></p>
-            </div>
-            <div></div>
-            <p></p>
-        </div>
-        <div>
-            <div>
-                <p></p>
-                <a href=""></a>
-            </div>
-            <div></div>
-            <div>
-                <img src="" alt="" />
+    return(
+        <div className="form-container">
+            <div className="profile-header">    
                 <div>
-                    <p></p>
-                    <p></p>
+                    <img src={UserImage} style={{width: '120px', height: '120px'}} alt="" />
+                    <p>Fave Lucy</p>
+                </div>
+                <a href="">Update Profile</a>
+            </div>
+            <div className="profile-contact">
+                <div>
+                    <p>Contact Details</p>
+                    <a href="">+ Add Number</a>
+                </div>
+                <div className="profile-line"></div>
+                <div>
+                    <p>08112345678</p>
+                    <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
+                </div>
+                <div>
+                    <p>080534237832</p>
+                    <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
                 </div>
             </div>
-            <div>
-                <img src="" alt="" />
+            <div className="profile-address">
                 <div>
-                    <p></p>
-                    <p></p>
+                    <p>Address</p>
+                    <a href="">+ Add Address</a>
+                </div>
+                <div className="profile-line"></div>
+                <p>No 52, Badagry Street, Mushin, Lagos</p>
+            </div>
+            <div className="profile-payment">
+                <div className="payment-header">
+                    <p>Payments</p>
+                    <a href="">Manage</a>
+                </div>
+                <div className="profile-line"></div>
+                <div className="card-detail">
+                    <img src={Visa} style={{width: '62.9346809387207px', height: '19px'}} alt="" />
+                    <div>
+                        <p >*****8994</p>
+                        <p style={{marginTop: '-13px'}}>Debit Card</p>
+                    </div>
+                </div>
+                <div className="card-detail">
+                    <img src={Mastercard} style={{width: '60.2998046875px', height: '35px'}} alt="" />
+                    <div>
+                        <p>****5676</p>
+                        <p style={{marginTop: '-13px'}}>Debit Card</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    )
 }
 
-export default TenantProfile
+export default TenantProfile;
