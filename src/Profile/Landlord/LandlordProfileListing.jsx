@@ -8,7 +8,8 @@ import UserImage from "../Assets/images/image8.png"
 
 const LandlordProfileListing = () => {
     return(
-        <div className="form-container">
+        <>
+        <div className="form1">
             <div style={{display: 'flex', flexDirection: 'row',}} className="profile-header">  
                 <div>
                     <div className="header-image">
@@ -25,7 +26,7 @@ const LandlordProfileListing = () => {
                 </div>
                 
             </div>
-            <div className="profile-contact">
+            <div className="profile-contact gap-y-4">
                 <div>
                     <p>Contact Details</p>
                     <a href="">+ Add Number</a>
@@ -40,7 +41,7 @@ const LandlordProfileListing = () => {
                     <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
                 </div>
             </div>
-            <div className="profile-address">
+            <div className="profile-address gap-y-4">
                 <div>
                     <p>Address</p>
                     <a href="">+ Add Address</a>
@@ -48,7 +49,7 @@ const LandlordProfileListing = () => {
                 <div className="profile-line"></div>
                 <p>No 52, Badagry Street, Mushin, Lagos</p>
             </div>
-            <div className="profile-bio">
+            <div className="profile-bio gap-y-4">
                 <div>
                     <p>Bio</p>
                     <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
@@ -60,8 +61,8 @@ const LandlordProfileListing = () => {
                     font resizing object project project bold resizing. 
                 </p>
             </div>
-            <div className="profile-property">
-                <div>
+            <div className="profile-property gap-y-3">
+                <div className="mt-2">
                     <p>Listed Properties</p>
                     <a href="">Add Property</a>
                 </div>
@@ -85,6 +86,8 @@ const LandlordProfileListing = () => {
                 </div>
             </div>
         </div>
+        
+        </>
     )
 }
 

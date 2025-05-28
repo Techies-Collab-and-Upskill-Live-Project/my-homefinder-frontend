@@ -1,10 +1,11 @@
-.form-container {
+.form1{
   max-width: 1044px;
   margin: 40px auto;
   gap: 30px;
   font-family: sans-serif;
   line-height: 100%; 
 }
+
 
 .header-image{
     border: 1px solid #ccc;
@@ -19,7 +20,7 @@
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(128, 128, 128, 0.4);
     padding: 10px 25px;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 .profile-contact div, .profile-address div, .profile-bio div, .profile-property div{
     display: flex;
