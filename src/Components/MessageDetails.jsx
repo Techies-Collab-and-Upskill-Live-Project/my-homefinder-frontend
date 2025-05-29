@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Picker } from "emoji-mart";
-import { SmileyIcon } from "@phosphor-icons/react";
-// import "emoji-mart";
+import { Phone, SmileyIcon, VideoCameraIcon } from "@phosphor-icons/react";
+import { ArrowLeft } from "@phosphor-icons/react";
 
-const MessageDetails = ({ message }) => {
+const MessageDetails = ({ message, onBack }) => {
   const [chat, setChat] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -56,14 +56,28 @@ const MessageDetails = ({ message }) => {
 
   return (
     <div className="lg:ml-[400px] bg-slate-200 flex flex-col h-screen">
-      <h3 className="text-lg font-semibold text-green-800 mb-4 border-b p-3">
+      <div className="text-lg flex justify-between items-center font-semibold text-green-800 mb-4 border-b p-3">
         <div className="flex items-center gap-4">
+          {/* Back button for mobile */}
+          <button
+            onClick={onBack}
+            className="block lg:hidden text-green-600 hover:text-green-800"
+            title="Go back"
+          >
+            <ArrowLeft size={24} />
+          </button>
+
           <div className="w-12 h-12 border-2 border-green-400 rounded-full bg-slate-500 flex items-center justify-center text-white font-bold">
             {message.contact?.charAt(0).toUpperCase()}
           </div>
           {message.contact}
         </div>
-      </h3>
+
+        <span className="flex items-center gap-4">
+          <VideoCameraIcon size={25} />
+          <Phone size={25} />
+        </span>
+      </div>
 
       {/* Chat bubbles */}
       <div className="flex-1 overflow-y-auto space-y-4 p-6">
@@ -73,14 +87,16 @@ const MessageDetails = ({ message }) => {
             className={`flex ${msg.fromUser ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-xs md:max-w-md px-4 py-2 rounded-lg shadow border 
-                ${
-                  msg.fromUser
-                    ? "bg-green-100 text-right border-green-300"
-                    : "bg-white text-left border-gray-300"
-                }`}
+              className={`max-w-xs md:max-w-md px-4 py-2 rounded-lg shadow border break-words
+          ${
+            msg.fromUser
+              ? "bg-green-100 text-right border-green-300"
+              : "bg-white text-left border-gray-300"
+          }`}
             >
-              <p className="text-sm text-gray-800">{msg.text}</p>
+              <p className="text-sm text-gray-800 break-words whitespace-pre-wrap">
+                {msg.text}
+              </p>
               <p className="text-[10px] text-gray-400 mt-1">{msg.time}</p>
             </div>
           </div>
@@ -104,11 +120,12 @@ const MessageDetails = ({ message }) => {
             </div>
           )} */}
 
-          <input
+          <textarea
             type="text"
+            rows="1"
             placeholder="Type a message..."
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={(e) => setNewMessage(e.target.value.replace(/\n$/, ""))}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             className="flex-1 p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
           />

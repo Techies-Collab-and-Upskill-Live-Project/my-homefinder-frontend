@@ -5,10 +5,21 @@ import MessageDetails from "../Components/MessageDetails";
 const Messages = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
 
+  const handleSelectMessage = (message) => {
+    setSelectedMessage(message);
+  };
+
+  const handleBack = () => {
+    setSelectedMessage(null);
+  };
+
   return (
     <>
-      <AllMessages onSelect={setSelectedMessage} />
-      <MessageDetails message={selectedMessage} />
+      {!selectedMessage ? (
+        <AllMessages onSelect={handleSelectMessage} />
+      ) : (
+        <MessageDetails message={selectedMessage} onBack={handleBack} />
+      )}
     </>
   );
 };
