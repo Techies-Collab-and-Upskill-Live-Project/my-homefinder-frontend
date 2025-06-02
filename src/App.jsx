@@ -1,12 +1,19 @@
-import Home from "./pages/Home";
+import PropertyCard from "./components/PropertyHero";
+import PropertyDetails from "./components/PropertyDetails";
+import TopNavbar from "./layout/TopNavbar";
+import Sidebar from "./layout/Sidebar";
+import LandlordlistingPage from "./pages/LandlordListingPage";
 
 function App() {
-    return (
-
+  return (
+    <section>
+      {/* <TopNavbar />
       <div>
-        <h1>My Home Finder</h1>
-      </div>
-      );
+        <Sidebar />
+      </div> */}
+      <LandlordlistingPage />
+    </section>
+  );
 }
 
-export default App
+export default App;
