@@ -5,26 +5,21 @@ import Navbar from "./Profile/components/Navbar";
 import LandlordProfileB4Listing from "./Profile/Landlord/LandlordProfileB4Listing";
 import LandlordProfileListing from "./Profile/Landlord/LandlordProfileListing";
 import ProfileFormLandlord from "./Profile/Landlord/ProfileFormLandlord";
+import ProfileForm from "./Profile/Tenants/ProfileForm";
 import TenantProfile from "./Profile/Tenants/TenantProfile";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 
 
 function App() {
     return (
-
-      <>
-        
-        
-        <Navbar />
-        <div className="mt-30">
-          <LandlordProfileListing />
-        </div>
-        
-        <Footer />    
-       
-      
-      </>
+      <Router>
+        <Routes>
+          <Route path="/" element={<ProfileForm />} />
+          <Route path="/TenantProfile" element={<TenantProfile />} />
+        </Routes>
+      </Router>
       );
 }
 

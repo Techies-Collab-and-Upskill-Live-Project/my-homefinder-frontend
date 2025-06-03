@@ -4,14 +4,23 @@ import UserImage from "../Assets/images/UserImage.png"
 import Pen from "../Assets/images/image9.png"
 import Mastercard from "../Assets/images/Mastercard.png"
 import Visa from "../Assets/images/Visa-logo.png"
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 const TenantProfile = () => {
+    const { state } = useLocation();
+    const navigate = useNavigate();
+     if(!state) return <p>No Data found please go back and submit the form</p>
     return(
         <div className="form-container">
             <div className="profile-header">    
                 <div>
-                    <img src={UserImage} style={{width: '120px', height: '120px'}} alt="" />
-                    <p>Fave Lucy</p>
+                    <img
+                        src={state?.image || UserImage}
+                        style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }}
+                        alt="Profile"
+                    />
+                    <p>{state?.name}</p>
                 </div>
                 <a href="">Update Profile</a>
             </div>
@@ -22,7 +31,7 @@ const TenantProfile = () => {
                 </div>
                 <div className="profile-line"></div>
                 <div>
-                    <p>08112345678</p>
+                    <p>{state?.number}</p>
                     <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
                 </div>
                 <div>
@@ -36,7 +45,7 @@ const TenantProfile = () => {
                     <a href="">+ Add Address</a>
                 </div>
                 <div className="profile-line"></div>
-                <p>No 52, Badagry Street, Mushin, Lagos</p>
+                <p>{state?.street || "No 52, Badagry Street, Mushin, Lagos"}</p>
             </div>
             <div className="profile-payment">
                 <div className="payment-header">
