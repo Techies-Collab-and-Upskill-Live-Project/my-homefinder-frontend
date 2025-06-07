@@ -145,7 +145,7 @@ const ProfileFormLandlord = () => {
             </div>
         </div>
 
-        <p style={{textAlign: 'center', fontSize: '32px', fontWeight: '400'}}>Verification</p>
+        <p style={{textAlign: 'center', fontSize: '32px', fontWeight: '400', marginTop: '25px', marginBottom: '45px'}}>Verification</p>
         <div className='input-line'></div>
         
         <div className="input-group">

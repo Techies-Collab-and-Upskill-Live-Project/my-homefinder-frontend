@@ -2,9 +2,9 @@ import { Search } from "lucide-react";
 
 const SearchBar = () => {
     return (
-        <div className='relative md:flex hidden justify-center items-center'>
+        <div className='relative md:flex  justify-center items-center'>
             <input 
-            className="border-2 border-gray-400 w-68 pl-5 h-9 rounded-xl  focus:outline-none focus:border-[#873E96] text-sm" 
+            className="border-2 border-gray-400 w-68 pl-5 h-9 rounded-xl  focus:outline-none focus:border-gray-600 text-sm" 
             type="text"
             placeholder='Search'
             />

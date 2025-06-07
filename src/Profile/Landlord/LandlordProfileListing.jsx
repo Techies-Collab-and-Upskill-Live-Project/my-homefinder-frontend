@@ -5,6 +5,7 @@ import Pen from "../Assets/images/image9.png"
 import HouseImage from "../Assets/images/House-Image.png" 
 import UserImage from "../Assets/images/image8.png"
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 
 const LandlordProfileListing = () => {
@@ -43,7 +44,7 @@ const LandlordProfileListing = () => {
                     <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
                 </div>
             </div>
-            <div className="profile-address gap-y-4">
+            <div className="profile-address">
                 <div>
                     <p>Address</p>
                     <a href="">+ Add Address</a>
@@ -51,7 +52,7 @@ const LandlordProfileListing = () => {
                 <div className="profile-line"></div>
                 <p>No 52, Badagry Street, Mushin, Lagos</p>
             </div>
-            <div className="profile-bio gap-y-4">
+            <div className="profile-bio">
                 <div>
                     <p>Bio</p>
                     <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
@@ -88,7 +89,7 @@ const LandlordProfileListing = () => {
                 </div>
             </div>
         </div>
-        
+        <Footer />
         </>
     )
 }

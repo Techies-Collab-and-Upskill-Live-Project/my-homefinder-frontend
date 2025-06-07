@@ -14,7 +14,7 @@
     padding: 20px 20px;
 }
 
-.profile-contact, .profile-address, .profile-bio, .profile-property{
+.profile-bio, .profile-property{
     display: flex;
     flex-direction: column;
     border: 1px solid #ccc;
@@ -22,8 +22,35 @@
     box-shadow: 0 4px 12px rgba(128, 128, 128, 0.4);
     padding: 10px 25px;
     margin-top: 12px;
+    row-gap: 12px;
 }
-.profile-contact div, .profile-address div, .profile-bio div, .profile-property div{
+.profile-address{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(128, 128, 128, 0.4);
+    padding: 10px 25px;
+    margin-top: 12px;
+    row-gap: 1px;
+}
+.profile-contact{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(128, 128, 128, 0.4);
+    padding: 10px 25px;
+    margin-top: 12px;
+    row-gap: 1px;
+}
+.profile-contact div, .profile-bio div, .profile-property div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.profile-address div{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -33,6 +60,7 @@
 .profile-contact div p, .profile-address div p{
     font-size: 16px;
     font-weight: 400;
+    margin-top: -10px;
 }
 .profile-contact div a, .profile-address div a{
     font-size: 12px;
@@ -75,6 +103,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    row-gap: 10px;
+    margin-left: 10px;
 }
 .profile-property-details div {
     gap: -100px 0;
@@ -83,7 +113,7 @@
     border: 0 solid;
     border-radius: 50%;
     padding: 6px;
-    background-color: #DBEBDB;
+    background-color: beige;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -93,7 +123,7 @@
     
 }
 .profile-like-icon:hover{
-    background-color: beige;
+    background-color: #DBEBDB;
     padding: 7px;
 }
 
