@@ -5,6 +5,7 @@ import Pen from "../Assets/images/image9.png"
 import Mastercard from "../Assets/images/Mastercard.png"
 import Visa from "../Assets/images/Visa-logo.png"
 import { useLocation, useNavigate } from 'react-router-dom';
+import Navbar from "../components/Navbar"
 
 
 const TenantProfile = () => {
@@ -12,6 +13,8 @@ const TenantProfile = () => {
     const navigate = useNavigate();
      if(!state) return <p>No Data found please go back and submit the form</p>
     return(
+        <>
+        <Navbar />
         <div className="form-container">
             <div className="profile-header">    
                 <div>
@@ -69,6 +72,7 @@ const TenantProfile = () => {
                 </div>
             </div>
         </div>
+        </>
     )
 }
 

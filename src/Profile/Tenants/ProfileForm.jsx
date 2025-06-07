@@ -3,7 +3,9 @@ import '../Assets/styles/ProfileForm.css';
 import { useState } from 'react';
 import UploadPicture from '../components/UploadPicture';
 import { useNavigate } from 'react-router-dom';
-import { image } from 'motion/react-client';
+import Navbar from '../components/Navbar';
+import { useProfile } from '../Assets/ProfileContext'; // Import the context to manage profile data
+
 
 const ProfileForm = () => {
 
@@ -18,6 +20,7 @@ const ProfileForm = () => {
     nin: ''
   });
   const navigate = useNavigate();
+  const { setProfileData } = useProfile(); // Use the context to set profile data
 
   const handleChange = (e) =>{
     const {name, value} = e.target;
@@ -32,10 +35,14 @@ const ProfileForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setProfileData(formData);
     navigate('/TenantProfile', {state : formData})
   }
-  const [profileImage, setProfileImage] = useState(null);
+
+
   return (
+    <>
+    <Navbar />
     <div className="form-container">
       <h2>Complete Your Profile</h2>
       <UploadPicture onImageSelect={handleImageUpload} />
@@ -139,6 +146,7 @@ const ProfileForm = () => {
         
       </form>
     </div>
+    </>
   );
 };
 

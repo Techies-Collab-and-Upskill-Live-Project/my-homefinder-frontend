@@ -1,20 +1,29 @@
 import React from "react";
 import '../Assets/styles/LandlordProfileB4Listing.css'
-
 import Pen from "../Assets/images/image9.png"
-
 import UserImage from "../Assets/images/image8.png"
+import Navbar from "../components/Navbar";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 const LandlordProfileB4Listing = () => {
+
+    const { state } = useLocation();
+    const navigate = useNavigate();
+    if(!state) return <p>No Data found please go back and submit the form</p>
+
     return(
+        <>
+        <Navbar />
         <div className="form-container">
             <div style={{display: 'flex', flexDirection: 'row',}} className="profile-header">  
                 <div>
-                    <div className="header-image">
-                        <img src={UserImage} style={{width: '30px', height: '30px'}} alt="" />
-                    </div>
-                    <p >Fave Lucy</p>
+                    <img
+                        src={state?.image || UserImage}
+                        style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }}
+                        alt="Profile"
+                    />
+                    <p>Favy Lucy</p>
                 </div>  
                 
                 <div className="header-details" style={{marginTop: '75px', display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'center'}} >
@@ -32,11 +41,11 @@ const LandlordProfileB4Listing = () => {
                 </div>
                 <div className="profile-line"></div>
                 <div>
-                    <p>08112345678</p>
+                    <p>08157648539</p>
                     <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
                 </div>
                 <div>
-                    <p>080534237832</p>
+                    <p>09047839578</p>
                     <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
                 </div>
             </div>
@@ -46,7 +55,7 @@ const LandlordProfileB4Listing = () => {
                     <a href="">+ Add Address</a>
                 </div>
                 <div className="profile-line"></div>
-                <p>No 52, Badagry Street, Mushin, Lagos</p>
+                <p>{state?.street || "No 52, Badagry Street, Mushin, Lagos"}</p>
             </div>
             <div className="profile-bio">
                 <div>
@@ -68,6 +77,7 @@ const LandlordProfileB4Listing = () => {
                 <div className="profile-line"></div>
             </div>
         </div>
+        </>
     )
 }
 
