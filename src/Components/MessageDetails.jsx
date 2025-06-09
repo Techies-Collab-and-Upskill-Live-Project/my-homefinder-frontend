@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Picker } from "emoji-mart";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import { Phone, SmileyIcon, VideoCameraIcon } from "@phosphor-icons/react";
 import { ArrowLeft } from "@phosphor-icons/react";
 
@@ -113,20 +114,19 @@ const MessageDetails = ({ message, onBack }) => {
           >
             <SmileyIcon />
           </button>
-          {/* 
+
           {showEmojiPicker && (
-            <div className="absolute bottom-12 z-10">
-              <Picker onSelect={addEmoji} theme="light" />
+            <div className="absolute bottom-14 left-0 z-50">
+              <Picker data={data} onEmojiSelect={addEmoji} />
             </div>
-          )} */}
+          )}
 
           <textarea
-            type="text"
             rows="1"
             placeholder="Type a message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value.replace(/\n$/, ""))}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
             className="flex-1 p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <button

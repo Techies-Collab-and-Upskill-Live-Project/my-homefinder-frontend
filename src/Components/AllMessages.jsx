@@ -10,7 +10,7 @@ const AllMessages = ({ onSelect }) => {
   };
 
   return (
-    <aside className="lg:w-[400px] fixed left-0 top-0 h-screen border-r border-green-300 bg-white overflow-y-auto">
+    <aside className="lg:w-[400px] w-full fixed left-0 top-0 h-screen border-r border-green-300 bg-white overflow-y-auto">
       <h2 className="text-xl sticky top-0 bg-white right-0 w-full font-semibold text-green-800 p-4 border-b border-green-300">
         Chats
       </h2>
