@@ -12,8 +12,8 @@ function App() {
   return (
     <section>
       <Hero />
-      <PropertyList />
       <SearchFeature />
+      <PropertyList />
       <Testimonials />
 
       {/* <TopNavbar />

@@ -1,10 +1,10 @@
-
+import Footer from "../layout/Footer"
 
 const Hero = () => {
   return (
-    <section className="max-w-7xl mx-auto  ">
+    <section className="max-w-full h-auto mx-auto mb-6 ">
       {/* <div className="relative bg-cover bg-center h-screen md:h-[500px]" src={heroBg.png} alt="Background Image"> */}
-      <div className="h-screen md:h-[606px] bg-[url('/heroBg.png')] bg-center bg-cover bg-no-repeat flex items-center justify-center"></div>
+      <div className="md:h-[550px] bg-[url('/heroBg.png')] bg-center bg-cover bg-no-repeat flex items-center justify-center"></div>
      
         <div className="w-full">
   {/* Dark overlay */}
