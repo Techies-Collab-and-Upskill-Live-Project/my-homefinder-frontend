@@ -1,4 +1,6 @@
+import React from "react";
 import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 import LandlordlistingPage from "./pages/LandlordListingPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer"
@@ -7,15 +9,17 @@ import Decision from "./pages/Decision";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
-import Messaging from "./pages/Messaging";
+import Messages from "./pages/Messages";
 import Reviews from "./pages/Reviews";
 import NotFound from "./pages/NotFound"
+import "./Tailwind.css";
 
 function App() {
     return (
           <section>
           <Navbar />
           <LandlordlistingPage />
+          <Messages />
           <Footer />
           {/* Wrapping the application with Router to enable routing */}
           {/* and defining the routes for different pages */}
@@ -26,7 +30,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/messaging" element={<Messaging />} />
+            <Route path="/messages" element={<Messages />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/landlordlistingpage" element={<LandlordlistingPage />} />
@@ -36,6 +40,5 @@ function App() {
           
     );
 };
-      >>>>>>> development -- Current Change
 
 export default App;
