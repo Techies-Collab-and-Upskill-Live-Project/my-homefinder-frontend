@@ -24,12 +24,12 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/decision" element={<Decision />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} 
+            <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/messaging" element={<Messaging />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/landlordlistingpage" element={<Landlordlistingpage />} />
+            <Route path="/landlordlistingpage" element={<LandlordlistingPage />} />
           </Routes>
           </section>
           
