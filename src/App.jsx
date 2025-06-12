@@ -1,12 +1,13 @@
 import React from "react";
 import Home from "./pages/Home";
 import "./Tailwind.css";
-import Messages from "./pages/Messages";
+import 'leaflet/dist/leaflet.css';
+import TenantListing from "./pages/TenantListing";
 
 function App() {
   return (
     <div>
-      <Messages />
+      <TenantListing />
     </div>
   );
 }
