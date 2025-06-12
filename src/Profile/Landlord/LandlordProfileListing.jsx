@@ -6,19 +6,30 @@ import HouseImage from "../Assets/images/House-Image.png"
 import UserImage from "../Assets/images/image8.png"
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import EditNumberModal from "../components/EditNumberModal";
+import { useProfile } from "../Assets/ProfileContext";
+import { useState } from "react";
+
 
 
 const LandlordProfileListing = () => {
+
+        const { profileData, updatePhoneNumber } = useProfile();
+        const [isEditNumberModalOpen, setIsEditNumberModalOpen] = useState(false);
+        const openEditNumberModal = () => setIsEditNumberModalOpen(true);
+        const closeEditNumberModal = () => setIsEditNumberModalOpen(false);
     return(
         <>
         <Navbar />
         <div className="form1">
             <div style={{display: 'flex', flexDirection: 'row',}} className="profile-header">  
                 <div>
-                    <div className="header-image">
-                        <img src={UserImage} style={{width: '30px', height: '30px'}} alt="" />
-                    </div>
-                    <p >Fave Lucy</p>
+                    <img
+                        src={profileData.image || UserImage}
+                        style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }}
+                        alt="Profile"
+                    />
+                    <p>{profileData.name || "Lucy Favy"}</p>
                 </div>  
                 
                 <div className="header-details" style={{marginTop: '75px', display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'center'}} >
@@ -36,21 +47,13 @@ const LandlordProfileListing = () => {
                 </div>
                 <div className="profile-line"></div>
                 <div>
-                    <p>08112345678</p>
-                    <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
+                    <p>{profileData.phoneNumber || "08157648539"}</p>
+                    <img onClick={openEditNumberModal} src={Pen} style={{ width: '17px', height: '17px', cursor: 'pointer' }} alt="Edit Phone" />
                 </div>
                 <div>
-                    <p>080534237832</p>
-                    <img src={Pen} style={{width: '17px', height: '17px'}} alt="" />
+                    <p>{profileData.phoneNumber || "08157648539"}</p>
+                    <img onClick={openEditNumberModal} src={Pen} style={{ width: '17px', height: '17px', cursor: 'pointer' }} alt="Edit Phone" />
                 </div>
-            </div>
-            <div className="profile-address">
-                <div>
-                    <p>Address</p>
-                    <a href="">+ Add Address</a>
-                </div>
-                <div className="profile-line"></div>
-                <p>No 52, Badagry Street, Mushin, Lagos</p>
             </div>
             <div className="profile-bio">
                 <div>
@@ -88,6 +91,12 @@ const LandlordProfileListing = () => {
                     </div>
                 </div>
             </div>
+            {isEditNumberModalOpen && (
+                <EditNumberModal
+                currentNumber={profileData.phoneNumber}
+                onClose={closeEditNumberModal}
+            />
+            )}
         </div>
         <Footer />
         </>

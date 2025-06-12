@@ -17,7 +17,7 @@ const Navbar = () =>{
     const showTenantProfile = ['/TenantProfile'].includes(location.pathname);
     const showExtraItems = ['/landlordProfileListing', '/landlordProfileB4Listing'].includes(location.pathname);
     const  showForm = ['/ProfileForm', '/ProfileFormLandlord'].includes(location.pathname);
-    const { profileImage, profileData } = useProfile();
+    const {  profileData } = useProfile();
 
     return(
         <nav className="py-1  shadow-lg gap-x fixed top-0 z-50 w-full bg-gray-50">
@@ -42,9 +42,9 @@ const Navbar = () =>{
 
                         <div className="hidden md:flex gap-x-2 justify-center items-center">
                             <MessageSquare className="w-5" />
-                            {profileImage ? 
+                            {profileData ? 
                                 <img 
-                                src={profileImage} 
+                                src={profileData.image} 
                                 alt="" className="cover rounded-full w-7 h-7" /> :
                                 <img 
                                 src={UserImage}
@@ -82,9 +82,9 @@ const Navbar = () =>{
                             <MessageSquare className="w-5" />
                             <Star className="w-5" />
                             
-                            {profileImage ? 
+                            {profileData ? 
                                 <img 
-                                src={profileImage} 
+                                src={profileData.image} 
                                 alt="" className="cover rounded-full w-7 h-7" /> :
                                 <img 
                                 src={UserImage}
@@ -121,9 +121,9 @@ const Navbar = () =>{
 
                         <div className="flex gap-x-2 items-center">
                             <MessageSquare className="w-5" />
-                            {profileImage ? 
+                            {profileData.image ? 
                                 <img 
-                                src={profileImage} 
+                                src={profileData.image} 
                                 alt="" className="cover rounded-full w-7 h-7" /> :
                                 <img 
                                 src={UserImage}
@@ -155,9 +155,9 @@ const Navbar = () =>{
                             <MessageSquare className="w-5" />
                             <Star className="w-5" />
                             
-                            {profileImage ? 
+                            {profileData ? 
                                 <img 
-                                src={profileImage} 
+                                src={profileData.image} 
                                 alt="" className="cover rounded-full w-7 h-7" /> :
                                 <img 
                                 src={UserImage}

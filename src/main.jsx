@@ -7,11 +7,13 @@ import { ProfileProvider } from './Profile/Assets/ProfileContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   
-    <ProfileProvider>
+    
       <StrictMode>
+        <ProfileProvider>
         <App />
+        </ProfileProvider>
       </StrictMode>
       
-    </ProfileProvider>
+    
   
 )

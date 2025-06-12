@@ -1,4 +1,3 @@
-// This file defines a context for managing the profile data state in a React application.
 
 import { createContext, useState, useContext } from 'react';
 
@@ -7,11 +6,36 @@ const ProfileContext = createContext();
 export const useProfile = () => useContext(ProfileContext);
 
 export const ProfileProvider = ({ children }) => {
-  const [profileImage, setProfileImage] = useState(null);
-  const [profileData, setProfileData] = useState(null);
+  const [profileData, setProfileData] = useState({
+    name: '',
+    phoneNumber: '',
+    nin: '',
+    image: null, 
+    email: '', 
+  });
+
+  const updatePhoneNumber = (newNumber) => {
+    setProfileData(prevProfileData => ({
+      ...prevProfileData,
+      phoneNumber: newNumber,
+    }));
+  };
+
+  const updateProfile = (newData) => {
+    setProfileData(prevProfileData => ({
+      ...prevProfileData,
+      ...newData,
+    }));
+  };
 
   return (
-    <ProfileContext.Provider value={{ profileImage, setProfileImage, profileData, setProfileData }}>
+    <ProfileContext.Provider value={{
+      profileData,
+      setProfileData,
+      updatePhoneNumber,
+      updateProfile,
+      
+    }}>
       {children}
     </ProfileContext.Provider>
   );
