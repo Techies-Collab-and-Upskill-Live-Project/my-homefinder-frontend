@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+import TenantListing from "./pages/TenantListing";
 import LandlordlistingPage from "./pages/LandlordListingPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer"
@@ -13,12 +14,14 @@ import Messages from "./pages/Messages";
 import Reviews from "./pages/Reviews";
 import NotFound from "./pages/NotFound"
 import "./Tailwind.css";
+import 'leaflet/dist/leaflet.css';
 
 function App() {
     return (
           <section>
           <Navbar />
           <LandlordlistingPage />
+          <TenantListing />
           <Messages />
           <Footer />
           {/* Wrapping the application with Router to enable routing */}
