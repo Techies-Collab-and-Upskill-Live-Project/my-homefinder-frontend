@@ -7,12 +7,19 @@ import Hero from "./components/Hero";
 import PropertyList from "./components/PropertyList";
 import Testimonials from "./components/Testimonials";
 import SearchFeature from "./components/SearchFeature";
+import SubSection from "./pages/Home";
+import DecisionPage from './components/DecisionPage';
 
 function App() {
   return (
     <section>
+      <div className="">
       <Hero />
-      <SearchFeature />
+      <SearchFeature /> 
+      </div>
+      <SubSection />
+
+      {/* <DecisionSection /> */}
       <PropertyList />
       <Testimonials />
 
@@ -21,6 +28,7 @@ function App() {
         <Sidebar />
       </div> */}
       <LandlordlistingPage />
+      <DecisionPage />
     </section>
   );
 }
