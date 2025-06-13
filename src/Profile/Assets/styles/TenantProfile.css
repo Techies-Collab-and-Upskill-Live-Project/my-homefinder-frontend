@@ -1,0 +1,95 @@
+.form-container {
+  max-width: 1044px;
+  margin: 40px auto;
+  gap: 30px;
+  font-family: sans-serif;
+  line-height: 100%;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(128, 128, 128, 0.4);
+  padding: 50px 70px;
+  margin-top: 120px;
+
+}
+
+
+.profile-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 12px;
+}
+
+.profile-header div{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+.profile-header a {
+    color: #FF5A00;
+    font-size: 12px;
+    font-weight: 400;
+}
+.profile-header div p{
+    color: #000000;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: sans-serif;
+}
+.profile-contact, .profile-address, .profile-payment{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(128, 128, 128, 0.4);
+    padding: 10px 25px;
+    margin-top: 20px;
+}
+.profile-payment{
+    row-gap: 17px;
+}
+.profile-contact div, .profile-address div, .payment-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+.profile-address p{
+    margin-top: 10px;
+}
+
+.profile-contact div p, .profile-address div p, .payment-header p, .card-detail div p{
+    font-size: 16px;
+    font-weight: 400;
+}
+.profile-contact div a, .profile-address div a, .payment-header a{
+    font-size: 12px;
+    font-weight: 400;
+    color: #000000;
+}
+
+.profile-line{
+    border: 1px solid #ccc;
+    border-radius: 1000px;
+    width: 100%;
+}
+
+.card-detail{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 0 20px;
+}
+
+.card-detail div{
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+    
+    
+}
