@@ -1,0 +1,138 @@
+
+import '../Assets/styles/ProfileForm.css';
+import { useState, useEffect } from 'react';
+import UploadPicture from '../components/UploadPicture';
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import { useProfile } from '../Assets/ProfileContext';
+
+const ProfileForm = () => {
+  const { profileData, updateProfile, updatePhoneNumber } = useProfile();
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    image: profileData?.image || null,
+    name: profileData?.name || '',
+    phoneNumber: profileData?.phoneNumber || '',
+    nin: profileData?.nin || ''
+  });
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
+
+  useEffect(() => {
+    setFormData({
+      image: profileData?.image || null,
+      name: profileData?.name || '',
+      phoneNumber: profileData?.phoneNumber || '',
+      nin: profileData?.nin || ''
+    });
+  }, [profileData]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleImageUpload = (imageUrl) => {
+    setFormData((prev) => ({ ...prev, image: imageUrl }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSaving(true);
+    setSaveMessage('');
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      updateProfile({
+        name: formData.name,
+        nin: formData.nin,
+        image: formData.image,
+      });
+      updatePhoneNumber(formData.phoneNumber);
+
+      setSaveMessage('Profile saved successfully!');
+      navigate('/TenantProfile');
+
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      setSaveMessage('Failed to save profile. Please try again.');
+    } finally {
+      setIsSaving(false);
+      setTimeout(() => setSaveMessage(''), 3000);
+    }
+  };
+
+  return (
+    <>
+      <Navbar />
+      <div className="form-container">
+        <h2>Complete Your Profile</h2>
+        <UploadPicture
+          onImageSelect={handleImageUpload}
+          initialImage={formData.image}
+          disabled={isSaving}
+        />
+        <form onSubmit={handleSubmit}>
+         
+          <div className="input-group">
+            <input
+              name="name"
+              value={formData.name}
+              disabled={isSaving}
+              onChange={handleChange} type="text" id="fullName" required placeholder=" " />
+            <label htmlFor="fullName">
+              <svg width="15" height="13" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.8872 8.44965C12.7247 7.84142 13.3359 7.00734 13.636 6.06347C13.936 5.1196 13.9099 4.11286 13.5613 3.18333C13.2127 2.25379 12.5589 1.44768 11.6908 0.87714C10.8228 0.306598 9.78374 0 8.71817 0C7.6526 0 6.61352 0.306598 5.7455 0.87714C4.87748 1.44768 4.22367 2.25379 3.87505 3.18333C3.52642 4.11286 3.50031 5.1196 3.80035 6.06347C4.10038 7.00734 4.71165 7.84142 5.54909 8.44965C4.11411 8.98038 2.86203 9.86064 1.92635 10.9966C0.990669 12.1325 0.406453 13.4816 0.235987 14.9C0.223648 15.0035 0.233524 15.1083 0.265052 15.2083C0.296579 15.3084 0.349141 15.4017 0.419735 15.4829C0.562307 15.6471 0.769676 15.7522 0.996223 15.7752C1.22277 15.7982 1.44994 15.7372 1.62775 15.6056C1.80557 15.474 1.91946 15.2826 1.94438 15.0734C2.13195 13.532 2.92815 12.1084 4.18086 11.0746C5.43357 10.0408 7.05496 9.46927 8.73525 9.46927C10.4155 9.46927 12.0369 10.0408 13.2896 11.0746C14.5423 12.1084 15.3385 13.532 15.5261 15.0734C15.5493 15.2672 15.6495 15.4461 15.8072 15.5757C15.965 15.7054 16.1691 15.7764 16.3803 15.7752H16.4743C16.6982 15.7515 16.9028 15.6469 17.0436 15.4845C17.1845 15.322 17.25 15.1147 17.226 14.9078C17.0547 13.4855 16.4673 12.1329 15.5268 10.9952C14.5864 9.85754 13.3282 8.97757 11.8872 8.44965ZM8.71817 7.88979C8.04239 7.88979 7.38179 7.7048 6.8199 7.35821C6.25801 7.01163 5.82007 6.51901 5.56146 5.94266C5.30286 5.36631 5.23519 4.73211 5.36703 4.12026C5.49887 3.5084 5.82428 2.94638 6.30213 2.50526C6.77998 2.06414 7.38879 1.76374 8.05158 1.64203C8.71438 1.52033 9.40138 1.58279 10.0257 1.82152C10.6501 2.06025 11.1837 2.46453 11.5591 2.98324C11.9346 3.50194 12.135 4.11177 12.135 4.73561C12.135 5.57215 11.775 6.37442 11.1342 6.96595C10.4934 7.55747 9.62435 7.88979 8.71817 7.88979Z" fill="black"/>
+              </svg>
+              Full Name
+            </label>
+          </div>
+
+          
+          <div className="input-group">
+            <input
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              disabled={isSaving}
+              onChange={handleChange} type="text" id="phoneNo" required placeholder=" " />
+            <label htmlFor="phoneNo">
+              <svg width="15" height="14" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.57417 1.88889C3.63084 2.72944 3.7725 3.55111 3.99917 4.335L2.86583 5.46833C2.47861 4.335 2.23306 3.13556 2.14806 1.88889H3.57417ZM12.8864 13.2411C13.6892 13.4678 14.5108 13.6094 15.3419 13.6661V15.0733C14.0953 14.9883 12.8958 14.7428 11.7531 14.365L12.8864 13.2411ZM4.48083 0H1.17528C0.655835 0 0.230835 0.425 0.230835 0.944444C0.230835 9.81278 7.41806 17 16.2864 17C16.8058 17 17.2308 16.575 17.2308 16.0556V12.7594C17.2308 12.24 16.8058 11.815 16.2864 11.815C15.1153 11.815 13.9725 11.6261 12.9147 11.2767C12.821 11.2427 12.7216 11.2266 12.6219 11.2294C12.3764 11.2294 12.1403 11.3239 11.9514 11.5033L9.87361 13.5811C7.19652 12.212 5.0188 10.0343 3.64972 7.35722L5.7275 5.27944C5.99195 5.015 6.0675 4.64667 5.96361 4.31611C5.60534 3.22816 5.42359 2.08986 5.42528 0.944444C5.42528 0.425 5.00028 0 4.48083 0Z" fill="black"/>
+              </svg>
+              Phone no
+            </label>
+          </div>
+
+         
+          <div className="input-group">
+            <input
+              name="nin"
+              value={formData.nin}
+              disabled={isSaving}
+              onChange={handleChange} type="text" id="nin" required placeholder=" " />
+            <label htmlFor="nin">
+              <svg width="15" height="13" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.8872 8.44965C12.7247 7.84142 13.3359 7.00734 13.636 6.06347C13.936 5.1196 13.9099 4.11286 13.5613 3.18333C13.2127 2.25379 12.5589 1.44768 11.6908 0.87714C10.8228 0.306598 9.78374 0 8.71817 0C7.6526 0 6.61352 0.306598 5.7455 0.87714C4.87748 1.44768 4.22367 2.25379 3.87505 3.18333C3.52642 4.11286 3.50031 5.1196 3.80035 6.06347C4.10038 7.00734 4.71165 7.84142 5.54909 8.44965C4.11411 8.98038 2.86203 9.86064 1.92635 10.9966C0.990669 12.1325 0.406453 13.4816 0.235987 14.9C0.223648 15.0035 0.233524 15.1083 0.265052 15.2083C0.296579 15.3084 0.349141 15.4017 0.419735 15.4829C0.562307 15.6471 0.769676 15.7522 0.996223 15.7752C1.22277 15.7982 1.44994 15.7372 1.62775 15.6056C1.80557 15.474 1.91946 15.2826 1.94438 15.0734C2.13195 13.532 2.92815 12.1084 4.18086 11.0746C5.43357 10.0408 7.05496 9.46927 8.73525 9.46927C10.4155 9.46927 12.0369 10.0408 13.2896 11.0746C14.5423 12.1084 15.3385 13.532 15.5261 15.0734C15.5493 15.2672 15.6495 15.4461 15.8072 15.5757C15.965 15.7054 16.1691 15.7764 16.3803 15.7752H16.4743C16.6982 15.7515 16.9028 15.6469 17.0436 15.4845C17.1845 15.322 17.25 15.1147 17.226 14.9078C17.0547 13.4855 16.4673 12.1329 15.5268 10.9952C14.5864 9.85754 13.3282 8.97757 11.8872 8.44965ZM8.71817 7.88979C8.04239 7.88979 7.38179 7.7048 6.8199 7.35821C6.25801 7.01163 5.82007 6.51901 5.56146 5.94266C5.30286 5.36631 5.23519 4.73211 5.36703 4.12026C5.49887 3.5084 5.82428 2.94638 6.30213 2.50526C6.77998 2.06414 7.38879 1.76374 8.05158 1.64203C8.71438 1.52033 9.40138 1.58279 10.0257 1.82152C10.6501 2.06025 11.1837 2.46453 11.5591 2.98324C11.9346 3.50194 12.135 4.11177 12.135 4.73561C12.135 5.57215 11.775 6.37442 11.1342 6.96595C10.4934 7.55747 9.62435 7.88979 8.71817 7.88979Z" fill="black"/>
+              </svg>
+              NIN
+            </label>
+          </div>
+          {saveMessage && (
+            <p className={`message ${saveMessage.includes('successfully') ? 'success' : 'error'}`}>
+              {saveMessage}
+            </p>
+          )}
+          <button type="submit" disabled={isSaving} className="complete-btn">{isSaving ? 'Saving...' : 'Complete'}</button>
+        </form>
+      </div>
+    </>
+  );
+};
+
+export default ProfileForm;
