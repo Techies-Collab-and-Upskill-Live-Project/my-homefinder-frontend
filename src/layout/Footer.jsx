@@ -55,7 +55,7 @@ const Footer = () => {
         <div className={footer.newsletter}>
           <h3>Subscribe to our Newsletter</h3>
           <input type="email" name="email" placeholder="Email" />
-          <button>Send</button>
+          <button className="btn">Send</button>
         </div>
       </div>
       {/* Copyright */}
