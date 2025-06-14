@@ -5,18 +5,32 @@ import TenantListing from "./pages/TenantListing";
 import LandlordlistingPage from "./pages/LandlordListingPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer"
+// profile start
 import LandlordProfileB4Listing from "./Profile/Landlord/LandlordProfileB4Listing";
 import LandlordProfileListing from "./Profile/Landlord/LandlordProfileListing";
 import ProfileFormLandlord from "./Profile/Landlord/ProfileFormLandlord";
 import Profile from "./Profile/profile";
 import ProfileForm from "./Profile/Tenants/ProfileForm";
 import TenantProfile from "./Profile/Tenants/TenantProfile";
+// profile end
+
+// landing start
 import Hero from "./components/Hero";
 import PropertyList from "./components/PropertyList";
 import Testimonials from "./components/Testimonials";
 import SearchFeature from "./components/SearchFeature";
 import SubSection from "./pages/Home";
+// landing end
+
+// OTP start
 import DecisionPage from './components/DecisionPage';
+import PropertyCard from "./components/PropertyHero";
+import PropertyDetails from "./components/PropertyDetails";
+import TopNavbar from "./layout/TopNavbar";
+import Sidebar from "./layout/Sidebar";
+import OtpSelection from "./pages/otpSelection";
+import OtpVerification from "./pages/otpVerification";
+// OTP end
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -60,6 +74,10 @@ function App() {
             <Route path="/reviews" element={<Reviews />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/landlordlistingpage" element={<LandlordlistingPage />} />
+            <Route path="/" element={<OtpSelection />} />
+            <Route path="/verify" element={<OtpVerification />} />
+            <Route path="/dashboard" element={<h1>Success! You're verified.</h1>} />
+            <Route path="/landlord" element={<LandlordlistingPage />} />
           </Routes>
           </section>
           
