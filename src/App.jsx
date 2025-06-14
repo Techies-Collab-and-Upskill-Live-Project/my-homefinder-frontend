@@ -11,8 +11,13 @@ import ProfileFormLandlord from "./Profile/Landlord/ProfileFormLandlord";
 import Profile from "./Profile/profile";
 import ProfileForm from "./Profile/Tenants/ProfileForm";
 import TenantProfile from "./Profile/Tenants/TenantProfile";
+import Hero from "./components/Hero";
+import PropertyList from "./components/PropertyList";
+import Testimonials from "./components/Testimonials";
+import SearchFeature from "./components/SearchFeature";
+import SubSection from "./pages/Home";
+import DecisionPage from './components/DecisionPage';
 import Landing from "./pages/Landing";
-import Decision from "./pages/Decision";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Messages from "./pages/Messages";
@@ -24,6 +29,15 @@ function App() {
     return (
           <section>
           <Navbar />
+          <div className="">
+            <Hero />
+            <SearchFeature /> 
+           </div>
+            <SubSection />
+            <PropertyList />
+            <Testimonials />
+            <LandlordlistingPage />
+            <DecisionPage />
           <LandlordlistingPage />
           <TenantListing />
           <Messages />
