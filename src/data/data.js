@@ -126,3 +126,21 @@ export const messages = [
     profile: "/profiles/benjamin.jpg",
   },
 ];
+
+export const nav_links = [
+  {
+    id: 1,
+    path: "/Explore",
+    text: "Explore",
+  },
+  {
+    id: 2,
+    path: "/",
+    text: "About Us",
+  },
+  {
+    id: 3,
+    path: "/",
+    text: "How it Works",
+  },
+];

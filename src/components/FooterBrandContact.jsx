@@ -1,11 +1,15 @@
 import footerImg from "/images/FooterLogo.png";
-import { PhoneIcon, EnvelopeSimpleIcon, MapPinIcon } from "@phosphor-icons/react";
+import {
+  PhoneIcon,
+  EnvelopeSimpleIcon,
+  MapPinIcon,
+} from "@phosphor-icons/react";
 
 const FooterBrandContact = () => {
   return (
     <div className="space-y-4">
-      <div className="flex items-center space-x-2">
-        <img src={footerImg} alt="logo" />
+      <div className="flex items-center">
+        <img src={footerImg} className="-ml-5" alt="logo" />
         <span className="text-2xl font-bold text-green-600">MyHomeFinder</span>
       </div>
       <div className="text-sm flex items-start space-x-2">

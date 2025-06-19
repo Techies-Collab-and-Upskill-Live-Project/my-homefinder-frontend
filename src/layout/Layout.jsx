@@ -1,20 +1,20 @@
-import {useState, useEffect} from "react";
-import {Outlet, useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 
 const Layout = () => {
-    return (
-        <div>
-            <Navbar />
+  return (
+    <div>
+      <Navbar />
 
-            <main>
-                <Outlet />
-            </main>
+      <main>
+        <Outlet />
+      </main>
 
-            < Footer/>
-        </div>
-    );
+      <Footer />
+    </div>
+  );
 };
 
 export default Layout;

@@ -11,7 +11,7 @@ const Footer = () => {
         <FooterSocials />
         <FooterNewsletter />
       </div>
-      <div className="border-t border-green-600 mt-10 pt-4">
+      <div className="border-t border-green-600 mt-10 padding">
         <p className="text-center text-sm text-gray-500">
           © 2025 MyHomeFinder. All rights reserved.
         </p>

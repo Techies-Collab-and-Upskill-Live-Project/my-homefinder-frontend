@@ -3,15 +3,15 @@ const FooterLinks = () => {
   return (
     <div>
       <h3 className="mb-3 mt-6 font-semibold">Quick Links</h3>
-      <ul className="space-y-2 text-sm cursor-pointer">
-        {links.map((link) => (
-          <li key={link}>
+      <span className="space-y-2 text-sm cursor-pointer">
+        {links.map((link, index) => (
+          <h5 key={index}>
             <a href="/" className="hover:text-green-600">
               {link}
             </a>
-          </li>
+          </h5>
         ))}
-      </ul>
+      </span>
     </div>
   );
 };

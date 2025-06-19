@@ -3,15 +3,15 @@ const FooterSocials = () => {
   return (
     <div>
       <h3 className="mb-3 mt-6 font-semibold">Socials</h3>
-      <ul className="space-y-2 text-sm">
-        {socials.map((social) => (
-          <li key={social}>
+      <span className="space-y-2 text-sm">
+        {socials.map((social, index) => (
+          <h5 key={index}>
             <a href="/" className="hover:text-green-600">
               {social}
             </a>
-          </li>
+          </h5>
         ))}
-      </ul>
+      </span>
     </div>
   );
 };
