@@ -1,9 +1,23 @@
-function Landing() {
+// import PropertyHero from "./Components/PropertyHero";
+// import PropertyDetails from "./Components/PropertyDetails";
+import Hero from "../Components/Hero"
+import PropertyList from "../Components/PropertyList";
+import Testimonials from "../Components/Testimonials";
+import SearchFeature from "../Components/SearchFeature";
+import SubSection from "../Components/SubSection";
+
+function App() {
   return (
-    <div>
-      <h1>Listings Page</h1>
-    </div>
+    <section>
+      <div>
+      <Hero />
+      <SearchFeature /> 
+      </div>
+      <SubSection />
+      <PropertyList />
+      <Testimonials />
+    </section>
   );
 }
 
-export default Landing;
+export default App;

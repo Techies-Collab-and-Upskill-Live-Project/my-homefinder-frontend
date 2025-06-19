@@ -1,7 +1,7 @@
-import trust from '../assets/trust.png';
-import Reliable from '../assets/Reliable.png';
-import FastResponse from '../assets/FastResponse.png';
-import communication from '../assets/Communication.jpg';
+import trust from '/images/trust.png';
+import Reliable from '/images/Reliable.png';
+import FastResponse from '/images/FastResponse.png';
+import communication from '/images/Communication.jpg';
 
 const SubSection = () => {
   return (

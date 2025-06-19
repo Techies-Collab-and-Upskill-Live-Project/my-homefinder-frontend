@@ -4,9 +4,9 @@ import "../Assets/styles/TenantProfile.css";
 import Pen from "../Assets/images/image9.png"; 
 import Mastercard from "../Assets/images/Mastercard.png";
 import Visa from "../Assets/images/Visa-logo.png";
-import Navbar from "../components/Navbar";
-import EditNumberModal from "../components/EditNumberModal";
-import UpdateProfileModal from '../components/UpdateProfileModal';
+import Navbar from "../Components/Navbar";
+import EditNumberModal from "../Components/EditNumberModal";
+import UpdateProfileModal from '../Components/UpdateProfileModal';
 import { useProfile } from "../Assets/ProfileContext";
 
 const TenantProfile = () => {

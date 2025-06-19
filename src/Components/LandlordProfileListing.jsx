@@ -4,10 +4,10 @@ import '../Assets/styles/LandlordProfileB4Listing.css'
 import Pen from "../Assets/images/image9.png"
 import HouseImage from "../Assets/images/House-Image.png" 
 import UserImage from "../Assets/images/image8.png"
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import EditNumberModal from "../components/EditNumberModal";
-import { useProfile } from "../Assets/ProfileContext";
+import Navbar from "../Profile/components/Navbar";
+import Footer from "../Profile/components/Footer";
+import EditNumberModal from "../Profile/components/EditNumberModal";
+import { useProfile } from "../Profile/Assets/ProfileContext";
 import { useState } from "react";
 
 

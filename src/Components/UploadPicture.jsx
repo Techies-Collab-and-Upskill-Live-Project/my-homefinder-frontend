@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import "../Assets/styles/ProfileForm.css";
 import ProfileImage from '../Assets/images/ProfileIcon.png';
-import { useProfile } from '../Assets/ProfileContext';
+import { useProfile } from '../Profile/Assets/ProfileContext';
 
 const UploadPicture = ({ onImageSelect, initialImage, disabled }) => {
   const { updateProfile } = useProfile();

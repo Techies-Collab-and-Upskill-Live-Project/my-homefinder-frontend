@@ -3,10 +3,10 @@ import '../Assets/styles/ProfileFormLandlord.css';
 import { useState } from 'react';
 
 import Preference from "../Assets/images/Preference.png"
-import Navbar from '../components/Navbar';
-import UploadPicture from '../components/UploadPicture';
+import Navbar from '../Profile/components/Navbar';
+import UploadPicture from '../Profile/components/UploadPicture';
 import { useNavigate } from 'react-router-dom';
-import { useProfile } from '../Assets/ProfileContext';
+import { useProfile } from '../Profile/Assets/ProfileContext';
 
 const ProfileFormLandlord = () => {
 
