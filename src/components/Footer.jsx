@@ -2,7 +2,6 @@ import FooterBrandContact from "./FooterBrandContact";
 import FooterLinks from "./FooterLinks";
 import FooterSocials from "./FooterSocials";
 import FooterNewsletter from "./FooterNewsletter";
-
 const Footer = () => {
   return (
     <footer className="bg-white border-t border-green-600 text-gray-700">

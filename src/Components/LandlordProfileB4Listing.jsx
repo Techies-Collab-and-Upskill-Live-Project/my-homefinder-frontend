@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import '../Assets/styles/LandlordProfileB4Listing.css'
 import Pen from "../Assets/images/image9.png"
 import UserImage from "../Assets/images/image8.png"
-import Navbar from "../components/Navbar";
+import Navbar from "../Profile/components/Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
-import EditNumberModal from "../components/EditNumberModal";
-import { useProfile } from "../Assets/ProfileContext";
+import EditNumberModal from "../Profile/components/EditNumberModal";
+import { useProfile } from "../Profile/Assets/ProfileContext";
 
 
 

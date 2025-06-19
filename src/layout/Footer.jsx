@@ -1,5 +1,5 @@
 import footer from "./footer.module.css";
-import footerImg from "../assets/FooterLogo.png";
+import footerImg from "/images/FooterLogo.png";
 import {
   IoCallOutline,
   MdOutlineMailOutline,

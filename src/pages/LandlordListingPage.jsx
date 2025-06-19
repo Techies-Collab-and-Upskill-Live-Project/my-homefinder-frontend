@@ -1,12 +1,12 @@
 import { useState } from "react";
-import listing from "./LandlordlistingPage.module.css";
+// import styles  from "./Components/LandlordListingPage.module.css";
 import TopNavbar from "../layout/TopNavbar";
 import Sidebar from "../layout/Sidebar";
 import PropertyHero from "../components/PropertyHero";
 import PropertyDetails from "../components/PropertyDetails";
 import RentedCard from "../components/RentedCard";
 import AddedCard from "../components/AddedCard";
-import Footer from "../layout/Footer";
+import Footer from "../Components/Footer";
 
 const LandlordlistingPage = () => {
   const [showMenu, setShowMenu] = useState(false);

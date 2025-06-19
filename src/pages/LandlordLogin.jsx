@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
+// import 'bootstrap-icons/font/bootstrap-icons.css';
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
-
-export default function SignUpPage() {
+export default function HomePage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,7 +26,6 @@ export default function SignUpPage() {
     const newErrors = {};
     if (!formData.name) newErrors.name = "Name is required";
     if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.phone) newErrors.phone = "Phone number is required";
     if (!formData.password) newErrors.password = "Password is required";
     else if (formData.password.length < 6)
       newErrors.password = "Password must be at least 6 characters";
@@ -45,60 +43,26 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="d-flex vh-100 justify-content-center align-items-center bg-light px-3 position-relative overflow-hidden">
-
-       <div style={{ width: "250px", height: "250px", backgroundColor: "green", borderRadius: "50%", position: "absolute", top: "-100px", right: "-100px" }}></div>
+     <div className="d-flex vh-100 justify-content-center align-items-center bg-light px-3 position-relative overflow-hidden">
+      <div style={{ width: "250px", height: "250px", backgroundColor: "green", borderRadius: "50%", position: "absolute", top: "-100px", right: "-100px" }}></div>
 
       <div style={{ width: "250px", height: "250px", backgroundColor: "green", borderRadius: "50%", position: "absolute", bottom: "-100px", left: "-100px" }}></div>
+       <img src="\Images\Logo.png" alt="Logo" style={{ position: 'absolute', top: '0px', left: '20px', height: '100px' }} />
 
-      <img src="\Images\Logo.png" alt="Logo" style={{ position: 'absolute', top: '0px', left: '20px', height: '100px' }} />
-      
-       <div className="card shadow p-4 rounded-4" style={{ maxWidth: "800px", width: "100%", zIndex: 1, }}>
+      <div className="card shadow p-4 rounded-4" style={{ maxWidth: "800px", width: "100%", zIndex: 1 }}>
         <div className="text-start">
           <button className="btn-close" />
         </div>
 
       <form
         onSubmit={handleSubmit}
-       
+      
       >
-        <h2 className="mb-4 text-center fw-semibold ">Hello! Sign up to list your home!!</h2>
-
-        <div className="mb-3 position-relative">
-           <label className="position-absolute bg-white px-2 py-1 rounded shadow-sm d-flex align-items-center" style={{ top: "-10px", left: "10px", color: "rgba(0,0,0,0.5)", fontSize:'16px' }}>
-            <i class="bi bi-person  me-2" style={{color: "rgba(0,0,0,1)", width:'17px'}}></i> Name
-          </label>
-          
-          <input
-            type="text"
-            name="name"
-            className={`form-control ${errors.name ? "is-invalid" : ""}`}
-            value={formData.name}
-            onChange={handleChange}
-            
-          />
-          {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-        </div>
-        
-
-        <div className="mb-2 position-relative">
-            <label className="position-absolute bg-white px-2 py-1 rounded shadow-sm d-flex align-items-center" style={{ top: "-10px", left: "10px", color: "rgba(0,0,0,0.5)", fontSize:'16px' }}>
-            <i class="bi bi-telephone me-2" style={{color: "rgba(0,0,0,1)", width:'17px'}}></i> Phone Number
-          </label>
-          <input
-            type="tel"
-            id="name"
-            name="phone"
-            className={`form-control ${errors.name ? "is-invalid" : ""}`}
-            value={formData.phone}
-            onChange={handleChange}
-            style={ {height: '50px'}}
-          />
-          {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
-        </div>
+       <h2 className="mb-2 text-center fw-semibold ">Welcome Back!!</h2>
+        <p className="text-center">Please Log in to continue</p>
 
 
-        <div className="mb-3 position-relative">
+       <div className="mb-3 position-relative">
           <label className="position-absolute bg-white px-2 py-1 rounded shadow-sm d-flex align-items-center" style={{ top: "-10px", left: "10px", color: "rgba(0,0,0,0.5)", fontSize:'16px' }}>
            <i class="bi bi-envelope me-2"style={{color: "rgba(0,0,0,1)", width:'17px'}}></i>Email
           </label>
@@ -115,7 +79,6 @@ export default function SignUpPage() {
             <div className="invalid-feedback">{errors.email}</div>
           )}
         </div>
-
 
         <div className="mb-3 position-relative">
           <label className="position-absolute bg-white px-2 py-1 rounded shadow-sm d-flex align-items-center" style={{ top: "-10px", left: "10px", color: "rgba(0,0,0,0.5)", fontSize:'16px' }}>
@@ -135,23 +98,14 @@ export default function SignUpPage() {
           )}
         </div>
 
-        <button type="submit" className="btn btn helo w-100 mb-0" style={{fontSize:'16px',}}>
-          Sign Up
+        <button type="submit" className="btn btn helo w-100 mb-3">
+          Login
         </button>
-
-        <div className="d-flex align-items-center my-2" style={{ marginTop: '0px', marginBottom: '0px' }}>
-          <div className="flex-grow-1"style={{ borderTop: '1px solid rgba(90,168,90,1)' }}></div>
-          <span className="mx-3 text-dark">Or sign up with</span>
-          <div className="flex-grow-1"style={{ borderTop: '1px solid rgba(90,168,90,1)' }}></div>
-        </div>
-
-        
         {/* <div className="d-flex justify-content-center align-items-center mb-3">
           <hr/> Or Sign Up With <hr />
           </div> */}
         {/* Social login icons only */}
-
-<div className="container">
+      <div className="container">
       <div className="row justify-content-center text-center">
         {/* Google */}
         <div className="col-4 col-md-1">
@@ -191,20 +145,18 @@ export default function SignUpPage() {
         </div>
       </div>
     </div>
-  
-
 
         {/* Already have an account */}
-        <div className="text-center mt-0 ">
+        <div className="text-center mt-3 ">
           <p className="d-flex justify-content-center align-items-center">
-          <span>Already have an account? </span>
+          <span>Don't have an account? </span>
           <button
             type="button"
-            style={{color:'rgba(90,168,90,1)'}}
             className="btn btn-link  text-decoration-none"
-            onClick={() => navigate("/login")}
-          >
-            Login
+            style={{color:'rgba(90,168,90,1)'}}
+            onClick={() => navigate("/signup")}>
+          
+            Sign Up
           </button>
         </p>
         </div>

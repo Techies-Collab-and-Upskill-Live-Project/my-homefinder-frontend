@@ -1,5 +1,5 @@
 import React from 'react';
-import Chinanza1 from '../assets/Chinanza1.jpg';
+import Chinanza1 from '/images/Chinanza1.jpg';
 
 const testimonials = [
   {
