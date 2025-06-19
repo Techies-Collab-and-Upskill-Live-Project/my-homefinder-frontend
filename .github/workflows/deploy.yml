@@ -34,7 +34,7 @@ jobs:
             npx vercel alias set $DEPLOY_URL devhomefinder.vercel.app --token=$VERCEL_TOKEN
           elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
             DEPLOY_URL=$(npx vercel --yes --token=$VERCEL_TOKEN --prod --confirm)
-            npx vercel alias set $DEPLOY_URL devhomefinder.vercel.app --token=$VERCEL_TOKEN
+            npx vercel alias set $DEPLOY_URL prodhomefinder.vercel.app --token=$VERCEL_TOKEN
           fi
 
       - name: Post-deployment cleanup
