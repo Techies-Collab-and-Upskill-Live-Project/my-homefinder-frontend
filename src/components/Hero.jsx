@@ -19,7 +19,12 @@ const Hero = () => {
             Browse verified listings, connect with landlords, and rent with
             confidence.
           </p>
-          <button className="padding_two mt-6 text-lg font-semibold cursor-pointer bg-green-700 text-white rounded-lg hover:bg-green-600 transition duration-300">
+          <button
+            style={{
+              borderRadius: "10px"
+            }}
+            className="padding_two mt-6 text-lg font-semibold cursor-pointer bg-green-700 text-white rounded-lg hover:bg-green-600 transition duration-300"
+          >
             Get Started
           </button>
         </div>

@@ -128,7 +128,12 @@ const PropertyList = () => (
 
             <div className="mt-4 flex justify-between items-center">
               <span className="font-bold text-lg">{property.price}</span>
-              <button className="padding bg-green-600 text-white rounded-[12px] hover:bg-green-700">
+              <button
+                style={{
+                  borderRadius: "10px"
+                }}
+                className="padding bg-green-600 text-white rounded-[12px] hover:bg-green-700"
+              >
                 Rent Now
               </button>
             </div>

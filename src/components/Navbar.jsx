@@ -19,8 +19,20 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         {nav_links.map((item, index) => (
           <span key={index}>
-            <Link to={item.path}>
-              <h5 className="hover:cursor-pointer font-semibold">
+            <Link
+              to={item.path}
+              style={{
+                textDecoration: "none",
+              }}
+            >
+              <h5
+                style={{
+                  fontSize: "15px",
+                  color: "black",
+                  textDecoration: "none",
+                }}
+                className="hover:cursor-pointer font-semibold"
+              >
                 {item.text}
               </h5>
             </Link>
@@ -31,11 +43,21 @@ const Navbar = () => {
       {/* Auth Buttons */}
       <div className="flex gap-2">
         <Link to="/TenantLogin">
-          <button className="padding border border-green-600 text-green-600 text-lg rounded-lg hover:bg-green-50 transition cursor-pointer">
+          <button
+            style={{
+              borderRadius: "10px",
+            }}
+            className="padding border border-green-600 text-green-600 text-lg rounded-lg hover:bg-green-50 transition cursor-pointer"
+          >
             Login
           </button>
         </Link>
-        <button className="bg-green-600 padding text-white rounded-lg hover:bg--900 transition cursor-pointer">
+        <button
+          style={{
+            borderRadius: "10px",
+          }}
+          className="bg-green-600 padding text-white rounded-lg hover:bg--900 transition cursor-pointer"
+        >
           Sign Up
         </button>
       </div>

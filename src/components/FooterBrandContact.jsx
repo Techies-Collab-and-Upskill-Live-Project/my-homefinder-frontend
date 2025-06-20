@@ -18,13 +18,27 @@ const FooterBrandContact = () => {
       </div>
       <p className="text-sm flex items-center space-x-2">
         <PhoneIcon size={20} weight="bold" />
-        <a href="tel:+2344345464356" className="hover:text-green-600">
+        <a
+          style={{
+            textDecoration: "none",
+            color: "black",
+          }}
+          href="tel:+2344345464356"
+          className="hover:text-green-600"
+        >
           434-546-4356
         </a>
       </p>
       <p className="text-sm flex items-center space-x-2">
         <EnvelopeSimpleIcon size={20} weight="bold" />
-        <a href="mailto:contact@lift.agency" className="hover:text-green-600">
+        <a
+          style={{
+            textDecoration: "none",
+            color: "black",
+          }}
+          href="mailto:contact@lift.agency"
+          className="hover:text-green-600"
+        >
           contact@myhomefinder.com
         </a>
       </p>

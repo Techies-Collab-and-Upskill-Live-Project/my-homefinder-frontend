@@ -142,8 +142,11 @@ const SearchFeature = () => {
         {/* Search Button */}
         <div className="w-full max-w-xl flex justify-center mt-4">
           <button
+            style={{
+              borderRadius: "10px",
+            }}
             onClick={handleSearch}
-            className="w-full md:w-1/2 lg:w-1/3 px-8 py-4 bg-green-600 padding text-white text-base font-semibold rounded-lg hover:bg-green-700 transition duration-300"
+            className="w-full md:w-1/2 lg:w-1/3 px-8 py-2 bg-green-600 padding text-white text-base font-semibold rounded-lg hover:bg-green-700 transition duration-300"
           >
             Search
           </button>
