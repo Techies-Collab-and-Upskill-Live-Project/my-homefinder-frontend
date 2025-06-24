@@ -8,40 +8,32 @@ import {
 const FooterBrandContact = () => {
   return (
     <div className="space-y-4">
-      <div className="flex items-center">
-        <img src={footerImg} className="-ml-5" alt="logo" />
-        <span className="text-2xl font-bold text-green-600">MyHomeFinder</span>
+      <div className="flex items-center gap-3">
+        <img src={footerImg} className="h-10 w-auto" alt="logo" />
+        <span className="text-xl font-bold text-green-600">MyHomeFinder</span>
       </div>
-      <div className="text-sm flex items-start space-x-2">
+
+      <div className="text-sm flex items-start gap-2 text-gray-700">
         <MapPinIcon size={20} weight="bold" />
         <span>5123 Market St., #22B, Charlottesville, California 44635</span>
       </div>
-      <p className="text-sm flex items-center space-x-2">
+
+      <div className="text-sm flex items-center gap-2 text-gray-700">
         <PhoneIcon size={20} weight="bold" />
-        <a
-          style={{
-            textDecoration: "none",
-            color: "black",
-          }}
-          href="tel:+2344345464356"
-          className="hover:text-green-600"
-        >
+        <a href="tel:+2344345464356" className="hover:text-green-600">
           434-546-4356
         </a>
-      </p>
-      <p className="text-sm flex items-center space-x-2">
+      </div>
+
+      <div className="text-sm flex items-center gap-2 text-gray-700">
         <EnvelopeSimpleIcon size={20} weight="bold" />
         <a
-          style={{
-            textDecoration: "none",
-            color: "black",
-          }}
-          href="mailto:contact@lift.agency"
+          href="mailto:contact@myhomefinder.com"
           className="hover:text-green-600"
         >
           contact@myhomefinder.com
         </a>
-      </p>
+      </div>
     </div>
   );
 };

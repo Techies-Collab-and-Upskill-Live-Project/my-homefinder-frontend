@@ -1,4 +1,3 @@
-import rented from "./RentedCard.module.css";
 import { recentlyRented } from "../data/property";
 
 const RentedCard = () => {

@@ -1,23 +1,14 @@
 import { useState } from "react";
-import sidebar from "./Sidebar.module.css";
-import {
-  CiGrid41,
-  PiHouseLight,
-  HiOutlineUsers,
-  VscTools,
-  HiOutlineUser,
-  IoSettingsOutline,
-  CiLogout,
-} from "../icons";
+
 
 const navLinks = [
-  { id: 1, name: "Overview", path: "/overview", icon: <CiGrid41 /> },
-  { id: 2, name: "Properties", path: "/property", icon: <PiHouseLight /> },
-  { id: 3, name: "Tenants", path: "/tenants", icon: <HiOutlineUsers /> },
-  { id: 4, name: "Maintenance", path: "/maintenance", icon: <VscTools /> },
-  { id: 5, name: "Account", path: "/account", icon: <HiOutlineUser /> },
-  { id: 6, name: "Settings", path: "/settings", icon: <IoSettingsOutline /> },
-  { id: 7, name: "Logout", path: "/logout", icon: <CiLogout /> },
+  { id: 1, name: "Overview", path: "/overview", icon: "" },
+  { id: 2, name: "Properties", path: "/property", icon: "" },
+  { id: 3, name: "Tenants", path: "/tenants", icon: "" },
+  { id: 4, name: "Maintenance", path: "/maintenance", icon: "" },
+  { id: 5, name: "Account", path: "/account", icon: "" },
+  { id: 6, name: "Settings", path: "/settings", icon: "" },
+  { id: 7, name: "Logout", path: "/logout", icon: "" },
 ];
 
 const Sidebar = ({ className }) => {

@@ -1,4 +1,3 @@
-import footer from "./footer.module.css";
 import footerImg from "/images/FooterLogo.png";
 import {
   IoCallOutline,

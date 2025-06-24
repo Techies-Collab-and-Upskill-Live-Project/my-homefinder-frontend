@@ -3,7 +3,6 @@ import '../Assets/styles/ProfileForm.css';
 import { useState, useEffect } from 'react';
 import UploadPicture from '../Components/UploadPicture';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 import { useProfile } from '../Assets/ProfileContext';
 
 const ProfileForm = () => {

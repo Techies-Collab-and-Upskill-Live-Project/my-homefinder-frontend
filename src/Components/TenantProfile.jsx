@@ -1,12 +1,9 @@
-
 import React, { useState } from "react";
-import "../Assets/styles/TenantProfile.css";
-import Pen from "../Assets/images/image9.png"; 
+import Pen from "../Assets/images/image9.png";
 import Mastercard from "../Assets/images/Mastercard.png";
 import Visa from "../Assets/images/Visa-logo.png";
-import Navbar from "../Components/Navbar";
 import EditNumberModal from "../Components/EditNumberModal";
-import UpdateProfileModal from '../Components/UpdateProfileModal';
+import UpdateProfileModal from "../Components/UpdateProfileModal";
 import { useProfile } from "../Assets/ProfileContext";
 
 const TenantProfile = () => {
@@ -21,10 +18,8 @@ const TenantProfile = () => {
   const openUpdateProfileModal = () => setShowUpdateProfileModal(true);
   const closeUpdateProfileModal = () => setShowUpdateProfileModal(false);
 
-  
   const defaultUserImage = "https://via.placeholder.com/150";
 
-  
   if (!profileData) {
     return (
       <div className="min-h-screen bg-gray-100 p-8 flex justify-center items-center">
@@ -35,18 +30,26 @@ const TenantProfile = () => {
 
   return (
     <>
-      <Navbar />
       <div className="form-container">
         <div className="profile-header">
           <div>
             <img
               src={profileData.image || defaultUserImage}
-              style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }}
+              style={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
               alt="Profile"
             />
             <p>{profileData.name || "Lucy Favy"}</p>
           </div>
-          <a onClick={openUpdateProfileModal} className="update-profile-btn" style={{cursor: 'pointer'}}>
+          <a
+            onClick={openUpdateProfileModal}
+            className="update-profile-btn"
+            style={{ cursor: "pointer" }}
+          >
             Update Profile
           </a>
         </div>
@@ -58,11 +61,21 @@ const TenantProfile = () => {
           <div className="profile-line"></div>
           <div>
             <p>{profileData.phoneNumber || "08157648539"}</p>
-            <img onClick={openEditNumberModal} src={Pen} style={{ width: '17px', height: '17px', cursor: 'pointer' }} alt="Edit Phone" />
+            <img
+              onClick={openEditNumberModal}
+              src={Pen}
+              style={{ width: "17px", height: "17px", cursor: "pointer" }}
+              alt="Edit Phone"
+            />
           </div>
           <div>
             <p>{profileData.phoneNumber || "08157648539"}</p>
-            <img onClick={openEditNumberModal} src={Pen} style={{ width: '17px', height: '17px', cursor: 'pointer' }} alt="Edit Phone" />
+            <img
+              onClick={openEditNumberModal}
+              src={Pen}
+              style={{ width: "17px", height: "17px", cursor: "pointer" }}
+              alt="Edit Phone"
+            />
           </div>
         </div>
 
@@ -73,22 +86,29 @@ const TenantProfile = () => {
           </div>
           <div className="profile-line"></div>
           <div className="card-detail">
-            <img src={Visa} style={{ width: '62.93px', height: '19px' }} alt="Visa Card" />
+            <img
+              src={Visa}
+              style={{ width: "62.93px", height: "19px" }}
+              alt="Visa Card"
+            />
             <div>
-              <p >*****8994</p>
-              <p style={{ marginTop: '-13px' }}>Debit Card</p>
+              <p>*****8994</p>
+              <p style={{ marginTop: "-13px" }}>Debit Card</p>
             </div>
           </div>
           <div className="card-detail">
-            <img src={Mastercard} style={{ width: '60.30px', height: '35px' }} alt="Mastercard" />
+            <img
+              src={Mastercard}
+              style={{ width: "60.30px", height: "35px" }}
+              alt="Mastercard"
+            />
             <div>
               <p>****5676</p>
-              <p style={{ marginTop: '-13px' }}>Debit Card</p>
+              <p style={{ marginTop: "-13px" }}>Debit Card</p>
             </div>
           </div>
         </div>
 
-       
         {isEditNumberModalOpen && (
           <EditNumberModal
             currentNumber={profileData.phoneNumber}
@@ -97,9 +117,7 @@ const TenantProfile = () => {
         )}
 
         {showUpdateProfileModal && (
-          <UpdateProfileModal
-            onClose={closeUpdateProfileModal}
-          />
+          <UpdateProfileModal onClose={closeUpdateProfileModal} />
         )}
       </div>
     </>

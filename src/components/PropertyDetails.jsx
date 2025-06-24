@@ -1,12 +1,4 @@
-import details from "./PropertyDetails.module.css";
 import { mainProperty } from "../data/property";
-import {
-  IoLocationOutline,
-  MdOutlineBed,
-  MdOutlineBathroom,
-  FaSwimmingPool,
-  IoMdWine,
-} from "../icons";
 
 //  this is the property deatils c ard that contains name, location, amenities, rent, status.
 const PropertyDetails = () => {

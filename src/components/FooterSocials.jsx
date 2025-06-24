@@ -1,32 +1,21 @@
 const FooterSocials = () => {
   const socials = ["Facebook", "LinkedIn", "Instagram", "X"];
+
   return (
     <div>
-      <h5
-        style={{
-          marginTop: "20px",
-        }}
-        className="mb-3 mt-6 font-semibold"
-      >
-        Socials
-      </h5>
-      <span className="space-y-2 text-sm">
+      <h5 className="mb-4 text-base font-semibold text-gray-800">Socials</h5>
+      <ul className="space-y-2 text-sm">
         {socials.map((social, index) => (
-          <h5 key={index}>
+          <li key={index}>
             <a
-              style={{
-                textDecoration: "none",
-                color: "black",
-                fontSize: "15px",
-              }}
               href="/"
-              className="hover:text-green-600"
+              className="text-gray-700 hover:text-green-600 transition"
             >
               {social}
             </a>
-          </h5>
+          </li>
         ))}
-      </span>
+      </ul>
     </div>
   );
 };

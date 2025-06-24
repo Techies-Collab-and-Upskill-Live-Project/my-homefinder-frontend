@@ -1,6 +1,6 @@
 // import PropertyHero from "./Components/PropertyHero";
 // import PropertyDetails from "./Components/PropertyDetails";
-import Hero from "../Components/Hero"
+import Hero from "../Components/Hero";
 import PropertyList from "../Components/PropertyList";
 import Testimonials from "../Components/Testimonials";
 import SearchFeature from "../Components/SearchFeature";
@@ -10,8 +10,8 @@ function App() {
   return (
     <section>
       <div>
-      <Hero />
-      <SearchFeature /> 
+        <Hero />
+        <SearchFeature />
       </div>
       <SubSection />
       <PropertyList />

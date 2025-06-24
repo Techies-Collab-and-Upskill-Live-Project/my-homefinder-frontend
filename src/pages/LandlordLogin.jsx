@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 // import 'bootstrap-icons/font/bootstrap-icons.css';
 // import "bootstrap/dist/css/bootstrap.min.css";

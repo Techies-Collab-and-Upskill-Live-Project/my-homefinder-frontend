@@ -1,7 +1,5 @@
 import { useState } from "react";
-import topNav from "./TopNavbar.module.css";
 import userImg from "/images/User.png";
-import { MdOutlineMessage, IoIosArrowDown, RxHamburgerMenu } from "../icons";
 
 import logo from "/images/HeroLogo.png";
 

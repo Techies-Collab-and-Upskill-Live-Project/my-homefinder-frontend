@@ -1,5 +1,5 @@
+import { MapPin } from "@phosphor-icons/react";
 import React from "react";
-import { BedDouble, Bath, Waves, Martini, Ruler, MapPin } from "lucide-react";
 
 const properties = [
   {
@@ -9,11 +9,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: BedDouble, text: "2 Master Bedrooms" },
-      { icon: Bath, text: "2 Bathrooms" },
-      { icon: Ruler, text: "5m²" },
-      { icon: Waves, text: "Swimming Pool" },
-      { icon: Martini, text: "Bar" },
+      { icon: "", text: "2 Master Bedrooms" },
+      { icon: "", text: "2 Bathrooms" },
+      { icon: "", text: "5m²" },
+      { icon: "", text: "Swimming Pool" },
+      { icon: "", text: "Bar" },
     ],
   },
   {
@@ -23,11 +23,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: BedDouble, text: "2 Master Bedrooms" },
-      { icon: Bath, text: "2 Bathrooms" },
-      { icon: Ruler, text: "5m²" },
-      { icon: Waves, text: "Swimming Pool" },
-      { icon: Martini, text: "Bar" },
+      { icon: "", text: "2 Master Bedrooms" },
+      { icon: "", text: "2 Bathrooms" },
+      { icon: "", text: "5m²" },
+      { icon: "", text: "Swimming Pool" },
+      { icon: "", text: "Bar" },
     ],
   },
   {
@@ -37,11 +37,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: BedDouble, text: "2 Master Bedrooms" },
-      { icon: Bath, text: "2 Bathrooms" },
-      { icon: Ruler, text: "5m²" },
-      { icon: Waves, text: "Swimming Pool" },
-      { icon: Martini, text: "Bar" },
+      { icon: "", text: "2 Master Bedrooms" },
+      { icon: "", text: "2 Bathrooms" },
+      { icon: "", text: "5m²" },
+      { icon: "", text: "Swimming Pool" },
+      { icon: "", text: "Bar" },
     ],
   },
   {
@@ -51,11 +51,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: BedDouble, text: "2 Master Bedrooms" },
-      { icon: Bath, text: "2 Bathrooms" },
-      { icon: Ruler, text: "5m²" },
-      { icon: Waves, text: "Swimming Pool" },
-      { icon: Martini, text: "Bar" },
+      { icon: "", text: "2 Master Bedrooms" },
+      { icon: "", text: "2 Bathrooms" },
+      { icon: "", text: "5m²" },
+      { icon: "", text: "Swimming Pool" },
+      { icon: "", text: "Bar" },
     ],
   },
   {
@@ -65,11 +65,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: BedDouble, text: "2 Master Bedrooms" },
-      { icon: Bath, text: "2 Bathrooms" },
-      { icon: Ruler, text: "5m²" },
-      { icon: Waves, text: "Swimming Pool" },
-      { icon: Martini, text: "Bar" },
+      { icon: "", text: "2 Master Bedrooms" },
+      { icon: "", text: "2 Bathrooms" },
+      { icon: "", text: "5m²" },
+      { icon: "", text: "Swimming Pool" },
+      { icon: "", text: "Bar" },
     ],
   },
   {
@@ -79,11 +79,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: BedDouble, text: "2 Master Bedrooms" },
-      { icon: Bath, text: "2 Bathrooms" },
-      { icon: Ruler, text: "5m²" },
-      { icon: Waves, text: "Swimming Pool" },
-      { icon: Martini, text: "Bar" },
+      { icon: "", text: "2 Master Bedrooms" },
+      { icon: "", text: "2 Bathrooms" },
+      { icon: "", text: "5m²" },
+      { icon: "", text: "Swimming Pool" },
+      { icon: "", text: "Bar" },
     ],
   },
 ];
@@ -120,7 +120,7 @@ const PropertyList = () => (
             <div className="flex flex-wrap text-sm text-gray-700 mt-3 gap-3">
               {property.features.map((feature, i) => (
                 <span key={i} className="flex items-center gap-1">
-                  <feature.icon className="w-4 h-4 text-gray-500" />
+                  {/* <feature.icon className="w-4 h-4 text-gray-500" /> */}
                   {feature.text}
                 </span>
               ))}

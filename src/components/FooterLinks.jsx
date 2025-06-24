@@ -1,32 +1,23 @@
 const FooterLinks = () => {
   const links = ["Home", "Explore", "About Us", "How it works"];
+
   return (
     <div>
-      <h5
-        style={{
-          marginTop: "20px",
-        }}
-        className="mb-3 mt-6 font-semibold"
-      >
+      <h5 className="mb-4 text-base font-semibold text-gray-800">
         Quick Links
       </h5>
-      <span className="space-y-2 text-sm cursor-pointer">
+      <ul className="space-y-2 text-sm">
         {links.map((link, index) => (
-          <h5 key={index}>
+          <li key={index}>
             <a
-              style={{
-                textDecoration: "none",
-                color: "black",
-                fontSize: "15px",
-              }}
               href="/"
-              className="hover:text-green-600"
+              className="text-gray-700 hover:text-green-600 transition"
             >
               {link}
             </a>
-          </h5>
+          </li>
         ))}
-      </span>
+      </ul>
     </div>
   );
 };

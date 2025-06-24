@@ -1,5 +1,4 @@
 import { useState } from "react";
-import hero from "./PropertyHero.module.css";
 
 const images = [
   "/images/House1.png",

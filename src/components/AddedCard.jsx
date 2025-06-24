@@ -1,4 +1,3 @@
-import add from "./AddedCard.module.css";
 import { recentlyAdded } from "../data/property";
 
 const AddedCard = () => {
