@@ -1,7 +1,5 @@
-
 import React, { useState } from "react";
-import "../Assets/styles/TenantProfile.css";
-import Pen from "../Assets/images/image9.png"; 
+import Pen from "../Assets/images/image9.png";
 import Mastercard from "../Assets/images/Mastercard.png";
 import Visa from "../Assets/images/Visa-logo.png";
 import Navbar from "../components/Navbar";
@@ -21,10 +19,8 @@ const TenantProfile = () => {
   const openUpdateProfileModal = () => setShowUpdateProfileModal(true);
   const closeUpdateProfileModal = () => setShowUpdateProfileModal(false);
 
-  
   const defaultUserImage = "https://via.placeholder.com/150";
 
-  
   if (!profileData) {
     return (
       <div className="min-h-screen bg-gray-100 p-8 flex justify-center items-center">
@@ -36,59 +32,65 @@ const TenantProfile = () => {
   return (
     <>
       <Navbar />
-      <div className="form-container">
-        <div className="profile-header">
-          <div>
+      <div className="max-w-4xl mx-auto mt-32 p-8 md:p-14 font-sans leading-tight border border-gray-300 rounded-xl shadow-lg flex flex-col gap-8">
+        <div className="flex flex-row items-center justify-center gap-3 md:gap-6">
+          <div className="flex flex-col items-center justify-center gap-2">
             <img
               src={profileData.image || defaultUserImage}
-              style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }}
+              
+              className="w-20 h-20 rounded-full object-cover"
               alt="Profile"
             />
-            <p>{profileData.name || "Lucy Favy"}</p>
+            <p className="text-black text-xl font-semibold">{profileData.name || "Lucy Favy"}</p>
           </div>
-          <a onClick={openUpdateProfileModal} className="update-profile-btn" style={{cursor: 'pointer'}}>
+          <a
+            onClick={openUpdateProfileModal}
+            className="text-orange-500 text-sm font-normal cursor-pointer hover:underline"
+          >
             Update Profile
           </a>
         </div>
 
-        <div className="profile-contact">
-          <div>
-            <p>Contact Details</p>
+        <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 mt-5 gap-3">
+          <div className="flex flex-row justify-between items-center mt-4">
+            <p className="text-base font-normal">Contact Details</p>
           </div>
-          <div className="profile-line"></div>
-          <div>
-            <p>{profileData.phoneNumber || "08157648539"}</p>
-            <img onClick={openEditNumberModal} src={Pen} style={{ width: '17px', height: '17px', cursor: 'pointer' }} alt="Edit Phone" />
+          <div className="border border-gray-300 rounded-full w-full"></div>
+          <div className="flex flex-row justify-between items-center mt-4">
+            <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
+            <img onClick={openEditNumberModal} src={Pen} className="w-4 h-4 cursor-pointer" alt="Edit Phone" />
           </div>
-          <div>
-            <p>{profileData.phoneNumber || "08157648539"}</p>
-            <img onClick={openEditNumberModal} src={Pen} style={{ width: '17px', height: '17px', cursor: 'pointer' }} alt="Edit Phone" />
-          </div>
-        </div>
-
-        <div className="profile-payment">
-          <div className="payment-header">
-            <p>Payments</p>
-            <button className="manage-payments-btn">Manage</button>
-          </div>
-          <div className="profile-line"></div>
-          <div className="card-detail">
-            <img src={Visa} style={{ width: '62.93px', height: '19px' }} alt="Visa Card" />
-            <div>
-              <p >*****8994</p>
-              <p style={{ marginTop: '-13px' }}>Debit Card</p>
-            </div>
-          </div>
-          <div className="card-detail">
-            <img src={Mastercard} style={{ width: '60.30px', height: '35px' }} alt="Mastercard" />
-            <div>
-              <p>****5676</p>
-              <p style={{ marginTop: '-13px' }}>Debit Card</p>
-            </div>
+          <div className="flex flex-row justify-between items-center mt-4">
+            <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
+            <img onClick={openEditNumberModal} src={Pen} className="w-4 h-4 cursor-pointer" alt="Edit Phone" />
           </div>
         </div>
 
-       
+        
+        <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 mt-5 gap-4">
+          <div className="flex flex-row justify-between items-center">
+            <p className="text-base font-normal">Payments</p>
+            <button className="text-sm font-normal text-black bg-transparent border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors">
+              Manage
+            </button>
+          </div>
+          <div className="border border-gray-300 rounded-full w-full"></div>
+          <div className="flex flex-row justify-start items-center gap-5">
+            <img src={Visa} className="w-16 h-5" alt="Visa Card" /> 
+            <div className="flex flex-col gap-2">
+              <p className="text-base font-normal">*****8994</p>
+              <p className="text-base font-normal -mt-3">Debit Card</p> 
+            </div>
+          </div>
+          <div className="flex flex-row justify-start items-center gap-5">
+            <img src={Mastercard} className="w-15 h-9" alt="Mastercard" /> 
+            <div className="flex flex-col gap-2">
+              <p className="text-base font-normal">****5676</p>
+              <p className="text-base font-normal -mt-3">Debit Card</p> 
+            </div>
+          </div>
+        </div>
+
         {isEditNumberModalOpen && (
           <EditNumberModal
             currentNumber={profileData.phoneNumber}

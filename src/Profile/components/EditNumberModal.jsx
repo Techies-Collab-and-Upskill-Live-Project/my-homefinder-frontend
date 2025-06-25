@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useProfile } from '../Assets/ProfileContext'; // Adjust path as needed
+import { useProfile } from '../Assets/ProfileContext'; 
 
 const EditNumberModal = ({ currentNumber, onClose }) => {
-  const { updatePhoneNumber } = useProfile(); // Get updatePhoneNumber from context
+  const { updatePhoneNumber } = useProfile(); 
   const [newNumber, setNewNumber] = useState(currentNumber || '');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Sync internal state with prop if currentNumber changes externally
+  
   useEffect(() => {
     setNewNumber(currentNumber || '');
   }, [currentNumber]);
@@ -27,12 +27,11 @@ const EditNumberModal = ({ currentNumber, onClose }) => {
 
     setIsLoading(true);
     try {
-      // Simulate API call delay (replace with actual backend call)
+      
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Call the context function to update the number
       updatePhoneNumber(newNumber.trim());
-      onClose(); // Close the modal on success
+      onClose(); 
     } catch (err) {
       setError('Failed to update number. Please try again.');
       console.error('Error updating phone number:', err);

@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import "../Assets/styles/ProfileForm.css";
 import ProfileImage from '../Assets/images/ProfileIcon.png';
