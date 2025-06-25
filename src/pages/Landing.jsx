@@ -1,6 +1,6 @@
 // import PropertyHero from "./components/PropertyHero";
 // import PropertyDetails from "./components/PropertyDetails";
-import Hero from "../Components/Hero";
+import Hero from "../components/Hero";
 import PropertyList from "../components/PropertyList";
 import Testimonials from "../components/Testimonials";
 import SearchFeature from "../components/SearchFeature";
