@@ -4,7 +4,7 @@ import Hero from "../components/Hero";
 import PropertyList from "../components/PropertyList";
 import Testimonials from "../components/Testimonials";
 import SearchFeature from "../components/SearchFeature";
-import SubSection from "../components/SubSection";
+import SubSection from "../Components/SubSection";
 
 function App() {
   return (
