@@ -1,4 +1,10 @@
-import { MapPin } from "@phosphor-icons/react";
+import {
+  Bed,
+  Toilet,
+  MapPin,
+  BeerBottle,
+  SwimmingPoolIcon,
+} from "@phosphor-icons/react";
 import React from "react";
 
 const properties = [
@@ -9,11 +15,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: "", text: "2 Master Bedrooms" },
-      { icon: "", text: "2 Bathrooms" },
-      { icon: "", text: "5m²" },
-      { icon: "", text: "Swimming Pool" },
-      { icon: "", text: "Bar" },
+      { icon: Bed, text: "2 Master Bedrooms" },
+      { icon: Toilet, text: "2 Bathrooms" },
+      { icon: Bed, text: "5m²" },
+      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
+      { icon: BeerBottle, text: "Bar" },
     ],
   },
   {
@@ -23,11 +29,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: "", text: "2 Master Bedrooms" },
-      { icon: "", text: "2 Bathrooms" },
-      { icon: "", text: "5m²" },
-      { icon: "", text: "Swimming Pool" },
-      { icon: "", text: "Bar" },
+      { icon: Bed, text: "2 Master Bedrooms" },
+      { icon: Toilet, text: "2 Bathrooms" },
+      { icon: Bed, text: "5m²" },
+      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
+      { icon: BeerBottle, text: "Bar" },
     ],
   },
   {
@@ -37,11 +43,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: "", text: "2 Master Bedrooms" },
-      { icon: "", text: "2 Bathrooms" },
-      { icon: "", text: "5m²" },
-      { icon: "", text: "Swimming Pool" },
-      { icon: "", text: "Bar" },
+      { icon: Bed, text: "2 Master Bedrooms" },
+      { icon: Toilet, text: "2 Bathrooms" },
+      { icon: Bed, text: "5m²" },
+      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
+      { icon: BeerBottle, text: "Bar" },
     ],
   },
   {
@@ -51,11 +57,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: "", text: "2 Master Bedrooms" },
-      { icon: "", text: "2 Bathrooms" },
-      { icon: "", text: "5m²" },
-      { icon: "", text: "Swimming Pool" },
-      { icon: "", text: "Bar" },
+      { icon: Bed, text: "2 Master Bedrooms" },
+      { icon: Toilet, text: "2 Bathrooms" },
+      { icon: Bed, text: "5m²" },
+      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
+      { icon: BeerBottle, text: "Bar" },
     ],
   },
   {
@@ -65,11 +71,11 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: "", text: "2 Master Bedrooms" },
-      { icon: "", text: "2 Bathrooms" },
-      { icon: "", text: "5m²" },
-      { icon: "", text: "Swimming Pool" },
-      { icon: "", text: "Bar" },
+      { icon: Bed, text: "2 Master Bedrooms" },
+      { icon: Toilet, text: "2 Bathrooms" },
+      { icon: Bed, text: "5m²" },
+      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
+      { icon: BeerBottle, text: "Bar" },
     ],
   },
   {
@@ -79,17 +85,17 @@ const properties = [
     price: "₦ 2,500,000",
     image: "/public/images/property.jpg",
     features: [
-      { icon: "", text: "2 Master Bedrooms" },
-      { icon: "", text: "2 Bathrooms" },
-      { icon: "", text: "5m²" },
-      { icon: "", text: "Swimming Pool" },
-      { icon: "", text: "Bar" },
+      { icon: Bed, text: "2 Master Bedrooms" },
+      { icon: Toilet, text: "2 Bathrooms" },
+      { icon: Bed, text: "5m²" },
+      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
+      { icon: BeerBottle, text: "Bar" },
     ],
   },
 ];
 
 const PropertyList = () => (
-  <section className="flex flex-col items-center justify-center mt-[200px] px-4">
+  <section className="flex flex-col items-center justify-center mt-[100px] px-4">
     <div className="text-center mb-8">
       <h2 className="text-xl sm:text-2xl font-medium mb-1">
         Best Properties Available
@@ -110,7 +116,7 @@ const PropertyList = () => (
             alt="Property"
             className="w-full h-48 object-cover"
           />
-          <div className="padding_four mt-4">
+          <div className="p-4 mt-4">
             <h3 className="font-semibold text-lg">{property.title}</h3>
             <p className="text-sm flex items-center mt-1">
               <MapPin className="w-4 h-4 mr-1 text-green-600" />
@@ -120,7 +126,7 @@ const PropertyList = () => (
             <div className="flex flex-wrap text-sm text-gray-700 mt-3 gap-3">
               {property.features.map((feature, i) => (
                 <span key={i} className="flex items-center gap-1">
-                  {/* <feature.icon className="w-4 h-4 text-gray-500" /> */}
+                  <feature.icon className="w-4 h-4 text-gray-500" />
                   {feature.text}
                 </span>
               ))}
@@ -128,12 +134,7 @@ const PropertyList = () => (
 
             <div className="mt-4 flex justify-between items-center">
               <span className="font-bold text-lg">{property.price}</span>
-              <button
-                style={{
-                  borderRadius: "10px"
-                }}
-                className="padding bg-green-600 text-white rounded-[12px] hover:bg-green-700"
-              >
+              <button className="padding bg-green-600 text-white rounded-[12px] px-4 py-2 hover:bg-green-700">
                 Rent Now
               </button>
             </div>

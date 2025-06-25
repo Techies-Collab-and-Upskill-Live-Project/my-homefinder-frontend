@@ -39,7 +39,7 @@ const Testimonials = () => (
         {testimonials.map((testimonial, index) => (
           <div
             key={index}
-            className="bg-white padding_four flex flex-col justify-between rounded-xl shadow-md text-center space-y-4"
+            className="bg-white p-4 flex flex-col justify-between rounded-xl shadow-md text-center space-y-4"
           >
             <div className="text-green-500 text-xl">★★★★★</div>
             <p className="text-sm text-gray-700">{testimonial.message}</p>
