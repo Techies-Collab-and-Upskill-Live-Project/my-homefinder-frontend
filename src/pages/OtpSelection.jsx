@@ -8,7 +8,7 @@ export default function OtpSelection() {
   const handleSelect = (method) => {
     const destination = method === "email" ? "user@example.com" : "+1234567890";
     localStorage.setItem("otpMethod", method);
-    navigate("/verify", { state: { method, destination } });
+    navigate("/OtpVerification", { state: { method, destination } });
   };
 
   return (

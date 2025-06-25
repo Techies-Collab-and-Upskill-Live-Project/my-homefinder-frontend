@@ -40,9 +40,11 @@ const Navbar = () => {
               Login
             </button>
           </Link>
-          <button className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
+          <Link to="/TenantSignUpPage">
+            <button className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
             Sign Up
           </button>
+          </Link>
         </div>
 
         {/* Mobile Hamburger Icon */}

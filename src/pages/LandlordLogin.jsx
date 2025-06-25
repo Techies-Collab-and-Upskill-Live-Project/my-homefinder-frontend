@@ -136,13 +136,13 @@ const LandlordLoginPage = () => {
           Don't have an account?{" "}
           <button
             className="text-green-600 hover:underline"
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/LandlordSignUpPage")}
           >
             Sign Up
           </button>
         </p>
 
-        <Link to="/otp">
+        <Link to="/OtpSelection">
           <p className="text-center mt-6 underline hover:text-green-600 cursor-pointer text-sm">
             Forgot your password?
           </p>

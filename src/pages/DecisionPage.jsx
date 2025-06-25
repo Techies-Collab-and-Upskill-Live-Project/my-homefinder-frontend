@@ -7,9 +7,9 @@ const SignupSelectionPage = () => {
 
   const handleRoleSelect = (role) => {
     if (role === "landlord") {
-      navigate("/signup/landlord");
+      navigate("/pages/LandlordSignUpPage");
     } else if (role === "tenant") {
-      navigate("/signup/tenant");
+      navigate("/pages/TenantSignUpPage");
     }
   };
 

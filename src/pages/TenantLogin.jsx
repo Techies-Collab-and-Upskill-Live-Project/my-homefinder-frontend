@@ -61,7 +61,7 @@ export default function HomePage() {
       />
 
       {/* Card */}
-      <div className="relative z-10 w-full max-w-md bg-white p-6 md:p-8 rounded-3xl shadow-lg">
+      <div className="relative z-10 w-full max-w-md bg-white p-6 md:p-8 rounded-3xl shadow-lg mt-[100px]">
         <div className="flex justify-end">
           <button className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
         </div>
@@ -115,17 +115,35 @@ export default function HomePage() {
           </button>
 
           {/* Socials */}
-          <div className="flex justify-center gap-4 mt-4 flex-wrap">
-            {["Google", "Apple", "Facebook"].map((provider) => (
-              <a
-                key={provider}
-                href="#"
-                className="w-12 h-12 bg-gray-100 flex items-center justify-center rounded-full hover:bg-gray-200 transition"
-              >
-                <img src={`/Images/${provider} logo.png`} alt={provider} className="w-6" />
-              </a>
-            ))}
-          </div>
+          <div className="flex justify-center gap-6 mt-6">
+          {[
+            {
+              img: "/google.svg",
+              alt: "Google",
+              link: "https://accounts.google.com",
+            },
+            {
+              img: "/apple.svg",
+              alt: "Apple",
+              link: "https://appleid.apple.com",
+            },
+            {
+              img: "/fb.svg",
+              alt: "Facebook",
+              link: "https://facebook.com",
+            },
+          ].map((item) => (
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              key={item.alt}
+              className="bg-gray-100 rounded-full p-3 hover:bg-gray-200"
+            >
+              <img src={item.img} alt={item.alt} className="w-6 h-6" />
+            </a>
+          ))}
+        </div>
 
           {/* Sign Up */}
           <p className="text-center mt-4 text-sm text-gray-600">
