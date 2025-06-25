@@ -1,13 +1,12 @@
 
 import React, { useState } from "react";
-import "../Assets/styles/TenantProfile.css";
-import Pen from "../Assets/images/image9.png"; 
 import Mastercard from "../Assets/images/Mastercard.png";
 import Visa from "../Assets/images/Visa-logo.png";
 import Navbar from "../Components/Navbar";
 import EditNumberModal from "../components/EditNumberModal";
 import UpdateProfileModal from '../Components/UpdateProfileModal';
 import { useProfile } from "../Assets/ProfileContext";
+import { PencilLine } from "phosphor-react";
 
 const TenantProfile = () => {
   const { profileData, updatePhoneNumber } = useProfile();
@@ -60,11 +59,11 @@ const TenantProfile = () => {
           <div className="border border-gray-300 rounded-full w-full"></div>
           <div className="flex flex-row justify-between items-center mt-4">
             <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
-            <img onClick={openEditNumberModal} src={Pen} className="w-4 h-4 cursor-pointer" alt="Edit Phone" />
+            <PencilLine size={32} onClick={openEditNumberModal} className="cursor-pointer" />
           </div>
           <div className="flex flex-row justify-between items-center mt-4">
             <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
-            <img onClick={openEditNumberModal} src={Pen} className="w-4 h-4 cursor-pointer" alt="Edit Phone" />
+            <PencilLine size={32} onClick={openEditNumberModal}  className="cursor-pointer"  />
           </div>
         </div>
 

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Pen from "../Assets/images/image9.png"
 import UserImage from "../Assets/images/image8.png"
 import Navbar from "../Profile/components/Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import EditNumberModal from "../Profile/components/EditNumberModal";
 import { useProfile } from "../Profile/Assets/ProfileContext";
+import { PencilLine } from "@phosphos-react";
 
 
 
@@ -50,17 +50,17 @@ const LandlordProfileB4Listing = () => {
                     <div className="border-t border-gray-300 rounded-full w-full"></div>
                     <div className="flex flex-row justify-between items-center">
                         <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
-                        <img onClick={openEditNumberModal} src={Pen} alt="Edit Phone" className="w-4 h-4 cursor-pointer" />
+                        <PencilLine size={32} onClick={openEditNumberModal} className="cursor-pointer" />
                     </div>
                     <div className="flex flex-row justify-between items-center">
                         <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
-                        <img onClick={openEditNumberModal} src={Pen} alt="Edit Phone" className="w-4 h-4 cursor-pointer" />
+                        <PencilLine size={32} onClick={openEditNumberModal} className="cursor-pointer" />
                     </div>
                 </div>
                 <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-3 mt-4">
                     <div className="flex flex-row justify-between items-center">
                         <p className="text-base font-normal">Bio</p>
-                        <img src={Pen} alt="Edit Bio" className="w-4 h-4" />
+                        <PencilLine size={32} className="cursor-pointer" />
                     </div>
                     <div className="border-t border-gray-300 rounded-full w-full"></div>
                     <p className="text-sm text-gray-700 break-words">
