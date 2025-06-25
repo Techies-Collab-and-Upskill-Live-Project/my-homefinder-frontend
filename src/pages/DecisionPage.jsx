@@ -1,86 +1,53 @@
-import React, { useState } from 'react';
-import { X, User, Home } from 'lucide-react'; 
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { X, UserCircle, House } from "@phosphor-icons/react";
 
 const SignupSelectionPage = () => {
-  const [selectedRole, setSelectedRole] = useState(null);
+  const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
-    setSelectedRole(role);
-    console.log(`Selected role: ${role}`);
+    if (role === "landlord") {
+      navigate("/signup/landlord");
+    } else if (role === "tenant") {
+      navigate("/signup/tenant");
+    }
   };
 
   const handleClose = () => {
-    console.log("Close button clicked");
+    navigate("/");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 font-inter">
-      <div className="relative bg-white rounded-xl shadow-2xl p-8 md:p-12 w-full max-w-md mx-auto text-center border border-gray-200">
-        
-        <button
-          onClick={handleClose}
-          className="absolute top-4 right-2 text-gray-500 hover:text-gray-800 focus:outline-none"
-          aria-label="Close"
-        >
-          <X size={24} />
-        </button>
+    <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] px-4 font-inter">
+      <div className="relative bg-white rounded-2xl shadow-xl border border-gray-200 p-8 md:p-10 w-full max-w-md text-center">
+        {/* Header */}
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+          Let’s get you started
+        </h2>
+        <p className="text-sm md:text-lg text-gray-500 mb-8">Sign up as a</p>
 
-        {/* Header Text */}
-        <h2 className="text-4xl font-bold text-gray-800 mt-4 mb-2">Let's get you started</h2>
-        <p className="text-lg text-gray-600 mb-8">Sign Up as a</p>
-
-        {/* Decision Selection Cards */}
-        <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 justify-center">
-          {/* Landlord Card */}
+        {/* Selection Cards */}
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Landlord */}
           <button
-            onClick={() => handleRoleSelect('landlord')}
-            className={`flex flex-col items-center justify-center p-6 md:p-8 rounded-lg border-2 w-full md:w-1/2 transition-all duration-300
-              ${selectedRole === 'landlord'
-                ? 'bg-green-700 border-green-700 text-white shadow-lg transform scale-105'
-                : 'bg-white border-green-500 text-green-700 hover:bg-green-50 hover:shadow-md'
-              }`}
-            aria-pressed={selectedRole === 'landlord'}
-            aria-label="Sign up as a Landlord"
+            onClick={() => handleRoleSelect("landlord")}
+            className="flex flex-col items-center justify-center p-6 rounded-xl border-2 w-full transition-all duration-300 bg-white border-green-500 text-green-700 hover:bg-green-50 hover:shadow-md"
           >
-            {/* Icon section */}
-            <User
-              size={60} // This icon can be sized
-              className="mb-3"
-              style={{ color: selectedRole === 'landlord' ? 'white' : '#10B981' }}
+            <UserCircle
+              size={56}
+              weight="duotone"
+              className="mb-3 text-green-600"
             />
-            {/* Text Label */}
-            <span
-              className={`text-2xl font-bold ${selectedRole === 'landlord' ? 'text-white' : 'text-green-700'}`}
-              style={{ color: selectedRole === 'landlord' ? 'white' : '#10B981' }} 
-            >
-              LANDLORD
-            </span>
+            <span className="text-lg md:text-xl font-semibold">LANDLORD</span>
           </button>
 
-          {/* Tenant Card */}
+          {/* Tenant */}
           <button
-            onClick={() => handleRoleSelect('tenant')}
-            className={`flex flex-col items-center justify-center p-6 md:p-8 rounded-lg border-2 w-full md:w-1/2 transition-all duration-300
-              ${selectedRole === 'tenant'
-                ? 'bg-green-700 border-green-700 text-white shadow-lg transform scale-105'
-                : 'bg-white border-green-500 text-green-700 hover:bg-green-50 hover:shadow-md'
-              }`}
-            aria-pressed={selectedRole === 'tenant'}
-            aria-label="Sign up as a Tenant"
+            onClick={() => handleRoleSelect("tenant")}
+            className="flex flex-col items-center justify-center p-6 rounded-xl border-2 w-full transition-all duration-300 bg-white border-green-500 text-green-700 hover:bg-green-50 hover:shadow-md"
           >
-            {/* Icon */}
-            <Home
-              size={60} 
-              className="mb-3"
-              style={{ color: selectedRole === 'tenant' ? 'white' : '#10B981' }} 
-            />
-            {/* Text Label */}
-            <span
-              className={`text-2xl font-bold ${selectedRole === 'tenant' ? 'text-white' : 'text-green-700'}`}
-              style={{ color: selectedRole === 'tenant' ? 'white' : '#10B981' }} 
-            >
-              TENANT
-            </span>
+            <House size={56} weight="duotone" className="mb-3 text-green-600" />
+            <span className="text-lg md:text-xl font-semibold">TENANT</span>
           </button>
         </div>
       </div>
