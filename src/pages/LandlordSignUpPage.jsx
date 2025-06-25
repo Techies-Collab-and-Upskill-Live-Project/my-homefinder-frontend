@@ -1,214 +1,198 @@
-import React, { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-// import 'bootstrap-icons/font/bootstrap-icons.css';
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
+const validationSchema = Yup.object({
+  name: Yup.string().required("Name is required"),
+  phone: Yup.string().required("Phone number is required"),
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
+});
 
-export default function SignUpPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const [errors, setErrors] = useState({});
+const SignUpPage = () => {
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.phone) newErrors.phone = "Phone number is required";
-    if (!formData.password) newErrors.password = "Password is required";
-    else if (formData.password.length < 6)
-      newErrors.password = "Password must be at least 6 characters";
-    return newErrors;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    console.log("Form submitted:", formData);
+  const handleSubmit = (values) => {
+    console.log("Sign Up Submitted:", values);
+    // API logic here
+    navigate("/dashboard");
   };
 
   return (
-    <div className="d-flex vh-100 justify-content-center align-items-center bg-light px-3 position-relative overflow-hidden">
+    <div className="flex min-h-screen overflow-hidden items-center justify-center bg-gray-50 relative px-4">
+      {/* Decorative circles */}
+      <div className="w-60 h-60 bg-green-600 rounded-full absolute -top-28 -right-28"></div>
+      <div className="w-60 h-60 bg-green-600 rounded-full absolute -bottom-28 -left-28"></div>
 
-       <div style={{ width: "250px", height: "250px", backgroundColor: "green", borderRadius: "50%", position: "absolute", top: "-100px", right: "-100px" }}></div>
+      {/* Logo */}
+      <img
+        src="/Images/Logo.png"
+        alt="Logo"
+        className="absolute top-4 left-6 h-20"
+      />
 
-      <div style={{ width: "250px", height: "250px", backgroundColor: "green", borderRadius: "50%", position: "absolute", bottom: "-100px", left: "-100px" }}></div>
+      <div className="bg-white rounded-3xl shadow-lg p-8 w-full mt-[100px] mb-[100px] max-w-md z-10">
+        <h2 className="text-2xl font-bold text-center mb-2">
+          Create an Account to List Your Property
+        </h2>
 
-      <img src="\Images\Logo.png" alt="Logo" style={{ position: 'absolute', top: '0px', left: '20px', height: '100px' }} />
-      
-       <div className="card shadow p-4 rounded-4" style={{ maxWidth: "800px", width: "100%", zIndex: 1, }}>
-        <div className="text-start">
-          <button className="btn-close" />
-        </div>
+        <Formik
+          initialValues={{ name: "", phone: "", email: "", password: "" }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {() => (
+            <Form className="space-y-4">
+              {/* Name */}
+              <div>
+                <label
+                  className="block text-sm font-medium mb-1"
+                  htmlFor="name"
+                >
+                  Name
+                </label>
+                <Field
+                  name="name"
+                  type="text"
+                  placeholder="Enter your name"
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-      <form
-        onSubmit={handleSubmit}
-       
-      >
-        <h2 className="mb-4 text-center fw-semibold ">Hello! Sign up to list your home!!</h2>
+              {/* Phone */}
+              <div>
+                <label
+                  className="block text-sm font-medium mb-1"
+                  htmlFor="phone"
+                >
+                  Phone Number
+                </label>
+                <Field
+                  name="phone"
+                  type="tel"
+                  placeholder="Enter your phone"
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+                <ErrorMessage
+                  name="phone"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-        <div className="mb-3 position-relative">
-           <label className="position-absolute bg-white px-2 py-1 rounded shadow-sm d-flex align-items-center" style={{ top: "-10px", left: "10px", color: "rgba(0,0,0,0.5)", fontSize:'16px' }}>
-            <i class="bi bi-person  me-2" style={{color: "rgba(0,0,0,1)", width:'17px'}}></i> Name
-          </label>
-          
-          <input
-            type="text"
-            name="name"
-            className={`form-control ${errors.name ? "is-invalid" : ""}`}
-            value={formData.name}
-            onChange={handleChange}
-            
-          />
-          {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-        </div>
-        
+              {/* Email */}
+              <div>
+                <label
+                  className="block text-sm font-medium mb-1"
+                  htmlFor="email"
+                >
+                  Email
+                </label>
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-        <div className="mb-2 position-relative">
-            <label className="position-absolute bg-white px-2 py-1 rounded shadow-sm d-flex align-items-center" style={{ top: "-10px", left: "10px", color: "rgba(0,0,0,0.5)", fontSize:'16px' }}>
-            <i class="bi bi-telephone me-2" style={{color: "rgba(0,0,0,1)", width:'17px'}}></i> Phone Number
-          </label>
-          <input
-            type="tel"
-            id="name"
-            name="phone"
-            className={`form-control ${errors.name ? "is-invalid" : ""}`}
-            value={formData.phone}
-            onChange={handleChange}
-            style={ {height: '50px'}}
-          />
-          {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
-        </div>
+              {/* Password */}
+              <div>
+                <label
+                  className="block text-sm font-medium mb-1"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <Field
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-
-        <div className="mb-3 position-relative">
-          <label className="position-absolute bg-white px-2 py-1 rounded shadow-sm d-flex align-items-center" style={{ top: "-10px", left: "10px", color: "rgba(0,0,0,0.5)", fontSize:'16px' }}>
-           <i class="bi bi-envelope me-2"style={{color: "rgba(0,0,0,1)", width:'17px'}}></i>Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            className={`form-control ${errors.email ? "is-invalid" : ""}`}
-            value={formData.email}
-            onChange={handleChange}
-            style={ {height: '50px'}}
-          />
-          {errors.email && (
-            <div className="invalid-feedback">{errors.email}</div>
+              {/* Signup Button */}
+              <button
+                type="submit"
+                className="w-full bg-green-600 text-white rounded-lg py-3 font-medium hover:bg-green-700 transition"
+              >
+                Sign Up
+              </button>
+            </Form>
           )}
+        </Formik>
+
+        {/* Divider */}
+        <div className="flex items-center my-4">
+          <div className="flex-grow border-t border-green-600"></div>
+          <span className="mx-3 text-gray-700 text-sm">Or sign up with</span>
+          <div className="flex-grow border-t border-green-600"></div>
         </div>
 
-
-        <div className="mb-3 position-relative">
-          <label className="position-absolute bg-white px-2 py-1 rounded shadow-sm d-flex align-items-center" style={{ top: "-10px", left: "10px", color: "rgba(0,0,0,0.5)", fontSize:'16px' }}>
-            <i class="bi bi-lock me-2 fw-regular" style={{color: "rgba(0,0,0,1)", width:'17px'}}></i> Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            className={`form-control ${errors.password ? "is-invalid" : ""}`}
-            value={formData.password}
-            onChange={handleChange}
-            style={ {height: '50px'}}
-          />
-          {errors.password && (
-            <div className="invalid-feedback">{errors.password}</div>
-          )}
-        </div>
-
-        <button type="submit" className="btn btn helo w-100 mb-0" style={{fontSize:'16px',}}>
-          Sign Up
-        </button>
-
-        <div className="d-flex align-items-center my-2" style={{ marginTop: '0px', marginBottom: '0px' }}>
-          <div className="flex-grow-1"style={{ borderTop: '1px solid rgba(90,168,90,1)' }}></div>
-          <span className="mx-3 text-dark">Or sign up with</span>
-          <div className="flex-grow-1"style={{ borderTop: '1px solid rgba(90,168,90,1)' }}></div>
-        </div>
-
-        
-        {/* <div className="d-flex justify-content-center align-items-center mb-3">
-          <hr/> Or Sign Up With <hr />
-          </div> */}
-        {/* Social login icons only */}
-
-<div className="container">
-      <div className="row justify-content-center text-center">
-        {/* Google */}
-        <div className="col-4 col-md-1">
-          <a href="https://accounts.google.com" target="_blank" rel="noopener noreferrer">
-            
-            <div
-              className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1"
-              style={{ width: '50px', height: '50px', backgroundColor: '#e9f5ee' }}
+        {/* Social Login */}
+        <div className="flex justify-center gap-6">
+          {[
+            {
+              img: "/google.svg",
+              alt: "Google",
+              link: "https://accounts.google.com",
+            },
+            {
+              img: "/apple.svg",
+              alt: "Apple",
+              link: "https://appleid.apple.com",
+            },
+            {
+              img: "/fb.svg",
+              alt: "Facebook",
+              link: "https://facebook.com",
+            },
+          ].map((item) => (
+            <a
+              key={item.alt}
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gray-100 rounded-full p-3 hover:bg-gray-200"
             >
-              <img src="\Images\Google logo.png" alt="Google" style={{ width: '30px'}}/>
-            </div>
-          </a>
+              <img src={item.img} alt={item.alt} className="w-6 h-6" />
+            </a>
+          ))}
         </div>
 
-        {/* Apple */}
-        <div className="col-4 col-md-2">
-          <a href="https://appleid.apple.com" target="_blank" rel="noopener noreferrer">
-            <div
-              className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1"
-              style={{ width: '50px', height: '50px', backgroundColor: '#e9f5ee' }}
-            >
-              <img src="\Images\Apple logo.png" alt="Apple"  style={{ width: '30px' }} />
-            </div>
-          </a>
-        </div>
-
-        {/* Facebook */}
-        <div className="col-4 col-md-1">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-            <div
-              className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1"
-              style={{ width: '50px', height: '50px', backgroundColor: '#e9f5ee' }}
-            >
-              <img src="\Images\Facebook logo.png" alt="Facebook" style={{ width: '30px' }}/>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  
-
-
-        {/* Already have an account */}
-        <div className="text-center mt-0 ">
-          <p className="d-flex justify-content-center align-items-center">
-          <span>Already have an account? </span>
+        {/* Already have account */}
+        <p className="text-center mt-6 text-sm">
+          Already have an account?{" "}
           <button
-            type="button"
-            style={{color:'rgba(90,168,90,1)'}}
-            className="btn btn-link  text-decoration-none"
-            onClick={() => navigate("/login")}
+            className="text-green-600 hover:underline"
+            // onClick={() => navigate("/login")}
           >
             Login
           </button>
         </p>
-        </div>
-      </form>
       </div>
     </div>
   );
-}
+};
+
+export default SignUpPage;

@@ -1,30 +1,28 @@
 import { recentlyRented } from "../data/property";
 
 const RentedCard = () => {
-  // const { name, location, image, price } = recentlyRented;
   return (
-    <section className={rented.container}>
-      <h2 className={rented.header}>Recently Rented</h2>
-      <div className={rented.wrapper}>
+    <section className="bg-white rounded-xl shadow-md p-6">
+      <h2 className="text-xl font-semibold mb-4">Recently Rented</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {recentlyRented.map((property) => (
-          <div key={property.id} className={rented.card}>
+          <div
+            key={property.id}
+            className="bg-gray-100 rounded-lg overflow-hidden"
+          >
             <img
               src={property.image}
               alt={property.name}
-              className={rented.img}
+              className="w-full h-40 object-cover"
             />
-            <div className={rented.content}>
-              <p className={rented.content_p}>{property.name}</p>
-              <p className={rented.loc}>{property.location}</p>
-              {/* ============I HAVE A BUG HERE, WILL FIX THE AMENITIES ARRAY LATER=============== */}
-              {/* <ul className={rented.amenities}>
-                {property.amenities.map((a) => (
-                  <li className={rented.list} key={a.id}>
-                    {a.label}
-                  </li>
-                ))}
-              </ul> */}
-              <p className={rented.content_p}>{property.price}/year</p>
+            <div className="p-4 flex flex-col justify-between">
+              <span>
+                <p className="font-semibold text-lg">{property.name}</p>
+                <p className="text-sm text-gray-500">{property.location}</p>
+              </span>
+              <p className="font-medium text-green-600 mt-2">
+                {property.price}/year
+              </p>
             </div>
           </div>
         ))}
@@ -32,4 +30,5 @@ const RentedCard = () => {
     </section>
   );
 };
+
 export default RentedCard;

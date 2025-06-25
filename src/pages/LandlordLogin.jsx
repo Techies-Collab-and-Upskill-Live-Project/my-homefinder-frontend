@@ -1,166 +1,155 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-// import 'bootstrap-icons/font/bootstrap-icons.css';
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function HomePage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
+});
 
-  const [errors, setErrors] = useState({});
+const LandlordLoginPage = () => {
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.password) newErrors.password = "Password is required";
-    else if (formData.password.length < 6)
-      newErrors.password = "Password must be at least 6 characters";
-    return newErrors;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    console.log("Form submitted:", formData);
+  const handleSubmit = (values) => {
+    console.log("Login submitted:", values);
+    // Add login API logic here
+    navigate("/dashboard");
   };
 
   return (
-     <div className="d-flex vh-100 justify-content-center align-items-center bg-light px-3 position-relative overflow-hidden">
-      <div style={{ width: "250px", height: "250px", backgroundColor: "green", borderRadius: "50%", position: "absolute", top: "-100px", right: "-100px" }}></div>
+    <div className="flex min-h-screen overflow-hidden items-center justify-center bg-gray-50 relative px-4">
+      {/* Top right circle */}
+      <div className="w-60 h-60 bg-green-600 rounded-full absolute -top-28 -right-28"></div>
+      {/* Bottom left circle */}
+      <div className="w-60 h-60 bg-green-600 rounded-full absolute -bottom-28 -left-28"></div>
 
-      <div style={{ width: "250px", height: "250px", backgroundColor: "green", borderRadius: "50%", position: "absolute", bottom: "-100px", left: "-100px" }}></div>
-       <img src="\Images\Logo.png" alt="Logo" style={{ position: 'absolute', top: '0px', left: '20px', height: '100px' }} />
+      {/* Logo */}
+      <img
+        src="/Images/Logo.png"
+        alt="Logo"
+        className="absolute top-4 left-6 h-20"
+      />
 
-      <div className="card shadow p-4 rounded-4" style={{ maxWidth: "800px", width: "100%", zIndex: 1 }}>
-        <div className="text-start">
-          <button className="btn-close" />
-        </div>
+      <div className="bg-white rounded-3xl shadow-lg p-8 w-full max-w-md z-10">
+        <h2 className="text-2xl font-bold text-center mb-2">Welcome Back!</h2>
+        <p className="text-center text-gray-600 mb-6">
+          Please log in to continue
+        </p>
 
-      <form
-        onSubmit={handleSubmit}
-      
-      >
-       <h2 className="mb-2 text-center fw-semibold ">Welcome Back!!</h2>
-        <p className="text-center">Please Log in to continue</p>
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {() => (
+            <Form className="space-y-4">
+              {/* Email */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Email
+                </label>
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
+              {/* Password */}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Password
+                </label>
+                <Field
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-       <div className="mb-3 position-relative">
-          <label className="position-absolute bg-white px-2 py-1 rounded shadow-sm d-flex align-items-center" style={{ top: "-10px", left: "10px", color: "rgba(0,0,0,0.5)", fontSize:'16px' }}>
-           <i class="bi bi-envelope me-2"style={{color: "rgba(0,0,0,1)", width:'17px'}}></i>Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            className={`form-control ${errors.email ? "is-invalid" : ""}`}
-            value={formData.email}
-            onChange={handleChange}
-            style={ {height: '50px'}}
-          />
-          {errors.email && (
-            <div className="invalid-feedback">{errors.email}</div>
+              {/* Login Button */}
+              <button
+                type="submit"
+                className="w-full bg-green-600 text-white rounded-lg py-3 font-medium hover:bg-green-700 transition"
+              >
+                Login
+              </button>
+            </Form>
           )}
-        </div>
+        </Formik>
 
-        <div className="mb-3 position-relative">
-          <label className="position-absolute bg-white px-2 py-1 rounded shadow-sm d-flex align-items-center" style={{ top: "-10px", left: "10px", color: "rgba(0,0,0,0.5)", fontSize:'16px' }}>
-            <i class="bi bi-lock me-2 fw-regular" style={{color: "rgba(0,0,0,1)", width:'17px'}}></i> Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            className={`form-control ${errors.password ? "is-invalid" : ""}`}
-            value={formData.password}
-            onChange={handleChange}
-            style={ {height: '50px'}}
-          />
-          {errors.password && (
-            <div className="invalid-feedback">{errors.password}</div>
-          )}
-        </div>
-
-        <button type="submit" className="btn btn helo w-100 mb-3">
-          Login
-        </button>
-        {/* <div className="d-flex justify-content-center align-items-center mb-3">
-          <hr/> Or Sign Up With <hr />
-          </div> */}
-        {/* Social login icons only */}
-      <div className="container">
-      <div className="row justify-content-center text-center">
-        {/* Google */}
-        <div className="col-4 col-md-1">
-          <a href="https://accounts.google.com" target="_blank" rel="noopener noreferrer">
-            
-            <div
-              className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1"
-              style={{ width: '50px', height: '50px', backgroundColor: '#e9f5ee' }}
+        {/* Social Login */}
+        <div className="flex justify-center gap-6 mt-6">
+          {[
+            {
+              img: "/google.svg",
+              alt: "Google",
+              link: "https://accounts.google.com",
+            },
+            {
+              img: "/apple.svg",
+              alt: "Apple",
+              link: "https://appleid.apple.com",
+            },
+            {
+              img: "/fb.svg",
+              alt: "Facebook",
+              link: "https://facebook.com",
+            },
+          ].map((item) => (
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              key={item.alt}
+              className="bg-gray-100 rounded-full p-3 hover:bg-gray-200"
             >
-              <img src="\Images\Google logo.png" alt="Google" style={{ width: '30px'}}/>
-            </div>
-          </a>
+              <img src={item.img} alt={item.alt} className="w-6 h-6" />
+            </a>
+          ))}
         </div>
 
-        {/* Apple */}
-        <div className="col-4 col-md-2">
-          <a href="https://appleid.apple.com" target="_blank" rel="noopener noreferrer">
-            <div
-              className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1"
-              style={{ width: '50px', height: '50px', backgroundColor: '#e9f5ee' }}
-            >
-              <img src="\Images\Apple logo.png" alt="Apple"  style={{ width: '30px' }} />
-            </div>
-          </a>
-        </div>
-
-        {/* Facebook */}
-        <div className="col-4 col-md-1">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-            <div
-              className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1"
-              style={{ width: '50px', height: '50px', backgroundColor: '#e9f5ee' }}
-            >
-              <img src="\Images\Facebook logo.png" alt="Facebook" style={{ width: '30px' }}/>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-
-        {/* Already have an account */}
-        <div className="text-center mt-3 ">
-          <p className="d-flex justify-content-center align-items-center">
-          <span>Don't have an account? </span>
+        {/* Sign Up Link */}
+        <p className="text-center mt-6 text-sm">
+          Don't have an account?{" "}
           <button
-            type="button"
-            className="btn btn-link  text-decoration-none"
-            style={{color:'rgba(90,168,90,1)'}}
-            onClick={() => navigate("/signup")}>
-          
+            className="text-green-600 hover:underline"
+            onClick={() => navigate("/signup")}
+          >
             Sign Up
           </button>
         </p>
-        </div>
-      </form>
+
+        <Link to="/otp">
+          <p className="text-center mt-6 underline hover:text-green-600 cursor-pointer text-sm">
+            Forgot your password?
+          </p>
+        </Link>
       </div>
     </div>
   );
-}
+};
+
+export default LandlordLoginPage;

@@ -15,6 +15,7 @@ const OtpVerification = () => {
 
   const fullOtp = otp.join("");
 
+  // Redirect if no method or destination
   useEffect(() => {
     if (!method || !destination) {
       navigate("/otp-method");
@@ -23,6 +24,7 @@ const OtpVerification = () => {
     }
   }, [method, destination, navigate]);
 
+  // Countdown timer for resend
   useEffect(() => {
     const timer =
       countdown > 0 &&
@@ -31,8 +33,14 @@ const OtpVerification = () => {
   }, [countdown]);
 
   const handleVerify = async () => {
+    if (fullOtp.length !== 6) {
+      setError("Please enter the complete 6-digit code.");
+      return;
+    }
+
     try {
       setLoading(true);
+      setError("");
       const res = await verifyOtp(fullOtp);
       alert(res);
       navigate("/dashboard");
@@ -51,34 +59,47 @@ const OtpVerification = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center relative">
-        <h2 className="text-xl font-bold mb-2">
-          Check Your {method === "email" ? "Email" : "Phone"}
+      <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center relative">
+        <h2 className="text-2xl font-bold mb-2">
+          Verify Your {method === "email" ? "Email" : "Phone"}
         </h2>
         <p className="text-sm text-gray-600 mb-6">
-          Enter the 6-digit verification code sent to
+          Enter the 6-digit code sent to{" "}
           <span className="font-medium">{destination}</span>
         </p>
+
+        {/* OTP Input */}
         <OtpInput otp={otp} setOtp={setOtp} />
-        {error && <p className="text-red-500 mt-2">{error}</p>}
+
+        {/* Error message */}
+        {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
+
+        {/* Verify button */}
         <button
-          className="mt-6 bg-green-600 hover:bg-green-700 text-white w-full py-2 rounded-lg text-sm "
           onClick={handleVerify}
           disabled={loading || fullOtp.length !== 6}
+          className={`mt-6 w-full py-2 rounded-lg text-sm font-medium ${
+            loading || fullOtp.length !== 6
+              ? "bg-green-300 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          } text-white transition`}
         >
           {loading ? "Verifying..." : "Verify"}
         </button>
-        <p className="text-xs text-gray-500 mt-4 flex flex-col">
-          Resend code in {countdown}s{" "}
-          {countdown === 0 && (
+
+        {/* Countdown and Resend */}
+        <div className="text-xs text-gray-500 mt-4">
+          {countdown > 0 ? (
+            <p>Resend code in {countdown}s</p>
+          ) : (
             <button
-              className="ml-2 text-blue-500 hover:underline"
               onClick={handleResend}
+              className="text-blue-500 hover:underline"
             >
-              Resend
+              Resend Code
             </button>
           )}
-        </p>
+        </div>
       </div>
     </div>
   );
