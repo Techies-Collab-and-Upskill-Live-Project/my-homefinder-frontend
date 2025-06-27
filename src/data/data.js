@@ -130,7 +130,7 @@ export const messages = [
 export const nav_links = [
   {
     id: 1,
-    path: "/Explore",
+    path: "/",
     text: "Explore",
   },
   {

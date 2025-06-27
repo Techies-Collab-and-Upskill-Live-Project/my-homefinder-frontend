@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -15,46 +15,15 @@ const validationSchema = Yup.object({
 });
 
 export default function TenantSignUpPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    password: "",
-  });
-
-  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.phone) newErrors.phone = "Phone number is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.password) newErrors.password = "Password is required";
-    else if (formData.password.length < 6)
-      newErrors.password = "Password must be at least 6 characters";
-    return newErrors;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    console.log("Form submitted:", formData);
+  const handleSubmit = (values) => {
+    console.log("Form submitted:", values);
+    // Handle form submission logic here (API call, etc.)
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="relative overflow-hidden min-h-screen flex items-center justify-center bg-gray-100 px-4">
       {/* Decorative Circles */}
       <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full top-[-100px] right-[-100px] z-0" />
       <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full bottom-[-100px] left-[-100px] z-0" />
@@ -67,144 +36,162 @@ export default function TenantSignUpPage() {
       />
 
       {/* Form Card */}
-      <div className="relative z-10 w-full max-w-md bg-white p-6 md:p-8 rounded-3xl shadow-lg mt-[100px]">
-        <div className="flex justify-end">
-          <button className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
-        </div>
+      <div className="relative z-10 w-full mb-20 max-w-md bg-white p-6 md:p-8 rounded-3xl shadow-lg mt-[100px]">
+        <Formik
+          initialValues={{
+            name: "",
+            phone: "",
+            email: "",
+            password: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form className="space-y-4">
+              <h2 className="text-2xl font-semibold text-center">
+                Create Your MyHomeFinder Account
+              </h2>
+              <p className="text-center text-gray-600">
+                Join to explore listings, save favorites, and manage your home
+                search easily.
+              </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <h2 className="text-2xl font-semibold text-center">Hello! Sign up to find a perfect home!!</h2>
+              {/* Name */}
+              <div>
+                <label className="block mb-1 text-gray-700">
+                  <i className="bi bi-person mr-2 text-black" />
+                  Name
+                </label>
+                <Field
+                  type="text"
+                  name="name"
+                  className="w-full h-12 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-          {/* Name */}
-          <div>
-            <label className="block mb-1 text-gray-700">
-              <i className="bi bi-person mr-2 text-black" />
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className={`w-full h-12 px-4 border ${
-                errors.name ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-green-400`}
-            />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-          </div>
+              {/* Phone */}
+              <div>
+                <label className="block mb-1 text-gray-700">
+                  <i className="bi bi-telephone mr-2 text-black" />
+                  Phone Number
+                </label>
+                <Field
+                  type="tel"
+                  name="phone"
+                  className="w-full h-12 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+                <ErrorMessage
+                  name="phone"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-          {/* Phone */}
-          <div>
-            <label className="block mb-1 text-gray-700">
-              <i className="bi bi-telephone mr-2 text-black" />
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className={`w-full h-12 px-4 border ${
-                errors.phone ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-green-400`}
-            />
-            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
-          </div>
+              {/* Email */}
+              <div>
+                <label className="block mb-1 text-gray-700">
+                  <i className="bi bi-envelope mr-2 text-black" />
+                  Email
+                </label>
+                <Field
+                  type="email"
+                  name="email"
+                  className="w-full h-12 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-          {/* Email */}
-          <div>
-            <label className="block mb-1 text-gray-700">
-              <i className="bi bi-envelope mr-2 text-black" />
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`w-full h-12 px-4 border ${
-                errors.email ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-green-400`}
-            />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-          </div>
+              {/* Password */}
+              <div>
+                <label className="block mb-1 text-gray-700">
+                  <i className="bi bi-lock mr-2 text-black" />
+                  Password
+                </label>
+                <Field
+                  type="password"
+                  name="password"
+                  className="w-full h-12 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
 
-          {/* Password */}
-          <div>
-            <label className="block mb-1 text-gray-700">
-              <i className="bi bi-lock mr-2 text-black" />
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={`w-full h-12 px-4 border ${
-                errors.password ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-green-400`}
-            />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-          </div>
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full h-12 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+              >
+                {isSubmitting ? "Signing Up..." : "Sign Up"}
+              </button>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            className="w-full h-12 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
-          >
-            Sign Up
-          </button>
+              {/* Divider */}
+              <div className="flex items-center my-4">
+                <div className="flex-grow border-t border-green-400" />
+                <span className="mx-3 text-sm text-gray-600">
+                  Or sign up with
+                </span>
+                <div className="flex-grow border-t border-green-400" />
+              </div>
 
-          {/* Divider */}
-          <div className="flex items-center my-4">
-            <div className="flex-grow border-t border-green-400" />
-            <span className="mx-3 text-sm text-gray-600">Or sign up with</span>
-            <div className="flex-grow border-t border-green-400" />
-          </div>
+              {/* Social Icons */}
+              <div className="flex justify-center gap-6">
+                {[
+                  {
+                    img: "/google.svg",
+                    alt: "Google",
+                    link: "https://accounts.google.com",
+                  },
+                  {
+                    img: "/apple.svg",
+                    alt: "Apple",
+                    link: "https://appleid.apple.com",
+                  },
+                  {
+                    img: "/fb.svg",
+                    alt: "Facebook",
+                    link: "https://facebook.com",
+                  },
+                ].map((item) => (
+                  <a
+                    key={item.alt}
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-gray-100 rounded-full p-3 hover:bg-gray-200"
+                  >
+                    <img src={item.img} alt={item.alt} className="w-6 h-6" />
+                  </a>
+                ))}
+              </div>
 
-          {/* Social Icons */}
-          <div className="flex justify-center gap-6">
-          {[
-            {
-              img: "/google.svg",
-              alt: "Google",
-              link: "https://accounts.google.com",
-            },
-            {
-              img: "/apple.svg",
-              alt: "Apple",
-              link: "https://appleid.apple.com",
-            },
-            {
-              img: "/fb.svg",
-              alt: "Facebook",
-              link: "https://facebook.com",
-            },
-          ].map((item) => (
-            <a
-              key={item.alt}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-gray-100 rounded-full p-3 hover:bg-gray-200"
-            >
-              <img src={item.img} alt={item.alt} className="w-6 h-6" />
-            </a>
-          ))}
-        </div>
-
-          {/* Already have account */}
-          <p className="text-center mt-4 text-sm text-gray-600">
-            Already have an account?{" "}
-            <button
-              type="button"
-              className="text-green-600 hover:underline"
-              onClick={() => navigate("/TenantLogin")}
-            >
-              Login
-            </button>
-          </p>
-        </form>
+              {/* Already have account */}
+              <p className="text-center mt-4 text-sm text-gray-600">
+                Already have an account?{" "}
+                <button
+                  type="button"
+                  className="text-green-600 hover:underline"
+                  onClick={() => navigate("/TenantLogin")}
+                >
+                  Login
+                </button>
+              </p>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
