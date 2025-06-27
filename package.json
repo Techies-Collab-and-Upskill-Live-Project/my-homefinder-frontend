@@ -22,7 +22,7 @@
     "postcss": "^8.5.3",
     "react": "^18.2.1",
     "react-dom": "^18.2.1",
-    "react-leaflet": "^5.0.0",
+    "react-leaflet": "^4.2.1",
     "react-router-dom": "^7.6.2",
     "tailwindcss": "^4.1.8",
     "yup": "^1.6.1"

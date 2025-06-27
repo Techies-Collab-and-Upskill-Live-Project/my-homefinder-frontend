@@ -15,8 +15,7 @@ import TenantProfile from "./pages/TenantProfile";
 import TenantListing from "./pages/TenantListing";
 import TenantLogin from "./pages/TenantLogin";
 import TenantSignUpPage from "./pages/TenantSignUpPage";
-
-// import 'leaflet/dist/leaflet.css';
+import 'leaflet/dist/leaflet.css';
 
 function App() {
   return (
