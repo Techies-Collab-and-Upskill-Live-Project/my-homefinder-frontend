@@ -5,7 +5,6 @@ import PropertyHero from "../components/PropertyHero";
 import PropertyDetails from "../components/PropertyDetails";
 import RentedCard from "../components/RentedCard";
 import AddedCard from "../components/AddedCard";
-import Footer from "../Components/Footer";
 
 const LandlordListingPage = () => {
   const [showMenu, setShowMenu] = useState(false);
