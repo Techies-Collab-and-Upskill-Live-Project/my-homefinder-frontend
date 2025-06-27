@@ -42,8 +42,8 @@ const Navbar = () => {
           </Link>
           <Link to="/TenantSignUpPage">
             <button className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
-            Sign Up
-          </button>
+              Sign Up
+            </button>
           </Link>
         </div>
 
@@ -78,13 +78,21 @@ const Navbar = () => {
               ))}
               <hr className="my-2" />
               <Link to="/TenantLogin">
-                <button className="w-full mb-2 px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="w-full mb-2 px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition"
+                >
                   Login
                 </button>
               </Link>
-              <button className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
-                Sign Up
-              </button>
+              <Link to="/TenantSignUpPage">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                >
+                  Sign Up
+                </button>
+              </Link>
             </div>
           </motion.div>
         )}
