@@ -13,18 +13,23 @@
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@phosphor-icons/react": "^2.1.10",
+    "@tailwindcss/postcss": "^4.1.8",
+    "@tailwindcss/vite": "^4.1.8",
     "emoji-mart": "^5.6.0",
     "formik": "^2.4.6",
     "framer-motion": "^12.17.0",
     "leaflet": "^1.9.4",
+    "postcss": "^8.5.3",
     "react": "^18.2.1",
     "react-dom": "^18.2.1",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.6.2",
+    "tailwindcss": "^4.1.8",
     "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@tailwindcss/vite": "^4.1.8",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
@@ -36,8 +41,5 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.8",
     "vite": "^6.3.5"
-  },
-  "engines": {
-    "node": ">=18"
   }
 }
