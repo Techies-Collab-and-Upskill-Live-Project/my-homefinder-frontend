@@ -1,12 +1,10 @@
 
 import React, { useState } from "react";
-import Mastercard from "../Assets/images/Mastercard.png";
-import Visa from "../Assets/images/Visa-logo.png";
-import Navbar from "../Components/Navbar";
-import EditNumberModal from "../components/EditNumberModal";
+import Mastercard from "/images/Mastercard.png";
+import EditNumberModal from "../Components/EditNumberModal";
 import UpdateProfileModal from '../Components/UpdateProfileModal';
-import { useProfile } from "../Assets/ProfileContext";
-import { PencilLine } from "phosphor-react";
+import { useProfile } from "../Components/ProfileContext";
+// import { PencilLine } from "phosphor-react";
 
 const TenantProfile = () => {
   const { profileData, updatePhoneNumber } = useProfile();

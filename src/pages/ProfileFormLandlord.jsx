@@ -2,7 +2,6 @@
 import { useState } from 'react';
 
 import Preference from "../Assets/images/Preference.png"
-import Navbar from '../Profile/components/Navbar';
 import UploadPicture from '../Profile/components/UploadPicture';
 import { useNavigate } from 'react-router-dom';
 import { useProfile } from '../Profile/Assets/ProfileContext';
@@ -44,7 +43,6 @@ const ProfileFormLandlord = () => {
 
     return (
         <>
-            <Navbar />
             <div className="max-w-4xl mx-auto my-10 p-5 font-sans">
                 <h2 className="text-center mb-8 text-lg">Complete Your Profile</h2>
 

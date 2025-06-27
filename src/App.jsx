@@ -10,7 +10,8 @@ import LandlordSignUpPage from './pages/LandlordSignUpPage';
 import Messages from "./pages/Messages";
 import OtpSelection from "./pages/OtpSelection";
 import OtpVerification from "./pages/OtpVerification";
-import Profile from "./pages/Profile";
+import ProfileForm from "./pages/ProfileForm";
+import TenantProfile from "./pages/TenantProfile";
 import TenantListing from "./pages/TenantListing";
 import TenantLogin from "./pages/TenantLogin";
 import TenantSignUpPage from "./pages/TenantSignUpPage";
@@ -30,7 +31,8 @@ function App() {
           <Route path= "/messages" element={<Messages />} />
           <Route path= "/otpselection" element={<OtpSelection />} />
           <Route path= "/otpverification" element={<OtpVerification />} />
-          <Route path= "/profile" element={<Profile />} />
+          <Route path= "/profileform" element={<ProfileForm />} />
+          <Route path= "/tenantprofile" element={<TenantProfile />} />
           <Route path= "/tenantlisting" element={<TenantListing />} />
           <Route path= "/tenantlogin" element={<TenantLogin />} />
           <Route path= "/tenantsignuppage" element={<TenantSignUpPage />} />

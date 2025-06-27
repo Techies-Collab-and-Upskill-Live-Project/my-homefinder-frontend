@@ -1,10 +1,8 @@
 
-import '../Assets/styles/ProfileForm.css';
 import { useState, useEffect } from 'react';
 import UploadPicture from '../Components/UploadPicture';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../Components/Navbar';
-import { useProfile } from '../Assets/ProfileContext';
+import { useProfile } from '../Components/ProfileContext';
 
 const ProfileForm = () => {
   const { profileData, updateProfile, updatePhoneNumber } = useProfile();
@@ -70,9 +68,9 @@ const ProfileForm = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="font-sans text-gray-800 p-4 md:p-8 max-w-lg mx-auto bg-white rounded-lg shadow-lg my-8 mt-32">
-        <h2 className="text-center mb-7 text-xl font-semibold md:text-2xl">Complete Your Profile</h2>
+      <div className="font-sans text-gray-800 p-4 md:p-8 max-w-lg mx-auto bg-white rounded-lg shadow-lg">
+        <div className="mt-[100px]">
+          <h2 className="text-center mb-7 text-xl font-semibold md:text-2xl">Complete Your Profile</h2>
         <UploadPicture
           onImageSelect={handleImageUpload}
           initialImage={formData.image}
@@ -153,6 +151,7 @@ const ProfileForm = () => {
             {isSaving ? 'Saving...' : 'Complete'}
           </button>
         </form>
+        </div>
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useProfile } from '../Profile/Assets/ProfileContext'; // Adjust path as needed
+import { useProfile } from '../Components/ProfileContext'; // Adjust path as needed
 
 const EditNumberModal = ({ currentNumber, onClose }) => {
   const { updatePhoneNumber } = useProfile(); // Get updatePhoneNumber from context

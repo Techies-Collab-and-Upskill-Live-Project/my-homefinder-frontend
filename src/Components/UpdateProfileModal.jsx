@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import UploadPicture from './UploadPicture';
-import { useProfile } from '../Profile/Assets/ProfileContext';
+import { useProfile } from '../Components/ProfileContext';
 
 const UpdateProfileModal = ({ onClose }) => {
   const { profileData, updateProfile } = useProfile();
