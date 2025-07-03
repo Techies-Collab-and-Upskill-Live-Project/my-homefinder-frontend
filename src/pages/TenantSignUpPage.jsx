@@ -1,48 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const validationSchema = Yup.object({
-  name: Yup.string().required("Name is required"),
-  phone: Yup.string().required("Phone number is required"),
+  fullName: Yup.string().required("Full name is required"),
   email: Yup.string()
     .email("Invalid email format")
     .required("Email is required"),
+  phone: Yup.string().required("Phone number is required"),
   password: Yup.string()
-    .required("Password is required")
-    .min(6, "Password must be at least 6 characters"),
+    .min(6, "Minimum 6 characters")
+    .required("Password is required"),
+  passwordRepeat: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .required("Please confirm your password"),
+  role: Yup.string()
+    .oneOf(["tenant", "landlord"], "Select a valid role")
+    .required("Role is required"),
 });
 
 export default function TenantSignUpPage() {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
-  const handleSubmit = (values) => {
-    console.log("Form submitted:", values);
-    // Handle form submission logic here (API call, etc.)
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setError("");
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/signup`,
+        values
+      );
+      console.log("Signup success:", data);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.response?.data?.message || "Signup failed");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <div className="relative overflow-hidden min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      {/* Decorative Circles */}
-      <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full top-[-100px] right-[-100px] z-0" />
-      <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full bottom-[-100px] left-[-100px] z-0" />
-
-      {/* Logo */}
+      <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full top-[-100px] right-[-100px]" />
+      <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full bottom-[-100px] left-[-100px]" />
       <img
         src="/Images/Logo.png"
         alt="Logo"
         className="absolute top-4 left-4 h-20 z-10"
       />
 
-      {/* Form Card */}
-      <div className="relative z-10 w-full mb-20 max-w-md bg-white p-6 md:p-8 rounded-3xl shadow-lg mt-[100px]">
+      <div className="relative z-10 w-full max-w-md bg-white p-8 rounded-3xl shadow-lg mt-[100px] mb-[100px]">
         <Formik
           initialValues={{
-            name: "",
-            phone: "",
+            fullName: "",
             email: "",
+            phone: "",
             password: "",
+            passwordRepeat: "",
+            role: "",
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -52,42 +69,16 @@ export default function TenantSignUpPage() {
               <h2 className="text-2xl font-semibold text-center">
                 Create Your MyHomeFinder Account
               </h2>
-              <p className="text-center text-gray-600">
-                Join to explore listings, save favorites, and manage your home
-                search easily.
-              </p>
 
-              {/* Name */}
+              {/* Full Name */}
               <div>
-                <label className="block mb-1 text-gray-700">
-                  <i className="bi bi-person mr-2 text-black" />
-                  Name
-                </label>
+                <label className="block mb-1 text-gray-700">Full Name</label>
                 <Field
-                  type="text"
-                  name="name"
-                  className="w-full h-12 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+                  name="fullName"
+                  className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
                 />
                 <ErrorMessage
-                  name="name"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="block mb-1 text-gray-700">
-                  <i className="bi bi-telephone mr-2 text-black" />
-                  Phone Number
-                </label>
-                <Field
-                  type="tel"
-                  name="phone"
-                  className="w-full h-12 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
-                />
-                <ErrorMessage
-                  name="phone"
+                  name="fullName"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
@@ -95,14 +86,11 @@ export default function TenantSignUpPage() {
 
               {/* Email */}
               <div>
-                <label className="block mb-1 text-gray-700">
-                  <i className="bi bi-envelope mr-2 text-black" />
-                  Email
-                </label>
+                <label className="block mb-1 text-gray-700">Email</label>
                 <Field
                   type="email"
                   name="email"
-                  className="w-full h-12 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
                 />
                 <ErrorMessage
                   name="email"
@@ -111,16 +99,28 @@ export default function TenantSignUpPage() {
                 />
               </div>
 
+              {/* Phone */}
+              <div>
+                <label className="block mb-1 text-gray-700">Phone Number</label>
+                <Field
+                  name="phone"
+                  type="tel"
+                  className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
+                />
+                <ErrorMessage
+                  name="phone"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
               {/* Password */}
               <div>
-                <label className="block mb-1 text-gray-700">
-                  <i className="bi bi-lock mr-2 text-black" />
-                  Password
-                </label>
+                <label className="block mb-1 text-gray-700">Password</label>
                 <Field
-                  type="password"
                   name="password"
-                  className="w-full h-12 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+                  type="password"
+                  className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
                 />
                 <ErrorMessage
                   name="password"
@@ -128,6 +128,47 @@ export default function TenantSignUpPage() {
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
+
+              {/* Confirm Password */}
+              <div>
+                <label className="block mb-1 text-gray-700">
+                  Confirm Password
+                </label>
+                <Field
+                  name="passwordRepeat"
+                  type="password"
+                  className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
+                />
+                <ErrorMessage
+                  name="passwordRepeat"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              {/* Role */}
+              <div>
+                <label className="block mb-1 text-gray-700">Role</label>
+                <Field
+                  name="role"
+                  as="select"
+                  className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
+                >
+                  <option value="">Select role</option>
+                  <option value="landlord">Landlord</option>
+                  <option value="tenant">Tenant</option>
+                </Field>
+                <ErrorMessage
+                  name="role"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              {/* Error Display */}
+              {error && (
+                <div className="text-red-500 text-sm text-center">{error}</div>
+              )}
 
               {/* Submit */}
               <button
@@ -138,47 +179,6 @@ export default function TenantSignUpPage() {
                 {isSubmitting ? "Signing Up..." : "Sign Up"}
               </button>
 
-              {/* Divider */}
-              <div className="flex items-center my-4">
-                <div className="flex-grow border-t border-green-400" />
-                <span className="mx-3 text-sm text-gray-600">
-                  Or sign up with
-                </span>
-                <div className="flex-grow border-t border-green-400" />
-              </div>
-
-              {/* Social Icons */}
-              <div className="flex justify-center gap-6">
-                {[
-                  {
-                    img: "/google.svg",
-                    alt: "Google",
-                    link: "https://accounts.google.com",
-                  },
-                  {
-                    img: "/apple.svg",
-                    alt: "Apple",
-                    link: "https://appleid.apple.com",
-                  },
-                  {
-                    img: "/fb.svg",
-                    alt: "Facebook",
-                    link: "https://facebook.com",
-                  },
-                ].map((item) => (
-                  <a
-                    key={item.alt}
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-gray-100 rounded-full p-3 hover:bg-gray-200"
-                  >
-                    <img src={item.img} alt={item.alt} className="w-6 h-6" />
-                  </a>
-                ))}
-              </div>
-
-              {/* Already have account */}
               <p className="text-center mt-4 text-sm text-gray-600">
                 Already have an account?{" "}
                 <button

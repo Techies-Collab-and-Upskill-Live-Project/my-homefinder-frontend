@@ -1,6 +1,8 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -15,20 +17,37 @@ const validationSchema = Yup.object({
 
 const SignUpPage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (values) => {
-    console.log("Sign Up Submitted:", values);
-    // API logic here
-    navigate("/dashboard");
+  const handleSubmit = async (values) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/register`,
+        values
+      );
+      console.log("Registration successful:", data);
+
+      // Save token or user info if needed
+      // localStorage.setItem("token", data.token);
+
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="flex min-h-screen overflow-hidden items-center justify-center bg-gray-50 relative px-4">
-      {/* Decorative circles */}
       <div className="w-60 h-60 bg-green-600 rounded-full absolute -top-28 -right-28"></div>
       <div className="w-60 h-60 bg-green-600 rounded-full absolute -bottom-28 -left-28"></div>
 
-      {/* Logo */}
       <img
         src="/Images/Logo.png"
         alt="Logo"
@@ -47,7 +66,6 @@ const SignUpPage = () => {
         >
           {() => (
             <Form className="space-y-4">
-              {/* Name */}
               <div>
                 <label
                   className="block text-sm font-medium mb-1"
@@ -68,7 +86,6 @@ const SignUpPage = () => {
                 />
               </div>
 
-              {/* Phone */}
               <div>
                 <label
                   className="block text-sm font-medium mb-1"
@@ -89,7 +106,6 @@ const SignUpPage = () => {
                 />
               </div>
 
-              {/* Email */}
               <div>
                 <label
                   className="block text-sm font-medium mb-1"
@@ -110,7 +126,6 @@ const SignUpPage = () => {
                 />
               </div>
 
-              {/* Password */}
               <div>
                 <label
                   className="block text-sm font-medium mb-1"
@@ -131,25 +146,29 @@ const SignUpPage = () => {
                 />
               </div>
 
-              {/* Signup Button */}
+              {error && (
+                <div className="text-red-500 text-sm mt-1 text-center">
+                  {error}
+                </div>
+              )}
+
               <button
                 type="submit"
                 className="w-full bg-green-600 text-white rounded-lg py-3 font-medium hover:bg-green-700 transition"
+                disabled={loading}
               >
-                Sign Up
+                {loading ? "Creating account..." : "Sign Up"}
               </button>
             </Form>
           )}
         </Formik>
 
-        {/* Divider */}
         <div className="flex items-center my-4">
           <div className="flex-grow border-t border-green-600"></div>
           <span className="mx-3 text-gray-700 text-sm">Or sign up with</span>
           <div className="flex-grow border-t border-green-600"></div>
         </div>
 
-        {/* Social Login */}
         <div className="flex justify-center gap-6">
           {[
             {
@@ -162,11 +181,7 @@ const SignUpPage = () => {
               alt: "Apple",
               link: "https://appleid.apple.com",
             },
-            {
-              img: "/fb.svg",
-              alt: "Facebook",
-              link: "https://facebook.com",
-            },
+            { img: "/fb.svg", alt: "Facebook", link: "https://facebook.com" },
           ].map((item) => (
             <a
               key={item.alt}
@@ -180,7 +195,6 @@ const SignUpPage = () => {
           ))}
         </div>
 
-        {/* Already have account */}
         <p className="text-center mt-6 text-sm">
           Already have an account?{" "}
           <button

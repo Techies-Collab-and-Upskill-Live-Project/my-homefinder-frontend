@@ -5,7 +5,7 @@ import communication from "/images/Communication.jpg";
 
 const SubSection = () => {
   return (
-    <div className="w-full bg-white py-16 mt-[100px] flex flex-col items-center">
+    <div className="w-full bg-white py-16 mt-[200px] flex flex-col items-center">
       <h2 className="text-center text-lg sm:text-2xl font-medium mb-12 px-4">
         Why Choose MyHomeFinder?
       </h2>

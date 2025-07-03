@@ -1,6 +1,8 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -13,21 +15,38 @@ const validationSchema = Yup.object({
 
 const LandlordLoginPage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (values) => {
-    console.log("Login submitted:", values);
-    // Add login API logic here
-    navigate("/dashboard");
+  const handleSubmit = async (values) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/login`,
+        values
+      );
+
+      console.log("Login successful:", data);
+
+      // Save tokens or user info if needed
+      // localStorage.setItem("token", data.token);
+
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="flex min-h-screen overflow-hidden items-center justify-center bg-gray-50 relative px-4">
-      {/* Top right circle */}
       <div className="w-60 h-60 bg-green-600 rounded-full absolute -top-28 -right-28"></div>
-      {/* Bottom left circle */}
       <div className="w-60 h-60 bg-green-600 rounded-full absolute -bottom-28 -left-28"></div>
 
-      {/* Logo */}
       <img
         src="/Images/Logo.png"
         alt="Logo"
@@ -47,7 +66,6 @@ const LandlordLoginPage = () => {
         >
           {() => (
             <Form className="space-y-4">
-              {/* Email */}
               <div>
                 <label
                   htmlFor="email"
@@ -68,7 +86,6 @@ const LandlordLoginPage = () => {
                 />
               </div>
 
-              {/* Password */}
               <div>
                 <label
                   htmlFor="password"
@@ -89,18 +106,23 @@ const LandlordLoginPage = () => {
                 />
               </div>
 
-              {/* Login Button */}
+              {error && (
+                <div className="text-red-500 text-sm mt-1 text-center">
+                  {error}
+                </div>
+              )}
+
               <button
                 type="submit"
                 className="w-full bg-green-600 text-white rounded-lg py-3 font-medium hover:bg-green-700 transition"
+                disabled={loading}
               >
-                Login
+                {loading ? "Logging in..." : "Login"}
               </button>
             </Form>
           )}
         </Formik>
 
-        {/* Social Login */}
         <div className="flex justify-center gap-6 mt-6">
           {[
             {
@@ -113,11 +135,7 @@ const LandlordLoginPage = () => {
               alt: "Apple",
               link: "https://appleid.apple.com",
             },
-            {
-              img: "/fb.svg",
-              alt: "Facebook",
-              link: "https://facebook.com",
-            },
+            { img: "/fb.svg", alt: "Facebook", link: "https://facebook.com" },
           ].map((item) => (
             <a
               href={item.link}
@@ -131,7 +149,6 @@ const LandlordLoginPage = () => {
           ))}
         </div>
 
-        {/* Sign Up Link */}
         <p className="text-center mt-6 text-sm">
           Don't have an account?{" "}
           <button

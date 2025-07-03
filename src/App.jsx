@@ -15,7 +15,9 @@ import TenantProfile from "./pages/TenantProfile";
 import TenantListing from "./pages/TenantListing";
 import TenantLogin from "./pages/TenantLogin";
 import TenantSignUpPage from "./pages/TenantSignUpPage";
-import 'leaflet/dist/leaflet.css';
+import "leaflet/dist/leaflet.css";
+import ForgotPasswordPage from "./pages/ForgotPassword";
+import ResetPasswordPage from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -28,8 +30,6 @@ function App() {
             path="/landlordlistingpage"
             element={<LandlordListingPage />}
           />
-          <Route path="/landlordlogin" element={<LandlordLogin />} />
-          <Route path="/landlordsignuppage" element={<LandlordSignUpPage />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/otpselection" element={<OtpSelection />} />
           <Route path="/otpverification" element={<OtpVerification />} />
@@ -38,6 +38,8 @@ function App() {
           <Route path="/tenantlisting" element={<TenantListing />} />
           <Route path="/tenantlogin" element={<TenantLogin />} />
           <Route path="/tenantsignuppage" element={<TenantSignUpPage />} />
+          <Route path="/forgotPassword" element={<ForgotPasswordPage />} />
+          <Route path="/resetPassword" element={<ResetPasswordPage />} />
         </Route>
       </Routes>
     </>

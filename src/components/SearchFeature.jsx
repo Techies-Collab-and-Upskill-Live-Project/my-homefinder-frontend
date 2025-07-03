@@ -22,7 +22,7 @@ const SearchFeature = () => {
   };
 
   return (
-    <div className="absolute -bottom-14 left-1/2 transform -translate-x-1/2 w-[95%] max-w-7xl z-20 px-4">
+    <div className="absolute -bottom-30 left-1/2 transform -translate-x-1/2 w-[95%] max-w-7xl z-20 px-4">
       {/* Rent/Lease Toggle */}
       <div className="flex bg-white border border-green-500 rounded-t-2xl w-fit h-12 overflow-hidden mb-0 shadow-sm">
         <button
