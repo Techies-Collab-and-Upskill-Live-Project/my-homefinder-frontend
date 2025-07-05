@@ -33,7 +33,16 @@ export default function TenantSignUpPage() {
         values
       );
       console.log("Signup success:", data);
-      navigate("/dashboard");
+      
+      // Redirect based on user role
+      if (values.role === "tenant") {
+        navigate("/TenantProfile");
+      } else if (values.role === "landlord") {
+        navigate("/LandlordProfile");
+      } else {
+        // Fallback to dashboard if role is not specified
+        navigate("/dashboard");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");
     } finally {

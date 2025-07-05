@@ -21,13 +21,27 @@ export default function HomePage() {
         values
       );
       console.log("Login success:", data);
-      navigate("/dashboard");
+      handleLoginSuccess(data);
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
       setSubmitting(false);
     }
   };
+
+const handleLoginSuccess = (userData) => {
+  // Assuming the API returns user data including role
+  const userRole = userData.role || userData.user?.role;
+  
+  if (userRole === "tenant") {
+    navigate("/TenantProfile");
+  } else if (userRole === "landlord") {
+    navigate("/LandlordProfile");
+  } else {
+    // Fallback
+    navigate("/dashboard");
+  }
+};
 
   return (
     <div className="relative overflow-hidden min-h-screen flex items-center justify-center bg-gray-100 px-4">
