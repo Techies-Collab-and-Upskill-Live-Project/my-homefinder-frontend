@@ -1,109 +1,294 @@
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Mastercard from "/images/Mastercard.png";
 import EditNumberModal from "../Components/EditNumberModal";
-import UpdateProfileModal from '../Components/UpdateProfileModal';
-import { useProfile } from "../Components/ProfileContext";
-// import { PencilLine } from "phosphor-react";
+import UpdateProfileModal from "../Components/UpdateProfileModal";
+import { PencilLine } from "@phosphor-icons/react";
+import axios from "axios";
 
 const TenantProfile = () => {
-  const { profileData, updatePhoneNumber } = useProfile();
-
   const [isEditNumberModalOpen, setIsEditNumberModalOpen] = useState(false);
   const [showUpdateProfileModal, setShowUpdateProfileModal] = useState(false);
+  const [isEditCardModalOpen, setIsEditCardModalOpen] = useState(false);
+  const [isEditImageModalOpen, setIsEditImageModalOpen] = useState(false);
+  // Helper function to generate the avatar URL
+  const generateAvatar = (name) => {
+    const encodedName = encodeURIComponent(name || "User");
+    return `https://ui-avatars.com/api/?name=${encodedName}&background=0D8ABC&color=fff&bold=true`;
+  };
 
-  const openEditNumberModal = () => setIsEditNumberModalOpen(true);
-  const closeEditNumberModal = () => setIsEditNumberModalOpen(false);
+  const [profileData, setProfileData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isImageSaving, setIsImageSaving] = useState(false);
+  const [imageError, setImageError] = useState("");
 
-  const openUpdateProfileModal = () => setShowUpdateProfileModal(true);
-  const closeUpdateProfileModal = () => setShowUpdateProfileModal(false);
+  const [cardDetails, setCardDetails] = useState({
+    number: "*****8994",
+    type: "Debit Card",
+  });
 
-  const defaultUserImage = "https://via.placeholder.com/150";
+  useEffect(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const storedName = localStorage.getItem("name") || "Lucy Favy";
+      const storedImage =
+        localStorage.getItem("profileImage") || generateAvatar(storedName);
+      const storedEmail = localStorage.getItem("email");
+      const storedPhoneNumber = localStorage.getItem("phoneNumber");
+      const storedCardNumber = localStorage.getItem("cardNumber");
+      const storedCardType = localStorage.getItem("cardType");
 
-  if (!profileData) {
+      setProfileData({
+        name: storedName || "Lucy Favy",
+        email: storedEmail || "lucyfavy@email.com",
+        phoneNumber: storedPhoneNumber || "08157648539",
+        image: storedImage,
+      });
+
+      setCardDetails({
+        number: storedCardNumber || "*****8994",
+        type: storedCardType || "Debit Card",
+      });
+
+      setIsLoading(false);
+    }, 800);
+  }, []);
+
+  const handleSaveCardDetails = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const newNumber = form.cardNumber.value.trim();
+    const newType = form.cardType.value.trim();
+
+    if (!newNumber || !newType) return;
+
+    localStorage.setItem("cardNumber", newNumber);
+    localStorage.setItem("cardType", newType);
+
+    setCardDetails({
+      number: newNumber,
+      type: newType,
+    });
+
+    setIsEditCardModalOpen(false);
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsImageSaving(true);
+    setImageError("");
+
+    try {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("profileImage", file);
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/users/uploadprofilepic`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const imageUrl = response.data.imageUrl;
+      localStorage.setItem("profileImage", imageUrl);
+      setProfileData((prev) => ({ ...prev, image: imageUrl }));
+
+      setIsEditImageModalOpen(false);
+    } catch (error) {
+      console.error(error);
+      setImageError(
+        error.response?.data?.message || "Image upload failed. Try again."
+      );
+    } finally {
+      setIsImageSaving(false);
+    }
+  };
+
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-100 p-8 flex justify-center items-center">
-        <p className="text-gray-600">Loading profile data...</p>
+      <div className="min-h-screen flex justify-center items-center bg-gray-100 p-6">
+        <p className="text-gray-600 text-base">Loading profile data...</p>
       </div>
     );
   }
 
   return (
-    <>
-      <Navbar />
-      <div className="max-w-4xl mx-auto mt-32 p-8 md:p-14 font-sans leading-tight border border-gray-300 rounded-xl shadow-lg flex flex-col gap-8">
-        <div className="flex flex-row items-center justify-center gap-3 md:gap-6">
-          <div className="flex flex-col items-center justify-center gap-2">
-            <img
-              src={profileData.image || defaultUserImage}
-              
-              className="w-20 h-20 rounded-full object-cover"
-              alt="Profile"
-            />
-            <p className="text-black text-xl font-semibold">{profileData.name || "Lucy Favy"}</p>
-          </div>
-          <a
-            onClick={openUpdateProfileModal}
-            className="text-orange-500 text-sm font-normal cursor-pointer hover:underline"
-          >
-            Update Profile
-          </a>
-        </div>
-
-        <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 mt-5 gap-3">
-          <div className="flex flex-row justify-between items-center mt-4">
-            <p className="text-base font-normal">Contact Details</p>
-          </div>
-          <div className="border border-gray-300 rounded-full w-full"></div>
-          <div className="flex flex-row justify-between items-center mt-4">
-            <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
-            <PencilLine size={32} onClick={openEditNumberModal} className="cursor-pointer" />
-          </div>
-          <div className="flex flex-row justify-between items-center mt-4">
-            <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
-            <PencilLine size={32} onClick={openEditNumberModal}  className="cursor-pointer"  />
-          </div>
-        </div>
-
-        
-        <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 mt-5 gap-4">
-          <div className="flex flex-row justify-between items-center">
-            <p className="text-base font-normal">Payments</p>
-            <button className="text-sm font-normal text-black bg-transparent border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors">
-              Manage
+    <div className="max-w-4xl mx-auto p-6 sm:p-8 md:p-12 bg-white border border-gray-200 rounded-2xl shadow-lg flex flex-col gap-8 mb-20">
+      {/* Profile Header */}
+      <div className="flex mt-40 flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <img
+            src={profileData.image}
+            alt="Profile"
+            className="w-24 h-24 rounded-full object-cover cursor-pointer hover:opacity-80 transition-all"
+            onClick={() => setIsEditImageModalOpen(true)}
+          />
+          <div className="flex flex-col items-center sm:items-start">
+            <p className="text-xl font-semibold text-gray-800">
+              {profileData.name}
+            </p>
+            <button
+              onClick={() => setShowUpdateProfileModal(true)}
+              className="text-sm text-green-600 hover:underline mt-1"
+            >
+              Update Profile
             </button>
           </div>
-          <div className="border border-gray-300 rounded-full w-full"></div>
-          <div className="flex flex-row justify-start items-center gap-5">
-            <img src={Visa} className="w-16 h-5" alt="Visa Card" /> 
-            <div className="flex flex-col gap-2">
-              <p className="text-base font-normal">*****8994</p>
-              <p className="text-base font-normal -mt-3">Debit Card</p> 
-            </div>
+        </div>
+      </div>
+
+      {/* Contact Details */}
+      <div className="border border-gray-200 rounded-xl p-6 flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <p className="text-base font-semibold text-gray-700">
+            Contact Details
+          </p>
+          <PencilLine
+            size={24}
+            onClick={() => setIsEditNumberModalOpen(true)}
+            className="cursor-pointer text-gray-500 hover:text-gray-700"
+          />
+        </div>
+        <div className="border-t border-gray-200 my-2" />
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col sm:flex-row sm:justify-between">
+            <p className="text-sm text-gray-500">Phone Number:</p>
+            <p className="text-sm text-gray-800">{profileData.phoneNumber}</p>
           </div>
-          <div className="flex flex-row justify-start items-center gap-5">
-            <img src={Mastercard} className="w-15 h-9" alt="Mastercard" /> 
-            <div className="flex flex-col gap-2">
-              <p className="text-base font-normal">****5676</p>
-              <p className="text-base font-normal -mt-3">Debit Card</p> 
+          <div className="flex flex-col sm:flex-row sm:justify-between">
+            <p className="text-sm text-gray-500">Email:</p>
+            <p className="text-sm text-gray-800">{profileData.email}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Payments */}
+      <div className="border border-gray-200 rounded-xl p-6 flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <p className="text-base font-semibold text-gray-700">
+            Payment Methods
+          </p>
+          <button
+            onClick={() => setIsEditCardModalOpen(true)}
+            className="text-sm font-medium text-black bg-transparent border border-gray-300 px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
+          >
+            Edit
+          </button>
+        </div>
+        <div className="border-t border-gray-200 my-2" />
+        <div className="flex items-center gap-4">
+          <img
+            src={Mastercard}
+            alt="Mastercard"
+            className="w-12 h-8 object-contain"
+          />
+          <div className="flex flex-col">
+            <p className="text-base text-gray-800">{cardDetails.number}</p>
+            <p className="text-sm text-gray-500 -mt-1">{cardDetails.type}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Edit Image Popup */}
+      {isEditImageModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md">
+            <h3 className="text-lg font-semibold mb-4">
+              Upload New Profile Image
+            </h3>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              disabled={isImageSaving}
+              className="mb-4"
+            />
+            {imageError && (
+              <p className="text-red-600 text-sm mb-4">{imageError}</p>
+            )}
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setIsEditImageModalOpen(false)}
+                className="text-sm text-gray-600 hover:text-gray-800"
+                disabled={isImageSaving}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
+      )}
 
-        {isEditNumberModalOpen && (
-          <EditNumberModal
-            currentNumber={profileData.phoneNumber}
-            onClose={closeEditNumberModal}
-          />
-        )}
+      {/* Edit Card Popup */}
+      {isEditCardModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md">
+            <h3 className="text-lg font-semibold mb-4">Edit Card Details</h3>
+            <form
+              onSubmit={handleSaveCardDetails}
+              className="flex flex-col gap-4"
+            >
+              <div>
+                <label className="text-sm font-medium text-gray-700">
+                  Card Number
+                </label>
+                <input
+                  type="text"
+                  name="cardNumber"
+                  defaultValue={cardDetails.number}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 mt-1"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-700">
+                  Card Type
+                </label>
+                <input
+                  type="text"
+                  name="cardType"
+                  defaultValue={cardDetails.type}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 mt-1"
+                  required
+                />
+              </div>
+              <div className="flex justify-end gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsEditCardModalOpen(false)}
+                  className="text-sm text-gray-600 hover:text-gray-800"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="text-sm bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
-        {showUpdateProfileModal && (
-          <UpdateProfileModal
-            onClose={closeUpdateProfileModal}
-          />
-        )}
-      </div>
-    </>
+      {/* Other Modals */}
+      {isEditNumberModalOpen && (
+        <EditNumberModal
+          currentNumber={profileData.phoneNumber}
+          onClose={() => setIsEditNumberModalOpen(false)}
+        />
+      )}
+      {showUpdateProfileModal && (
+        <UpdateProfileModal onClose={() => setShowUpdateProfileModal(false)} />
+      )}
+    </div>
   );
 };
 

@@ -1,71 +1,88 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import UploadPicture from './UploadPicture';
-import { useProfile } from '../Components/ProfileContext';
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import axios from "axios";
+import { useProfile } from "../Components/ProfileContext";
 
 const UpdateProfileModal = ({ onClose }) => {
   const { profileData, updateProfile } = useProfile();
 
-  const [name, setName] = useState(profileData.name || '');
-  const [image, setImage] = useState(profileData.image || null);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [saveMessage, setSaveMessage] = useState('');
+  const [message, setMessage] = useState({ type: "", text: "" });
 
   useEffect(() => {
-    setName(profileData.name || '');
-    setImage(profileData.image || null);
-  }, [profileData.name, profileData.image]);
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleImageUpload = (imageUrl) => {
-    setImage(imageUrl);
-  };
+    setFullName(profileData.name || "");
+    setEmail(profileData.email || "");
+  }, [profileData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSaving(true);
-    setSaveMessage('');
+    setMessage({ type: "", text: "" });
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found");
 
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/users/update`,
+        {
+          fullName,
+          email,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const updatedData = response.data;
+
+      // Update profile context
       updateProfile({
-        name: name,
-        image: image,
+        name: updatedData.fullName,
+        email: updatedData.email,
       });
 
-      setSaveMessage('Profile updated successfully!');
-      setTimeout(() => {
-        onClose();
-      }, 1000);
+      // Update localStorage
+      localStorage.setItem("name", updatedData.fullName);
+      localStorage.setItem("email", updatedData.email);
 
+      setMessage({ type: "success", text: "Profile updated successfully!" });
+      setTimeout(() => onClose(), 1500);
     } catch (error) {
-      console.error('Failed to update profile:', error);
-      setSaveMessage('Failed to update profile. Please try again.');
+      console.error(error);
+      setMessage({
+        type: "error",
+        text:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to update profile. Please try again.",
+      });
     } finally {
       setIsSaving(false);
-      if (saveMessage.includes('Failed')) {
-        setTimeout(() => setSaveMessage(''), 3000);
+      if (message.type === "error") {
+        setTimeout(() => setMessage({ type: "", text: "" }), 3000);
       }
     }
   };
 
   return ReactDOM.createPortal(
-  
-    <div className="fixed inset-0 bg-none bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-    
+    <div
+      className="fixed inset-0 bg-black/50 bg-opacity-40 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
       <div
-        className="bg-white rounded-lg shadow-xl w-full max-w-md mx-auto p-6 relative transform transition-all duration-300 ease-out scale-100 opacity-100"
+        className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative"
         onClick={(e) => e.stopPropagation()}
       >
-        
-        <div className="flex justify-between items-center pb-4 mb-4 border-b border-gray-200">
-          <h2 className="text-2xl font-semibold text-gray-800">Edit Profile</h2>
+        {/* Header */}
+        <div className="flex justify-between items-center pb-4 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-800">Edit Profile</h2>
           <button
-            className="text-gray-500 hover:text-gray-700 text-3xl leading-none"
+            className="text-gray-500 hover:text-gray-700 text-2xl"
             onClick={onClose}
             aria-label="Close modal"
           >
@@ -73,56 +90,69 @@ const UpdateProfileModal = ({ onClose }) => {
           </button>
         </div>
 
-       
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="mb-4">
-            <label htmlFor="modalName" className="block text-gray-700 text-sm font-bold mb-2">
-              Full Name:
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5 mt-4">
+          <div>
+            <label
+              htmlFor="fullName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Full Name
             </label>
             <input
               type="text"
-              id="modalName"
-              value={name}
-              onChange={handleNameChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              id="fullName"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
               required
               disabled={isSaving}
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Profile Picture:
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Email Address
             </label>
-            <UploadPicture
-              onImageSelect={handleImageUpload}
-              initialImage={image}
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+              required
               disabled={isSaving}
             />
           </div>
 
-          {saveMessage && (
-            <p className={`text-sm py-2 px-3 rounded ${
-              saveMessage.includes('successfully')
-                ? 'bg-green-100 text-green-700 border border-green-200'
-                : 'bg-red-100 text-red-700 border border-red-200'
-            }`}>
-              {saveMessage}
+          {/* Message */}
+          {message.text && (
+            <p
+              className={`text-sm px-3 py-2 rounded ${
+                message.type === "success"
+                  ? "bg-green-100 text-green-700 border border-green-200"
+                  : "bg-red-100 text-red-700 border border-red-200"
+              }`}
+            >
+              {message.text}
             </p>
           )}
 
-         
-          <div className="flex justify-end pt-4 border-t border-gray-200 mt-6 space-x-3">
+          {/* Actions */}
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200"
+              className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
               disabled={isSaving}
             >
-              {isSaving ? 'Saving...' : 'Save Changes'}
+              {isSaving ? "Saving..." : "Save Changes"}
             </button>
             <button
               type="button"
-              className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors duration-200"
+              className="bg-gray-200 hover:bg-gray-300 text-gray-800 disabled:opacity-10 disabled:cursor-not-allowed font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
               onClick={onClose}
               disabled={isSaving}
             >

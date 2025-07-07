@@ -29,19 +29,19 @@ export default function HomePage() {
     }
   };
 
-const handleLoginSuccess = (userData) => {
-  // Assuming the API returns user data including role
-  const userRole = userData.role || userData.user?.role;
-  
-  if (userRole === "tenant") {
-    navigate("/TenantProfile");
-  } else if (userRole === "landlord") {
-    navigate("/LandlordProfile");
-  } else {
-    // Fallback
-    navigate("/dashboard");
-  }
-};
+  const handleLoginSuccess = (userData) => {
+    // Assuming the API returns user data including role
+    const userRole = userData.role || userData.user?.role;
+
+    if (userRole === "tenant") {
+      navigate("/TenantProfile");
+    } else if (userRole === "landlord") {
+      navigate("/LandlordProfile");
+    } else {
+      // Fallback
+      navigate("/dashboard");
+    }
+  };
 
   return (
     <div className="relative overflow-hidden min-h-screen flex items-center justify-center bg-gray-100 px-4">

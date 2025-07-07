@@ -33,10 +33,10 @@ export default function TenantSignUpPage() {
         values
       );
       console.log("Signup success:", data);
-      
+
       // Redirect based on user role
-      if (values.role === "tenant") {
-        navigate("/TenantProfile");
+      if (values.role === "renter") {
+        navigate("/tenantProfile");
       } else if (values.role === "landlord") {
         navigate("/LandlordProfile");
       } else {
@@ -164,8 +164,8 @@ export default function TenantSignUpPage() {
                   className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
                 >
                   <option value="">Select role</option>
-                  <option value="landlord">Landlord</option>
-                  <option value="tenant">Tenant</option>
+                  <option value="landlord">renter</option>
+                  <option value="tenant">landlord</option>
                 </Field>
                 <ErrorMessage
                   name="role"
