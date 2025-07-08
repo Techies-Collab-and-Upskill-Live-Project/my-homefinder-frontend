@@ -42,7 +42,7 @@ const EditNumberModal = ({ currentNumber, currentEmail, onClose }) => {
 
     setIsLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("authToken");
       const response = await axios.patch(
         `${import.meta.env.VITE_API_URL}/users/update-contact`,
         { phoneNumber: phoneNumber.trim(), email: email.trim() },

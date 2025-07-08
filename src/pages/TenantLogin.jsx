@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -12,6 +13,7 @@ const validationSchema = Yup.object({
 export default function HomePage() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const { login } = useAuth();
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setError("");
@@ -21,7 +23,15 @@ export default function HomePage() {
         values
       );
       console.log("Login success:", data);
-      handleLoginSuccess(data);
+      
+      // Store authentication data securely
+      const success = login(data.user || data, data.token || data.accessToken);
+      
+      if (success) {
+        handleLoginSuccess(data.user || data);
+      } else {
+        setError("Failed to store authentication data");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
@@ -30,13 +40,13 @@ export default function HomePage() {
   };
 
   const handleLoginSuccess = (userData) => {
-    // Assuming the API returns user data including role
-    const userRole = userData.role || userData.user?.role;
+    // Navigate based on user role
+    const userRole = userData.role;
 
     if (userRole === "tenant") {
-      navigate("/TenantProfile");
+      navigate("/tenantprofile");
     } else if (userRole === "landlord") {
-      navigate("/LandlordProfile");
+      navigate("/landlordprofileb4listing");
     } else {
       // Fallback
       navigate("/dashboard");

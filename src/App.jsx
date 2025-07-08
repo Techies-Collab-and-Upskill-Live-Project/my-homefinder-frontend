@@ -4,9 +4,7 @@ import Landing from "./pages/Landing";
 import Layout from "./layout/Layout";
 import "./index.css";
 import DecisionPage from "./pages/DecisionPage";
-import LandlordListingPage from "./pages/LandlordListingPage";
-import LandlordLogin from "./pages/LandlordLogin";
-import LandlordSignUpPage from "./pages/LandlordSignUpPage";
+import LandlordListingPage from "./pages/LandlordListingPage"
 import Messages from "./pages/Messages";
 import OtpSelection from "./pages/OtpSelection";
 import OtpVerification from "./pages/OtpVerification";
@@ -18,6 +16,7 @@ import TenantSignUpPage from "./pages/TenantSignUpPage";
 import "leaflet/dist/leaflet.css";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -28,14 +27,18 @@ function App() {
           <Route path="/decisionpage" element={<DecisionPage />} />
           <Route
             path="/landlordlistingpage"
-            element={<LandlordListingPage />}
+            element={
+              <ProtectedRoute requiredRole="landlord">
+                <LandlordListingPage />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
           <Route path="/otpselection" element={<OtpSelection />} />
           <Route path="/otpverification" element={<OtpVerification />} />
-          <Route path="/profileform" element={<ProfileForm />} />
-          <Route path="/tenantprofile" element={<TenantProfile />} />
-          <Route path="/tenantlisting" element={<TenantListing />} />
+          <Route path="/profileform" element={<ProtectedRoute><ProfileForm /></ProtectedRoute>} />
+          <Route path="/tenantprofile" element={<ProtectedRoute><TenantProfile /></ProtectedRoute>} />
+          <Route path="/tenantlisting" element={<ProtectedRoute><TenantListing /></ProtectedRoute>} />
           <Route path="/tenantlogin" element={<TenantLogin />} />
           <Route path="/tenantsignuppage" element={<TenantSignUpPage />} />
           <Route path="/forgotPassword" element={<ForgotPasswordPage />} />

@@ -80,7 +80,7 @@ const TenantProfile = () => {
     setImageError("");
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("authToken");
       const formData = new FormData();
       formData.append("profileImage", file);
 

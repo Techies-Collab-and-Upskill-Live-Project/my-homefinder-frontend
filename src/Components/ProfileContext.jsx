@@ -10,7 +10,7 @@ export const ProfileProvider = ({ children }) => {
     name: '',
     phoneNumber: '',
     nin: '',
-    image: null, 
+    image: null,  
     email: '', 
   });
 
@@ -28,13 +28,20 @@ export const ProfileProvider = ({ children }) => {
     }));
   };
 
+  const updateEmail = (newEmail) => {
+    setProfileData(prevProfileData => ({
+      ...prevProfileData,
+      email: newEmail,
+    }));
+  };
+
   return (
     <ProfileContext.Provider value={{
       profileData,
       setProfileData,
       updatePhoneNumber,
       updateProfile,
-      
+      updateEmail,
     }}>
       {children}
     </ProfileContext.Provider>

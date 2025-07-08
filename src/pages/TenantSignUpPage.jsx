@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
 
 const validationSchema = Yup.object({
   fullName: Yup.string().required("Full name is required"),
@@ -24,6 +25,7 @@ const validationSchema = Yup.object({
 export default function TenantSignUpPage() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const { login } = useAuth();
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setError("");
@@ -33,15 +35,23 @@ export default function TenantSignUpPage() {
         values
       );
       console.log("Signup success:", data);
-
-      // Redirect based on user role
-      if (values.role === "renter") {
-        navigate("/tenantProfile");
-      } else if (values.role === "landlord") {
-        navigate("/LandlordProfile");
+      
+      // Store authentication data securely
+      const success = login(data.user || data, data.token || data.accessToken);
+      
+      if (success) {
+        // Redirect based on user role
+        const userRole = values.role;
+        if (userRole === "tenant") {
+          navigate("/tenantprofile");
+        } else if (userRole === "landlord") {
+          navigate("/landlordprofileb4listing");
+        } else {
+          // Fallback to dashboard if role is not specified
+          navigate("/dashboard");
+        }
       } else {
-        // Fallback to dashboard if role is not specified
-        navigate("/dashboard");
+        setError("Failed to store authentication data");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");
@@ -164,8 +174,8 @@ export default function TenantSignUpPage() {
                   className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
                 >
                   <option value="">Select role</option>
-                  <option value="landlord">renter</option>
-                  <option value="tenant">landlord</option>
+                  <option value="tenant">Tenant</option>
+                  <option value="landlord">Landlord</option>
                 </Field>
                 <ErrorMessage
                   name="role"
