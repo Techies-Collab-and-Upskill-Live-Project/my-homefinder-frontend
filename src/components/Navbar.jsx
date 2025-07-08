@@ -1,15 +1,46 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { nav_links } from "../data/data";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbarlogo from "/images/Navbarlogo.svg";
-import { List, X } from "@phosphor-icons/react";
+import { List, SignOutIcon, UserCircleIcon, X } from "@phosphor-icons/react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const Navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        setUser(null);
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    setIsOpen(false);
+    Navigate("/");
+  };
+
+  const handleProfileClick = () => {
+    if (!user) return;
+    if (user.role === "tenant") {
+      Navigate("/tenantprofile");
+    } else if (user.role === "landlord") {
+      Navigate("/landlord-dashboard");
+    } else {
+      Navigate("/profile");
+    }
+  };
 
   return (
-    <nav className="bg-white shadow-md fixed w-full z-50">
+    <nav className="bg-white shadow-md fixed w-full z-[9999]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
         {/* Logo */}
         <Link to="/">
@@ -33,18 +64,44 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Auth Buttons */}
-        <div className="hidden md:flex gap-3">
-          <Link to="/TenantLogin">
-            <button className="px-4 py-2 border border-green-600 text-green-600 text-sm rounded-md hover:bg-green-50 transition">
-              Login
-            </button>
-          </Link>
-          <Link to="/TenantSignUpPage">
-            <button className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
-              Sign Up
-            </button>
-          </Link>
+        {/* Auth Buttons or Profile */}
+        <div
+          className="hidden cursor-pointer md:flex items-center gap-3"
+          onClick={handleProfileClick}
+        >
+          {user ? (
+            <div className="flex items-center gap-2">
+              {user.image ? (
+                <img
+                  src={user.image}
+                  alt="profile"
+                  className="w-8 h-8 rounded-full object-cover"
+                />
+              ) : (
+                <UserCircleIcon className="w-8 h-8 text-gray-600" />
+              )}
+              <span className="text-sm font-medium">{user.name}</span>
+              <button
+                onClick={handleLogout}
+                className="text-xs text-red-500 cursor-pointer ml-2"
+              >
+                <SignOutIcon size={20} />
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link to="/TenantLogin">
+                <button className="px-4 py-2 border border-green-600 text-green-600 text-sm rounded-md hover:bg-green-50 transition">
+                  Login
+                </button>
+              </Link>
+              <Link to="/TenantSignUpPage">
+                <button className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
+                  Sign Up
+                </button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Hamburger Icon */}
@@ -59,7 +116,7 @@ const Navbar = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="md:hidden px-6 pt-4 pb-6"
+            className="md:hidden z-50 px-6 pt-4 pb-6"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -77,22 +134,48 @@ const Navbar = () => {
                 </Link>
               ))}
               <hr className="my-2" />
-              <Link to="/TenantLogin">
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="w-full mb-2 px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition"
+              {user ? (
+                <div
+                  className="flex cursor-pointer items-center gap-2"
+                  onClick={handleProfileClick}
                 >
-                  Login
-                </button>
-              </Link>
-              <Link to="/TenantSignUpPage">
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-                >
-                  Sign Up
-                </button>
-              </Link>
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt="profile"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <UserCircleIcon className="w-8 h-8 text-gray-600" />
+                  )}
+                  <span className="text-sm font-medium">{user.name}</span>
+                  <button
+                    onClick={handleLogout}
+                    className="text-xs text-red-500 cursor-pointer ml-2"
+                  >
+                    <SignOutIcon size={20} />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <Link to="/TenantLogin">
+                    <button
+                      onClick={() => setIsOpen(false)}
+                      className="w-full mb-2 px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition"
+                    >
+                      Login
+                    </button>
+                  </Link>
+                  <Link to="/TenantSignUpPage">
+                    <button
+                      onClick={() => setIsOpen(false)}
+                      className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                    >
+                      Sign Up
+                    </button>
+                  </Link>
+                </>
+              )}
             </div>
           </motion.div>
         )}

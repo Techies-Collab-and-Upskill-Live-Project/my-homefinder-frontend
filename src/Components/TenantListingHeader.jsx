@@ -1,17 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const TenantListingHeader = () => {
+  const fallbackNames = [
+    "Home Seeker",
+    "Friend",
+    "Happy Tenant",
+    "Explorer",
+    "Future Renter",
+  ];
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        setName(user.name || randomFallback());
+      } catch {
+        setName(randomFallback());
+      }
+    } else {
+      setName(randomFallback());
+    }
+  }, []);
+
+  const randomFallback = () => {
+    const randomIndex = Math.floor(Math.random() * fallbackNames.length);
+    return fallbackNames[randomIndex];
+  };
+
   return (
-    <>
-      <header>
-        <h1 className="text-3xl font-black mb-2">Hi Fav Lucy,</h1>
-        <p className="text-md font-semibold">
-          We found <span className="text-[#0D7B0D]">120</span> homes In lagos
-          that matches your search
-        </p>
-        <small>Select and rent your dream house in the search list below</small>
-      </header>
-    </>
+    <header>
+      <h1 className="text-3xl mt-20 font-black mb-2">Hi {name},</h1>
+      <p className="text-md font-semibold">
+        We found <span className="text-[#0D7B0D]">120</span> homes In Lagos that
+        match your search
+      </p>
+      <small>Select and rent your dream house in the search list below</small>
+    </header>
   );
 };
 

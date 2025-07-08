@@ -211,7 +211,7 @@ const TenantListingHouses = () => {
               key={option}
               onClick={() => {
                 setFilter(option);
-                setCurrentPage(1); // Reset to page 1 when filter changes
+                setCurrentPage(1);
               }}
               className={`px-4 py-2 rounded-full text-sm font-medium border transition ${
                 filter === option

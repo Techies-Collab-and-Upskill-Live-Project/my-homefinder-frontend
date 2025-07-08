@@ -23,10 +23,10 @@ export default function HomePage() {
         values
       );
       console.log("Login success:", data);
-      
+
       // Store authentication data securely
       const success = login(data.user || data, data.token || data.accessToken);
-      
+
       if (success) {
         handleLoginSuccess(data.user || data);
       } else {
@@ -46,10 +46,10 @@ export default function HomePage() {
     if (userRole === "tenant") {
       navigate("/tenantprofile");
     } else if (userRole === "landlord") {
-      navigate("/landlordprofileb4listing");
+      navigate("/landlordListing");
     } else {
       // Fallback
-      navigate("/dashboard");
+      navigate("/");
     }
   };
 
