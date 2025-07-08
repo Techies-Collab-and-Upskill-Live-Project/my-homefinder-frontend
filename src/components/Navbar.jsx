@@ -39,6 +39,13 @@ const Navbar = () => {
     }
   };
 
+  const getGreeting = () => {
+    const hours = new Date().getHours();
+    if (hours < 12) return "Good morning";
+    if (hours < 18) return "Good afternoon";
+    return "Good evening";
+  };
+
   return (
     <nav className="bg-white shadow-md fixed w-full z-[9999]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
@@ -80,7 +87,9 @@ const Navbar = () => {
               ) : (
                 <UserCircleIcon className="w-8 h-8 text-gray-600" />
               )}
-              <span className="text-sm font-medium">{user.name}</span>
+              <span className="text-sm font-medium">
+                {getGreeting()}, {user.name}
+              </span>
               <button
                 onClick={handleLogout}
                 className="text-xs text-red-500 cursor-pointer ml-2"
@@ -148,7 +157,9 @@ const Navbar = () => {
                   ) : (
                     <UserCircleIcon className="w-8 h-8 text-gray-600" />
                   )}
-                  <span className="text-sm font-medium">{user.name}</span>
+                  <span className="text-sm font-medium">
+                    {getGreeting()}, {user.name}
+                  </span>
                   <button
                     onClick={handleLogout}
                     className="text-xs text-red-500 cursor-pointer ml-2"

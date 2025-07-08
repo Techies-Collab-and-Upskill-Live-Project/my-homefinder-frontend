@@ -1,95 +1,215 @@
-import React, { useState } from "react";
-import { PencilLine } from "phosphor-react";
-import UserImage from "../Assets/images/image8.png"
-import Navbar from "../Profile/components/Navbar";
-import { useLocation, useNavigate } from "react-router-dom";
-import EditNumberModal from "../Profile/components/EditNumberModal";
-import { useProfile } from "../Profile/Assets/ProfileContext";
-
-
+import React, { useState, useEffect } from "react";
+import UserImage from "/images/image8.png";
+import { PencilLineIcon, TrashIcon } from "@phosphor-icons/react";
+import EditNumberModal from "../Components/EditNumberModal";
+import EditBioModal from "../Components/EditBioModal";
+import AddPropertyModal from "../Components/AddPropertyModal";
 
 const LandlordProfileB4Listing = () => {
-    const { profileData, updatePhoneNumber } = useProfile();
-    const [isEditNumberModalOpen, setIsEditNumberModalOpen] = useState(false);
-    const openEditNumberModal = () => setIsEditNumberModalOpen(true);
-    const closeEditNumberModal = () => setIsEditNumberModalOpen(false);
+  const [isEditNumberModalOpen, setIsEditNumberModalOpen] = useState(false);
+  const [isEditBioModalOpen, setIsEditBioModalOpen] = useState(false);
+  const [isAddPropertyModalOpen, setIsAddPropertyModalOpen] = useState(false);
 
-    const navigate = useNavigate();
-    if (!profileData) return <p className="text-center text-lg mt-10">No Data found, please go back and submit the form.</p>
+  const [phoneNumbers, setPhoneNumbers] = useState([]);
+  const [bio, setBio] = useState("");
+  const [properties, setProperties] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
 
-    return (
-        <>
-            <Navbar />
-            <div className="max-w-4xl mx-auto px-6 py-8 mt-32 font-sans leading-normal border border-gray-300 rounded-xl shadow-lg space-y-8">
-                <div className="flex justify-center gap-x-4 items-center mb-6">
-                    <div className="flex flex-col items-center">
-                        <img
-                            src={profileData.image || UserImage}
-                            alt="Profile"
-                            className="w-20 h-20 rounded-full object-cover border border-gray-300 p-2"
-                        />
-                        <p className="mt-2 text-lg font-medium">{profileData.name || "Lucy Favy"}</p>
-                    </div>
+  useEffect(() => {
+    try {
+      const storedPhones = JSON.parse(
+        localStorage.getItem("phoneNumbers") || "[]"
+      );
+      const storedBio = localStorage.getItem("bio") || "No bio added yet.";
+      const storedProperties = JSON.parse(
+        localStorage.getItem("properties") || "[]"
+      );
 
-                    
-                    <div className="flex flex-row items-center gap-1 mt-6">
-                        <svg width="14" height="16" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4">
-                            <path d="M12 8L8 12L6 10M1 3V10.0557C1 13.0859 2.71202 15.856 5.42229 17.2111L9 19L12.5777 17.2111C15.288 15.856 17 13.0859 17 10.0557V3L16.303 3.07744C13.8542 3.34953 11.3912 2.70802 9.3863 1.27594L9 1L8.6137 1.27594C6.60878 2.70802 4.14576 3.34953 1.69699 3.07744L1 3Z" stroke="#0D7B0D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        <a className="text-green-700 text-sm font-medium hover:underline cursor-pointer">
-                            Update Profile
-                        </a>
-                    </div>
-                </div>
+      setPhoneNumbers(Array.isArray(storedPhones) ? storedPhones : []);
+      setBio(typeof storedBio === "string" ? storedBio : "No bio added yet.");
+      setProperties(Array.isArray(storedProperties) ? storedProperties : []);
+    } catch (err) {
+      console.error("Error loading data from localStorage", err);
+      setPhoneNumbers([]);
+      setBio("No bio added yet.");
+      setProperties([]);
+    }
+  }, []);
 
-                <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-0.5 mt-4"> {/* profile-contact with individual styles */}
-                    <div className="flex flex-row justify-between items-center">
-                        <p className="text-base font-normal -mt-2.5">Contact Details</p>
-                        <a href="#" className="text-sm font-normal text-black hover:underline">+ Add Number</a>
-                    </div>
-                    <div className="border-t border-gray-300 rounded-full w-full"></div>
-                    <div className="flex flex-row justify-between items-center">
-                        <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
-                        <PencilLine size={32} onClick={openEditNumberModal} className="cursor-pointer" />
-                    </div>
-                    <div className="flex flex-row justify-between items-center">
-                        <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
-                        <PencilLine size={32} onClick={openEditNumberModal} className="cursor-pointer" />
-                    </div>
-                </div>
-                <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-3 mt-4">
-                    <div className="flex flex-row justify-between items-center">
-                        <p className="text-base font-normal">Bio</p>
-                        <PencilLine size={32} className="cursor-pointer" />
-                    </div>
-                    <div className="border-t border-gray-300 rounded-full w-full"></div>
-                    <p className="text-sm text-gray-700 break-words">
-                        Figma ipsum component variant main layer subtract opacity
-                        union export boolean asset clip draft. Outline bold vector
-                        storke blur component auto scale component project. shadow component main section
-                        font resizing object project project bold resizing.
-                    </p>
-                </div>
+  const savePhoneNumbers = (newNumbers) => {
+    setPhoneNumbers(Array.isArray(newNumbers) ? newNumbers : []);
+    localStorage.setItem("phoneNumbers", JSON.stringify(newNumbers));
+  };
 
-                <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-3 mt-4">
-                    <div className="flex flex-row justify-between items-center">
-                        <p className="text-base font-normal">Listed Properties</p>
-                        <a href="#" className="text-sm font-normal text-black hover:underline">+ Add Address</a>
-                    </div>
-                    <div className="border-t border-gray-300 rounded-full w-full"></div>
-                </div>
+  const saveBio = (newBio) => {
+    setBio(typeof newBio === "string" ? newBio : "");
+    localStorage.setItem("bio", newBio);
+  };
 
-            </div>
+  const saveProperties = (newProperties) => {
+    setProperties(Array.isArray(newProperties) ? newProperties : []);
+    localStorage.setItem("properties", JSON.stringify(newProperties));
+  };
 
-            {isEditNumberModalOpen && (
-                <EditNumberModal
-                    currentNumber={profileData.phoneNumber}
-                    onClose={closeEditNumberModal}
-                    updatePhoneNumber={updatePhoneNumber}
-                />
-            )}
-        </>
+  const handleDeleteNumber = (indexToDelete) => {
+    const updatedNumbers = phoneNumbers.filter(
+      (_, index) => index !== indexToDelete
     );
+    savePhoneNumbers(updatedNumbers);
+  };
+
+  return (
+    <>
+      <div className="max-w-4xl mx-auto px-6 py-8 font-sans leading-normal border border-gray-300 rounded-xl shadow-lg space-y-8">
+        <div className="flex justify-center mt-20 gap-x-4 items-center mb-6">
+          <div className="flex flex-col items-center">
+            <img
+              src={UserImage}
+              alt="Profile"
+              className="w-20 h-20 rounded-full object-cover border border-gray-300 p-2"
+            />
+            <p className="mt-2 text-lg font-medium">Lucy Favy</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-2">
+          <div className="flex justify-between items-center">
+            <p className="text-base font-normal">Contact Details</p>
+            <span
+              onClick={() => {
+                setEditingIndex(null);
+                setIsEditNumberModalOpen(true);
+              }}
+              className="text-sm font-normal text-black hover:underline cursor-pointer"
+            >
+              + Add Number
+            </span>
+          </div>
+          <div className="border-t border-gray-300"></div>
+          {phoneNumbers.length > 0 ? (
+            phoneNumbers.map((num, index) => (
+              <div key={index} className="flex justify-between items-center">
+                <p className="text-base font-normal">{num}</p>
+                <span className="flex items-center gap-2">
+                  <PencilLineIcon
+                    size={24}
+                    onClick={() => {
+                      setEditingIndex(index);
+                      setIsEditNumberModalOpen(true);
+                    }}
+                    className="cursor-pointer text-green-600 hover:text-green-800"
+                  />
+                  <button
+                    onClick={() => handleDeleteNumber(index)}
+                    className="text-red-500 hover:text-red-700 ml-4"
+                  >
+                    <TrashIcon size={24} />
+                  </button>
+                </span>
+              </div>
+            ))
+          ) : (
+            <p className="text-sm text-gray-500">No phone numbers added.</p>
+          )}
+        </div>
+
+        <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-3">
+          <div className="flex justify-between items-center">
+            <p className="text-base font-normal">Bio</p>
+            <PencilLineIcon
+              size={32}
+              onClick={() => setIsEditBioModalOpen(true)}
+              className="cursor-pointer"
+            />
+          </div>
+          <div className="border-t border-gray-300"></div>
+          <p className="text-sm text-gray-700 break-words">{bio}</p>
+        </div>
+
+        <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-3">
+          <div className="flex justify-between items-center">
+            <p className="text-base font-normal">Listed Properties</p>
+            <span
+              onClick={() => setIsAddPropertyModalOpen(true)}
+              className="text-sm font-normal text-black hover:underline cursor-pointer"
+            >
+              + Add Property
+            </span>
+          </div>
+          <div className="border-t border-gray-300"></div>
+          {properties.length > 0 ? (
+            properties.map((prop, index) => (
+              <div key={index} className="text-sm text-gray-700 space-y-1">
+                <p>
+                  <strong>Address:</strong> {prop.address}
+                </p>
+                <p>
+                  <strong>Description:</strong> {prop.description}
+                </p>
+                <p>
+                  <strong>Price:</strong> ₦{prop.price}
+                </p>
+                <p>
+                  <strong>Tags:</strong> {prop.tags.join(", ")}
+                </p>
+                <div className="flex space-x-2">
+                  {prop.images.map((img, i) => (
+                    <img
+                      key={i}
+                      src={img}
+                      alt="property"
+                      className="w-20 h-20 object-cover rounded"
+                    />
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-sm text-gray-500">No properties listed yet.</p>
+          )}
+        </div>
+      </div>
+
+      {isEditNumberModalOpen && (
+        <EditNumberModal
+          initialNumber={
+            editingIndex !== null ? phoneNumbers[editingIndex] : ""
+          }
+          onClose={() => {
+            setIsEditNumberModalOpen(false);
+            setEditingIndex(null);
+          }}
+          onSave={(newNumber) => {
+            let updatedNumbers = [...phoneNumbers];
+            if (editingIndex !== null) {
+              updatedNumbers[editingIndex] = newNumber; // update existing number
+            } else {
+              updatedNumbers.push(newNumber); // add new number
+            }
+            savePhoneNumbers(updatedNumbers);
+            setEditingIndex(null);
+            setIsEditNumberModalOpen(false);
+          }}
+        />
+      )}
+
+      {isEditBioModalOpen && (
+        <EditBioModal
+          currentBio={bio}
+          onClose={() => setIsEditBioModalOpen(false)}
+          onSave={saveBio}
+        />
+      )}
+
+      {isAddPropertyModalOpen && (
+        <AddPropertyModal
+          currentProperties={properties}
+          onClose={() => setIsAddPropertyModalOpen(false)}
+          onSave={saveProperties}
+        />
+      )}
+    </>
+  );
 };
 
 export default LandlordProfileB4Listing;

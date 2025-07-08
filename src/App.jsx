@@ -17,6 +17,7 @@ import "leaflet/dist/leaflet.css";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
+import LandlordProfileB4Listing from "./pages/LandlordProfileB4Listing";
 
 function App() {
   return (
@@ -46,9 +47,9 @@ function App() {
           <Route
             path="/profileform"
             element={
-              <ProtectedRoute>
-                <ProfileForm />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <ProfileForm />
+              // </ProtectedRoute>
             }
           />
           <Route
@@ -72,6 +73,14 @@ function App() {
             element={
               // <ProtectedRoute>
               <LandlordListingPage />
+              // </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/landlordProfile"
+            element={
+              // <ProtectedRoute>
+              <LandlordProfileB4Listing />
               // </ProtectedRoute>
             }
           />

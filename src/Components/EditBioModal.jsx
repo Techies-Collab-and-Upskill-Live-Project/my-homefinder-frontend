@@ -2,41 +2,40 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-const EditNumberModal = ({ onClose, onSave, initialNumber = "" }) => {
+const EditBioModal = ({ currentBio = "", onClose, onSave }) => {
   const validationSchema = Yup.object({
-    phoneNumber: Yup.string()
-      .matches(/^\d{10,15}$/, "Enter a valid phone number (10-15 digits)")
-      .required("Phone number is required"),
+    bio: Yup.string()
+      .min(10, "Bio must be at least 10 characters")
+      .required("Bio is required"),
   });
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
-      <div className="bg-white p-6 rounded-md w-80 space-y-4">
-        <h3 className="text-lg font-bold">
-          {initialNumber ? "Edit Phone Number" : "Add Phone Number"}
-        </h3>
-
+      <div className="bg-white p-6 rounded-md w-96 space-y-4">
+        <h3 className="text-lg font-bold">Edit Bio</h3>
         <Formik
-          initialValues={{ phoneNumber: initialNumber }}
+          initialValues={{ bio: currentBio }}
           validationSchema={validationSchema}
-          onSubmit={(values) => {
-            onSave(values.phoneNumber); // Send only the updated number
+          onSubmit={(values, { resetForm }) => {
+            onSave(values.bio);
+            resetForm();
             onClose();
           }}
         >
           {() => (
             <Form className="space-y-3">
               <Field
-                name="phoneNumber"
-                placeholder="Enter phone number"
+                as="textarea"
+                name="bio"
+                rows="4"
+                placeholder="Write something about yourself..."
                 className="w-full border border-gray-300 rounded-md p-2"
               />
               <ErrorMessage
-                name="phoneNumber"
+                name="bio"
                 component="div"
                 className="text-red-500 text-sm"
               />
-
               <div className="flex justify-end gap-2">
                 <button
                   type="button"
@@ -60,4 +59,4 @@ const EditNumberModal = ({ onClose, onSave, initialNumber = "" }) => {
   );
 };
 
-export default EditNumberModal;
+export default EditBioModal;
