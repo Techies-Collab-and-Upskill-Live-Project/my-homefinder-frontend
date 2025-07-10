@@ -12,11 +12,11 @@ import "./index.css";
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
-      <ProfileProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ProfileProvider>
+    <ProfileProvider>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+    </ProfileProvider>
     </AuthProvider>
   </React.StrictMode>,
   );

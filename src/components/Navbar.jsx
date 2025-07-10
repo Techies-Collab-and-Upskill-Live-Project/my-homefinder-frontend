@@ -11,18 +11,17 @@ const Navbar = () => {
   const Navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       try {
-        const user = JSON.parse(storedUser);
-        const userName = user.data.fullName;
-        setUser(userName || "user");
+        const userName = storedUser.data.fullName;
+        setUser(userName);
       } catch (error) {
         console.error("Error parsing user data:", error);
-        setName(randomFallback());
+        setUser(null);
       }
     } else {
-      setName(randomFallback());
+      setUser(null);
     }
   }, []);
 
@@ -42,7 +41,7 @@ const Navbar = () => {
     } else if (roleName === "LANDLORD") {
       Navigate("/landlordProfile");
     } else {
-      Navigate("/profile");
+      Navigate("/");
     }
   };
 
@@ -106,12 +105,12 @@ const Navbar = () => {
             </div>
           ) : (
             <>
-              <Link to="/TenantLogin">
+              <Link to="/tenantLogin">
                 <button className="px-4 py-2 border border-green-600 text-green-600 text-sm rounded-md hover:bg-green-50 transition">
                   Login
                 </button>
               </Link>
-              <Link to="/TenantSignUpPage">
+              <Link to="/tenantSignUpPage">
                 <button className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition">
                   Sign Up
                 </button>
@@ -176,7 +175,7 @@ const Navbar = () => {
                 </div>
               ) : (
                 <>
-                  <Link to="/TenantLogin">
+                  <Link to="/tenantLogin">
                     <button
                       onClick={() => setIsOpen(false)}
                       className="w-full mb-2 px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition"
@@ -184,7 +183,7 @@ const Navbar = () => {
                       Login
                     </button>
                   </Link>
-                  <Link to="/TenantSignUpPage">
+                  <Link to="/tenantSignUpPage">
                     <button
                       onClick={() => setIsOpen(false)}
                       className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"

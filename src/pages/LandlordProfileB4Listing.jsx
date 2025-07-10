@@ -15,17 +15,18 @@ const LandlordProfileB4Listing = () => {
   const [properties, setProperties] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
 
+  const [userData, setUserData] = useState(null);
   useEffect(() => {
+  const userDetails = JSON.parse(localStorage.getItem("user"));
+  setUserData(userDetails);
+
     try {
-      const storedPhones = JSON.parse(
-        localStorage.getItem("phoneNumbers") || "[]"
-      );
       const storedBio = localStorage.getItem("bio") || "No bio added yet.";
       const storedProperties = JSON.parse(
         localStorage.getItem("properties") || "[]"
       );
 
-      setPhoneNumbers(Array.isArray(storedPhones) ? storedPhones : []);
+      setPhoneNumbers(userData.data.phone);
       setBio(typeof storedBio === "string" ? storedBio : "No bio added yet.");
       setProperties(Array.isArray(storedProperties) ? storedProperties : []);
     } catch (err) {
@@ -36,11 +37,6 @@ const LandlordProfileB4Listing = () => {
     }
   }, []);
 
-  const savePhoneNumbers = (newNumbers) => {
-    setPhoneNumbers(Array.isArray(newNumbers) ? newNumbers : []);
-    localStorage.setItem("phoneNumbers", JSON.stringify(newNumbers));
-  };
-
   const saveBio = (newBio) => {
     setBio(typeof newBio === "string" ? newBio : "");
     localStorage.setItem("bio", newBio);
@@ -49,13 +45,6 @@ const LandlordProfileB4Listing = () => {
   const saveProperties = (newProperties) => {
     setProperties(Array.isArray(newProperties) ? newProperties : []);
     localStorage.setItem("properties", JSON.stringify(newProperties));
-  };
-
-  const handleDeleteNumber = (indexToDelete) => {
-    const updatedNumbers = phoneNumbers.filter(
-      (_, index) => index !== indexToDelete
-    );
-    savePhoneNumbers(updatedNumbers);
   };
 
   return (
@@ -68,7 +57,7 @@ const LandlordProfileB4Listing = () => {
               alt="Profile"
               className="w-20 h-20 rounded-full object-cover border border-gray-300 p-2"
             />
-            <p className="mt-2 text-lg font-medium">Lucy Favy</p>
+            <p className="mt-2 text-lg font-medium">{userData.data.fullName}</p>
           </div>
         </div>
 
@@ -77,96 +66,15 @@ const LandlordProfileB4Listing = () => {
             <p className="text-base font-normal">Contact Details</p>
             <span
               onClick={() => {
-                setEditingIndex(null);
                 setIsEditNumberModalOpen(true);
               }}
-              className="text-sm font-normal text-black hover:underline cursor-pointer"
+              className="flex items-center gap-x-2 text-sm font-normal text-black hover:underline cursor-pointer"
             >
-              + Add Number
+              <PencilLineIcon className="w-4 h-4" /> Edit Number
             </span>
           </div>
           <div className="border-t border-gray-300"></div>
-          {phoneNumbers.length > 0 ? (
-            phoneNumbers.map((num, index) => (
-              <div key={index} className="flex justify-between items-center">
-                <p className="text-base font-normal">{num}</p>
-                <span className="flex items-center gap-2">
-                  <PencilLineIcon
-                    size={24}
-                    onClick={() => {
-                      setEditingIndex(index);
-                      setIsEditNumberModalOpen(true);
-                    }}
-                    className="cursor-pointer text-green-600 hover:text-green-800"
-                  />
-                  <button
-                    onClick={() => handleDeleteNumber(index)}
-                    className="text-red-500 hover:text-red-700 ml-4"
-                  >
-                    <TrashIcon size={24} />
-                  </button>
-                </span>
-              </div>
-            ))
-          ) : (
-            <p className="text-sm text-gray-500">No phone numbers added.</p>
-          )}
-        </div>
-
-        <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-3">
-          <div className="flex justify-between items-center">
-            <p className="text-base font-normal">Bio</p>
-            <PencilLineIcon
-              size={32}
-              onClick={() => setIsEditBioModalOpen(true)}
-              className="cursor-pointer"
-            />
-          </div>
-          <div className="border-t border-gray-300"></div>
-          <p className="text-sm text-gray-700 break-words">{bio}</p>
-        </div>
-
-        <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-3">
-          <div className="flex justify-between items-center">
-            <p className="text-base font-normal">Listed Properties</p>
-            <span
-              onClick={() => setIsAddPropertyModalOpen(true)}
-              className="text-sm font-normal text-black hover:underline cursor-pointer"
-            >
-              + Add Property
-            </span>
-          </div>
-          <div className="border-t border-gray-300"></div>
-          {properties.length > 0 ? (
-            properties.map((prop, index) => (
-              <div key={index} className="text-sm text-gray-700 space-y-1">
-                <p>
-                  <strong>Address:</strong> {prop.address}
-                </p>
-                <p>
-                  <strong>Description:</strong> {prop.description}
-                </p>
-                <p>
-                  <strong>Price:</strong> ₦{prop.price}
-                </p>
-                <p>
-                  <strong>Tags:</strong> {prop.tags.join(", ")}
-                </p>
-                <div className="flex space-x-2">
-                  {prop.images.map((img, i) => (
-                    <img
-                      key={i}
-                      src={img}
-                      alt="property"
-                      className="w-20 h-20 object-cover rounded"
-                    />
-                  ))}
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-sm text-gray-500">No properties listed yet.</p>
-          )}
+          <h5 className="text-sm text-slate-400 mt-2 font-normal">{phoneNumbers}</h5>
         </div>
       </div>
 
