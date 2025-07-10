@@ -16,7 +16,7 @@ import TenantSignUpPage from "./pages/TenantSignUpPage";
 import "leaflet/dist/leaflet.css";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./Components/ProtectedRoute";
 import LandlordProfileB4Listing from "./pages/LandlordProfileB4Listing";
 
 function App() {
