@@ -29,21 +29,34 @@ const TenantProfile = () => {
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
-      const storedName = localStorage.getItem("name") || "Lucy Favy";
-      const storedImage =
-        localStorage.getItem("profileImage") || generateAvatar(storedName);
-      const storedEmail = localStorage.getItem("email");
-      const storedPhoneNumber = localStorage.getItem("phoneNumber");
-      const storedCardNumber = localStorage.getItem("cardNumber");
-      const storedCardType = localStorage.getItem("cardType");
+      const storedUser = localStorage.getItem("user");
+      let userData = null;
+
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          userData = parsedUser.data || parsedUser; // fallback if data is at root
+        } catch {
+          userData = null;
+        }
+      }
+
+      const name = userData?.fullName || "Lucy Favy";
+      const email = userData?.email || "lucyfavy@email.com";
+      const phone = userData?.phone || "08157648539";
+      const image =
+        localStorage.getItem("profileImage") || generateAvatar(name);
 
       setProfileData({
-        name: storedName || "Lucy Favy",
-        email: storedEmail || "lucyfavy@email.com",
-        phoneNumber: storedPhoneNumber || "08157648539",
-        image: storedImage,
+        name,
+        email,
+        phoneNumber: phone,
+        image,
       });
 
+      // Leave the card details untouched
+      const storedCardNumber = localStorage.getItem("cardNumber");
+      const storedCardType = localStorage.getItem("cardType");
       setCardDetails({
         number: storedCardNumber || "*****8994",
         type: storedCardType || "Debit Card",

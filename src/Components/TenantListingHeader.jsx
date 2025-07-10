@@ -10,24 +10,26 @@ const TenantListingHeader = () => {
   ];
   const [name, setName] = useState("");
 
+  const randomFallback = () => {
+    const randomIndex = Math.floor(Math.random() * fallbackNames.length);
+    return fallbackNames[randomIndex];
+  };
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
-        setName(user.name || randomFallback());
-      } catch {
+        const userName = user.data.fullName;
+        setName(userName || randomFallback());
+      } catch (error) {
+        console.error("Error parsing user data:", error);
         setName(randomFallback());
       }
     } else {
       setName(randomFallback());
     }
   }, []);
-
-  const randomFallback = () => {
-    const randomIndex = Math.floor(Math.random() * fallbackNames.length);
-    return fallbackNames[randomIndex];
-  };
 
   return (
     <header>

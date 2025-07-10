@@ -43,8 +43,8 @@ export default function HomePage() {
     // Navigate based on user role
     const userRole = userData.role;
 
-    if (userRole === "tenant") {
-      navigate("/tenantprofile");
+    if (userRole === "renter") {
+      navigate("/tenantlisting");
     } else if (userRole === "landlord") {
       navigate("/landlordListing");
     } else {

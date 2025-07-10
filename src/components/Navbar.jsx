@@ -14,10 +14,15 @@ const Navbar = () => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
-        setUser(JSON.parse(storedUser));
-      } catch {
-        setUser(null);
+        const user = JSON.parse(storedUser);
+        const userName = user.data.fullName;
+        setUser(userName || "user");
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        setName(randomFallback());
       }
+    } else {
+      setName(randomFallback());
     }
   }, []);
 
@@ -29,11 +34,13 @@ const Navbar = () => {
   };
 
   const handleProfileClick = () => {
-    if (!user) return;
-    if (user.role === "tenant") {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const roleName = user?.data?.role?.name;
+
+    if (roleName === "RENTER") {
       Navigate("/tenantprofile");
-    } else if (user.role === "landlord") {
-      Navigate("/landlord-dashboard");
+    } else if (roleName === "LANDLORD") {
+      Navigate("/landlordProfile");
     } else {
       Navigate("/profile");
     }
@@ -88,7 +95,7 @@ const Navbar = () => {
                 <UserCircleIcon className="w-8 h-8 text-gray-600" />
               )}
               <span className="text-sm font-medium">
-                {getGreeting()}, {user.name}
+                {getGreeting()}, {user.split(" ")[1]}
               </span>
               <button
                 onClick={handleLogout}
@@ -158,7 +165,7 @@ const Navbar = () => {
                     <UserCircleIcon className="w-8 h-8 text-gray-600" />
                   )}
                   <span className="text-sm font-medium">
-                    {getGreeting()}, {user.name}
+                    {getGreeting()}, {user.split(" ")[1]}
                   </span>
                   <button
                     onClick={handleLogout}

@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
+import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 
 const validationSchema = Yup.object({
   fullName: Yup.string().required("Full name is required"),
@@ -18,11 +19,14 @@ const validationSchema = Yup.object({
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Please confirm your password"),
   role: Yup.string()
-    .oneOf(["tenant", "landlord"], "Select a valid role")
+    .oneOf(["renter", "landlord"], "Select a valid role")
     .required("Role is required"),
 });
 
 export default function TenantSignUpPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const { login } = useAuth();
@@ -35,20 +39,17 @@ export default function TenantSignUpPage() {
         values
       );
       console.log("Signup success:", data);
-      
-      // Store authentication data securely
-      const success = login(data.user || data, data.token || data.accessToken);
-      
-      if (success) {
+      localStorage.setItem("user", JSON.stringify(data));
+      if (data) {
         // Redirect based on user role
         const userRole = values.role;
-        if (userRole === "tenant") {
-          navigate("/tenantprofile");
+        if (userRole === "renter") {
+          navigate("/tenantlisting");
         } else if (userRole === "landlord") {
           navigate("/landlordprofileb4listing");
         } else {
           // Fallback to dashboard if role is not specified
-          navigate("/dashboard");
+          navigate("/");
         }
       } else {
         setError("Failed to store authentication data");
@@ -136,11 +137,20 @@ export default function TenantSignUpPage() {
               {/* Password */}
               <div>
                 <label className="block mb-1 text-gray-700">Password</label>
-                <Field
-                  name="password"
-                  type="password"
-                  className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
-                />
+                <div className="relative">
+                  <Field
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 top-3 text-gray-500"
+                  >
+                    {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+                  </button>
+                </div>
                 <ErrorMessage
                   name="password"
                   component="div"
@@ -153,11 +163,20 @@ export default function TenantSignUpPage() {
                 <label className="block mb-1 text-gray-700">
                   Confirm Password
                 </label>
-                <Field
-                  name="passwordRepeat"
-                  type="password"
-                  className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
-                />
+                <div className="relative">
+                  <Field
+                    name="passwordRepeat"
+                    type={showConfirmPassword ? "text" : "password"}
+                    className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    className="absolute right-3 top-3 text-gray-500"
+                  >
+                    {showConfirmPassword ? <EyeSlashIcon /> : <EyeIcon />}
+                  </button>
+                </div>
                 <ErrorMessage
                   name="passwordRepeat"
                   component="div"
@@ -174,7 +193,7 @@ export default function TenantSignUpPage() {
                   className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
                 >
                   <option value="">Select role</option>
-                  <option value="tenant">Tenant</option>
+                  <option value="renter">Renter</option>
                   <option value="landlord">Landlord</option>
                 </Field>
                 <ErrorMessage
