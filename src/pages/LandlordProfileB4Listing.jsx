@@ -4,13 +4,11 @@ import { PencilLineIcon, TrashIcon } from "@phosphor-icons/react";
 import axios from "axios";
 import AddPropertyModal from "../Components/AddPropertyModal";
 
-// Bio Modal Component
-const EditBioModal = ({ onClose, onSave, initialBio }) => {
+const EditBioModal = ({ onClose, onSave, initialBio, loading }) => {
   const [newBio, setNewBio] = useState(initialBio);
 
   const handleSave = () => {
     onSave(newBio);
-    onClose();
   };
 
   return (
@@ -30,8 +28,9 @@ const EditBioModal = ({ onClose, onSave, initialBio }) => {
           <button
             onClick={handleSave}
             className="bg-green-600 text-white px-4 py-2 rounded"
+            disabled={loading}
           >
-            Save Bio
+            {loading ? "Saving..." : "Save Bio"}
           </button>
         </div>
       </div>
@@ -48,6 +47,9 @@ export default function LandlordProfileB4Listing() {
   const [properties, setProperties] = useState([]);
   const [userData, setUserData] = useState(null);
 
+  const [bioLoading, setBioLoading] = useState(false);
+  const [propertyLoading, setPropertyLoading] = useState(false);
+
   useEffect(() => {
     const userDetails = JSON.parse(localStorage.getItem("user"));
     if (userDetails?.user) {
@@ -63,11 +65,17 @@ export default function LandlordProfileB4Listing() {
   }, []);
 
   const saveBio = (newBio) => {
-    setBio(newBio);
-    localStorage.setItem("bio", newBio);
+    setBioLoading(true);
+    setTimeout(() => {
+      setBio(newBio);
+      localStorage.setItem("bio", newBio);
+      setBioLoading(false);
+      setIsEditBioModalOpen(false);
+    }, 3000);
   };
 
   const saveNewProperty = async (propertyData) => {
+    setPropertyLoading(true);
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const token = user?.token?.token;
@@ -86,12 +94,14 @@ export default function LandlordProfileB4Listing() {
       localStorage.setItem("properties", JSON.stringify(updatedProperties));
     } catch (error) {
       console.error("Error adding property:", error);
+    } finally {
+      setPropertyLoading(false);
+      setIsAddPropertyModalOpen(false);
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8 font-sans leading-normal border border-gray-300 rounded-xl shadow-lg space-y-8">
-      {/* Profile Section */}
       <div className="flex justify-center mt-20 gap-x-4 items-center mb-6">
         <div className="flex flex-col items-center">
           <img
@@ -105,7 +115,6 @@ export default function LandlordProfileB4Listing() {
         </div>
       </div>
 
-      {/* Contact */}
       <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-2">
         <div className="flex justify-between items-center">
           <p className="text-base font-normal">Contact Details</p>
@@ -114,7 +123,6 @@ export default function LandlordProfileB4Listing() {
         <h5 className="text-sm text-slate-400 mt-2 font-normal">{phone}</h5>
       </div>
 
-      {/* Bio */}
       <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-2">
         <div className="flex justify-between items-center">
           <p className="text-base font-normal">Bio</p>
@@ -129,7 +137,6 @@ export default function LandlordProfileB4Listing() {
         <p className="text-sm text-slate-500 mt-2">{bio}</p>
       </div>
 
-      {/* Property List */}
       <div className="border border-gray-300 rounded-xl shadow-lg p-6">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Your Properties</h3>
@@ -137,30 +144,38 @@ export default function LandlordProfileB4Listing() {
             onClick={() => setIsAddPropertyModalOpen(true)}
             className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 text-sm"
           >
-            Add Property
+            {propertyLoading ? "Adding..." : "Add Property"}
           </button>
         </div>
 
         {properties.length === 0 ? (
           <p className="text-sm text-gray-500">No properties added yet.</p>
         ) : (
-          <ul className="space-y-3">
+          <ul className="space-y-4">
             {properties.map((prop, idx) => (
-              <li key={idx} className="flex justify-between items-center">
-                <span>
-                  {prop.title} - ₦{prop.price}
-                </span>
-                <TrashIcon
-                  className="w-5 h-5 text-red-500 cursor-pointer"
-                  onClick={() => {
-                    const newProps = properties.filter((_, i) => i !== idx);
-                    setProperties(newProps);
-                    localStorage.setItem(
-                      "properties",
-                      JSON.stringify(newProps)
-                    );
-                  }}
-                />
+              <li key={idx} className="flex flex-col gap-1 border p-3 rounded">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">
+                    {prop.title} - ₦{prop.price}
+                  </span>
+                  <TrashIcon
+                    className="w-5 h-5 text-red-500 cursor-pointer"
+                    onClick={() => {
+                      const newProps = properties.filter((_, i) => i !== idx);
+                      setProperties(newProps);
+                      localStorage.setItem(
+                        "properties",
+                        JSON.stringify(newProps)
+                      );
+                    }}
+                  />
+                </div>
+                <p className="text-sm text-gray-600">{prop.description}</p>
+                <p className="text-xs text-gray-500">Type: {prop.type}</p>
+                <p className="text-xs text-gray-500">
+                  Location: {prop.address}, {prop.city}, {prop.state},{" "}
+                  {prop.country}
+                </p>
               </li>
             ))}
           </ul>
@@ -179,6 +194,7 @@ export default function LandlordProfileB4Listing() {
           initialBio={bio}
           onClose={() => setIsEditBioModalOpen(false)}
           onSave={saveBio}
+          loading={bioLoading}
         />
       )}
     </div>

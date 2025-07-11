@@ -47,41 +47,41 @@ function App() {
           <Route
             path="/profileform"
             element={
-              // <ProtectedRoute>
-              <ProfileForm />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <ProfileForm />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/tenantprofile"
             element={
-              // <ProtectedRoute>
-              <TenantProfile />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <TenantProfile />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/tenantlisting"
             element={
-              // <ProtectedRoute>
-              <TenantListing />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <TenantListing />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/landlordListing"
             element={
-              // <ProtectedRoute>
-              <LandlordListingPage />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <LandlordListingPage />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/landlordProfile"
             element={
-              // <ProtectedRoute>
-              <LandlordProfileB4Listing />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <LandlordProfileB4Listing />
+              </ProtectedRoute>
             }
           />
           <Route path="/tenantlogin" element={<TenantLogin />} />
