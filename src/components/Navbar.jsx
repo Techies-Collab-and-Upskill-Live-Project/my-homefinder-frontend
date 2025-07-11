@@ -8,13 +8,13 @@ import { List, SignOutIcon, UserCircleIcon, X } from "@phosphor-icons/react";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       try {
-        const userName = storedUser.data.fullName;
+        const userName = storedUser?.fullName || storedUser?.user?.fullName;
         setUser(userName);
       } catch (error) {
         console.error("Error parsing user data:", error);
@@ -29,19 +29,19 @@ const Navbar = () => {
     localStorage.removeItem("user");
     setUser(null);
     setIsOpen(false);
-    Navigate("/");
+    navigate("/");
   };
 
   const handleProfileClick = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const roleName = user?.data?.role?.name;
+    const userData = JSON.parse(localStorage.getItem("user"));
+    const roleName = userData?.role || userData?.user?.role.name;
 
-    if (roleName === "RENTER") {
-      Navigate("/tenantprofile");
-    } else if (roleName === "LANDLORD") {
-      Navigate("/landlordProfile");
+    if (roleName === "RENTER" || roleName === "renter") {
+      navigate("/tenantprofile");
+    } else if (roleName === "LANDLORD" || roleName === "landlord") {
+      navigate("/landlordProfile");
     } else {
-      Navigate("/");
+      navigate("/");
     }
   };
 
@@ -78,23 +78,15 @@ const Navbar = () => {
         </div>
 
         {/* Auth Buttons or Profile */}
-        <div
-          className="hidden cursor-pointer md:flex items-center gap-3"
-          onClick={handleProfileClick}
-        >
+        <div className="hidden md:flex items-center gap-3">
           {user ? (
-            <div className="flex items-center gap-2">
-              {user.image ? (
-                <img
-                  src={user.image}
-                  alt="profile"
-                  className="w-8 h-8 rounded-full object-cover"
-                />
-              ) : (
-                <UserCircleIcon className="w-8 h-8 text-gray-600" />
-              )}
-              <span className="text-sm font-medium">
-                {getGreeting()}, {user.split(" ")[1]}
+            <div className="flex items-center gap-2 cursor-pointer">
+              <UserCircleIcon className="w-8 h-8 text-gray-600" />
+              <span
+                className="text-sm font-medium"
+                onClick={handleProfileClick}
+              >
+                {getGreeting()}, {user?.split(" ")[0] || "User"}
               </span>
               <button
                 onClick={handleLogout}
@@ -150,24 +142,22 @@ const Navbar = () => {
               ))}
               <hr className="my-2" />
               {user ? (
-                <div
-                  className="flex cursor-pointer items-center gap-2"
-                  onClick={handleProfileClick}
-                >
-                  {user.image ? (
-                    <img
-                      src={user.image}
-                      alt="profile"
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                  ) : (
-                    <UserCircleIcon className="w-8 h-8 text-gray-600" />
-                  )}
-                  <span className="text-sm font-medium">
-                    {getGreeting()}, {user.split(" ")[1]}
+                <div className="flex items-center gap-2">
+                  <UserCircleIcon className="w-8 h-8 text-gray-600" />
+                  <span
+                    className="text-sm font-medium"
+                    onClick={() => {
+                      handleProfileClick();
+                      setIsOpen(false);
+                    }}
+                  >
+                    {getGreeting()}, {user?.split(" ")[0] || "User"}
                   </span>
                   <button
-                    onClick={handleLogout}
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
                     className="text-xs text-red-500 cursor-pointer ml-2"
                   >
                     <SignOutIcon size={20} />

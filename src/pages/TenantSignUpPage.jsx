@@ -3,7 +3,6 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../contexts/AuthContext";
 import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 
 const validationSchema = Yup.object({
@@ -26,10 +25,10 @@ const validationSchema = Yup.object({
 export default function TenantSignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const { login } = useAuth();
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setError("");
@@ -40,17 +39,9 @@ export default function TenantSignUpPage() {
       );
       console.log("Signup success:", data);
       localStorage.setItem("user", JSON.stringify(data));
+
       if (data) {
-        // Redirect based on user role
-        const userRole = values.role;
-        if (userRole === "renter") {
-          navigate("/tenantlisting");
-        } else if (userRole === "landlord") {
-          navigate("/landlordprofileb4listing");
-        } else {
-          // Fallback to dashboard if role is not specified
-          navigate("/");
-        }
+        setShowPopup(true);
       } else {
         setError("Failed to store authentication data");
       }
@@ -59,6 +50,11 @@ export default function TenantSignUpPage() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+    navigate("/TenantLogin");
   };
 
   return (
@@ -90,7 +86,6 @@ export default function TenantSignUpPage() {
                 Create Your MyHomeFinder Account
               </h2>
 
-              {/* Full Name */}
               <div>
                 <label className="block mb-1 text-gray-700">Full Name</label>
                 <Field
@@ -104,7 +99,6 @@ export default function TenantSignUpPage() {
                 />
               </div>
 
-              {/* Email */}
               <div>
                 <label className="block mb-1 text-gray-700">Email</label>
                 <Field
@@ -119,7 +113,6 @@ export default function TenantSignUpPage() {
                 />
               </div>
 
-              {/* Phone */}
               <div>
                 <label className="block mb-1 text-gray-700">Phone Number</label>
                 <Field
@@ -134,7 +127,6 @@ export default function TenantSignUpPage() {
                 />
               </div>
 
-              {/* Password */}
               <div>
                 <label className="block mb-1 text-gray-700">Password</label>
                 <div className="relative">
@@ -145,7 +137,7 @@ export default function TenantSignUpPage() {
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
+                    onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-gray-500"
                   >
                     {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
@@ -158,7 +150,6 @@ export default function TenantSignUpPage() {
                 />
               </div>
 
-              {/* Confirm Password */}
               <div>
                 <label className="block mb-1 text-gray-700">
                   Confirm Password
@@ -171,7 +162,7 @@ export default function TenantSignUpPage() {
                   />
                   <button
                     type="button"
-                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3 top-3 text-gray-500"
                   >
                     {showConfirmPassword ? <EyeSlashIcon /> : <EyeIcon />}
@@ -184,7 +175,6 @@ export default function TenantSignUpPage() {
                 />
               </div>
 
-              {/* Role */}
               <div>
                 <label className="block mb-1 text-gray-700">Role</label>
                 <Field
@@ -203,12 +193,10 @@ export default function TenantSignUpPage() {
                 />
               </div>
 
-              {/* Error Display */}
               {error && (
                 <div className="text-red-500 text-sm text-center">{error}</div>
               )}
 
-              {/* Submit */}
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -231,6 +219,26 @@ export default function TenantSignUpPage() {
           )}
         </Formik>
       </div>
+
+      {/* Success Popup */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-6 rounded-xl text-center w-[90%] max-w-md">
+            <h3 className="text-lg font-semibold mb-3 text-green-700">
+              Registration Successful!
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Please log in using your newly created account details.
+            </p>
+            <button
+              onClick={closePopup}
+              className="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition"
+            >
+              Proceed to Login
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -35,7 +35,7 @@ const TenantProfile = () => {
       if (storedUser) {
         try {
           const parsedUser = JSON.parse(storedUser);
-          userData = parsedUser.data || parsedUser; // fallback if data is at root
+          userData = parsedUser.user;
         } catch {
           userData = null;
         }

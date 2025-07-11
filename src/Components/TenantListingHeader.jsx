@@ -20,7 +20,7 @@ const TenantListingHeader = () => {
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
-        const userName = user.data.fullName;
+        const userName = user.user.fullName;
         setName(userName || randomFallback());
       } catch (error) {
         console.error("Error parsing user data:", error);

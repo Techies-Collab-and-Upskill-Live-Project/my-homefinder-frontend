@@ -3,17 +3,17 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../contexts/AuthContext";
+import { EyeIcon, EyeClosedIcon } from "@phosphor-icons/react";
 
 const validationSchema = Yup.object({
-  email: Yup.string().email("Invalid email").required("Email is required"),
+  emailOrPhone: Yup.string().required("Email or phone is required"),
   password: Yup.string().required("Password is required"),
 });
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setError("");
@@ -22,34 +22,25 @@ export default function HomePage() {
         `${import.meta.env.VITE_API_URL}/auth/login`,
         values
       );
-      console.log("Login success:", data);
+      console.log("Login success:", data.user);
 
-      // Store authentication data securely
-      const success = login(data.user || data, data.token || data.accessToken);
+      // Save to localStorage
+      const user = localStorage.setItem("user", JSON.stringify(data));
 
-      if (success) {
-        handleLoginSuccess(data.user || data);
+      const userRole = data.user.role.name;
+      if (userRole === "RENTER") {
+        navigate("/tenantlisting");
+        window.location.reload();
+      } else if (userRole === "LANDLORD") {
+        navigate("/landlordListing");
+        window.location.reload();
       } else {
-        setError("Failed to store authentication data");
+        navigate("/");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  const handleLoginSuccess = (userData) => {
-    // Navigate based on user role
-    const userRole = userData.role;
-
-    if (userRole === "renter") {
-      navigate("/tenantlisting");
-    } else if (userRole === "landlord") {
-      navigate("/landlordListing");
-    } else {
-      // Fallback
-      navigate("/");
     }
   };
 
@@ -65,7 +56,7 @@ export default function HomePage() {
 
       <div className="relative z-10 w-full max-w-md bg-white p-8 rounded-3xl shadow-lg mt-[100px]">
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{ emailOrPhone: "", password: "" }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -79,26 +70,38 @@ export default function HomePage() {
               </p>
 
               <div>
-                <label className="block mb-1 text-gray-700">Email</label>
+                <label className="block mb-1 text-gray-700">
+                  Email or Phone
+                </label>
                 <Field
-                  type="email"
-                  name="email"
+                  type="text"
+                  name="emailOrPhone"
                   className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
                 />
                 <ErrorMessage
-                  name="email"
+                  name="emailOrPhone"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
 
-              <div>
+              <div className="relative">
                 <label className="block mb-1 text-gray-700">Password</label>
                 <Field
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
-                  className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
+                  className="w-full h-12 px-4 border rounded-md focus:ring-green-400 pr-10"
                 />
+                <span
+                  className="absolute top-10 right-3 text-gray-500 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeClosedIcon size={20} />
+                  ) : (
+                    <EyeIcon size={20} />
+                  )}
+                </span>
                 <ErrorMessage
                   name="password"
                   component="div"
@@ -128,11 +131,12 @@ export default function HomePage() {
                   Sign Up
                 </button>
               </p>
+
               <Link
-                className="text-center hover:underline"
+                className="text-center hover:underline block text-sm text-gray-600"
                 to="/forgotPassword"
               >
-                <p>Forgot Password?</p>
+                Forgot Password?
               </Link>
             </Form>
           )}

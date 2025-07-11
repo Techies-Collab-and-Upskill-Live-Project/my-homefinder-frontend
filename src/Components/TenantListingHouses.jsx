@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import TenantListingSidebar from "./TenantListingSidebar";
 import { Heart } from "@phosphor-icons/react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 
-// Dummy icon to avoid missing marker issue
+// Leaflet marker fix
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -16,153 +17,32 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-const houseData = [
-  {
-    id: 1,
-    name: "Sunny Side Villa",
-    address: "12 Ocean View Drive, Lagos",
-    amenities: ["WiFi", "Air Conditioning", "Pool", "Parking"],
-    type: "bungalow",
-    price: 450000,
-    featured: true,
-    popular: true,
-    image: "/house_sample.png",
-    position: [6.5244, 3.3792],
-  },
-  {
-    id: 2,
-    name: "Modern Duplex",
-    address: "5 Lekki Gardens, Lagos",
-    amenities: ["Gym", "WiFi", "Garage"],
-    type: "duplex",
-    price: 750000,
-    featured: false,
-    popular: false,
-    image: "/house_sample.png",
-    position: [6.4667, 3.45],
-  },
-  {
-    id: 3,
-    name: "Compact Self-Contain",
-    address: "22 Palm Street, Abuja",
-    amenities: ["Water Heater", "Fan"],
-    type: "self-contain",
-    price: 200000,
-    featured: false,
-    popular: true,
-    image: "/house_sample.png",
-    position: [9.0579, 7.4951],
-  },
-  {
-    id: 4,
-    name: "Luxury Bungalow",
-    address: "10 Paradise Lane, Ibadan",
-    amenities: ["WiFi", "AC", "Generator", "CCTV"],
-    type: "bungalow",
-    price: 600000,
-    featured: true,
-    popular: false,
-    image: "/house_sample.png",
-    position: [7.3775, 3.947],
-  },
-  {
-    id: 5,
-    name: "Penthouse Duplex",
-    address: "88 Victoria Island, Lagos",
-    amenities: ["Gym", "Swimming Pool", "Lift"],
-    type: "duplex",
-    price: 1200000,
-    featured: true,
-    popular: true,
-    image: "/house_sample.png",
-    position: [6.4281, 3.4216],
-  },
-  {
-    id: 6,
-    name: "Urban Nest",
-    address: "3 Broadway Crescent, Enugu",
-    amenities: ["WiFi", "Backup Power"],
-    type: "self-contain",
-    price: 220000,
-    featured: false,
-    popular: false,
-    image: "/house_sample.png",
-    position: [6.5244, 7.5186],
-  },
-  {
-    id: 7,
-    name: "Serenity Duplex",
-    address: "7 Trans Amadi, Port Harcourt",
-    amenities: ["Gym", "WiFi", "Security"],
-    type: "duplex",
-    price: 800000,
-    featured: true,
-    popular: true,
-    image: "/house_sample.png",
-    position: [4.8156, 7.0498],
-  },
-  {
-    id: 8,
-    name: "Garden View Bungalow",
-    address: "15 Ring Road, Benin City",
-    amenities: ["Garden", "WiFi", "Generator"],
-    type: "bungalow",
-    price: 480000,
-    featured: true,
-    popular: false,
-    image: "/house_sample.png",
-    position: [6.3382, 5.6258],
-  },
-  {
-    id: 9,
-    name: "Royal Self-Contain",
-    address: "42 Prince Avenue, Jos",
-    amenities: ["Fan", "Water Heater"],
-    type: "self-contain",
-    price: 180000,
-    featured: false,
-    popular: true,
-    image: "/house_sample.png",
-    position: [9.8965, 8.8583],
-  },
-  {
-    id: 10,
-    name: "Elite Duplex",
-    address: "25 Admiralty Way, Lekki",
-    amenities: ["WiFi", "AC", "Gym", "Security"],
-    type: "duplex",
-    price: 1100000,
-    featured: true,
-    popular: true,
-    image: "/house_sample.png",
-    position: [6.436, 3.4846],
-  },
-  {
-    id: 11,
-    name: "Tranquil Cottage",
-    address: "9 Rock Hill, Abeokuta",
-    amenities: ["CCTV", "WiFi", "Solar"],
-    type: "bungalow",
-    price: 400000,
-    featured: false,
-    popular: false,
-    image: "/house_sample.png",
-    position: [7.1606, 3.3481],
-  },
-  {
-    id: 12,
-    name: "Budget Stay",
-    address: "1 Unity Close, Osogbo",
-    amenities: ["Fan", "Water"],
-    type: "self-contain",
-    price: 160000,
-    featured: false,
-    popular: true,
-    image: "/house_sample.png",
-    position: [7.7719, 4.556],
-  },
+// Random house images
+const randomImages = [
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c", // Modern house
+  "https://images.unsplash.com/photo-1572120360610-d971b9b7886d", // Cozy house front
+  "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2", // White modern home
+  "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7", // Contemporary home
+  "https://images.unsplash.com/photo-1613977257363-b4c7ed7caa7b", // Lake view house
+  "https://images.unsplash.com/photo-1570129477492-45c003edd2be", // Blue house with plants
+  "https://images.unsplash.com/photo-1577985046627-3c74f5f8b13f", // Tiny cabin
+  "https://images.unsplash.com/photo-1565182999561-18d7dc61d9c5", // Farmhouse
+  "https://images.unsplash.com/photo-1550958427-0cfb7edac4b7", // Suburban home
+  "https://images.unsplash.com/photo-1600585153837-4e26c92ed968", // White villa
+  "https://images.unsplash.com/photo-1505691938895-1758d7feb511", // Traditional home
+  "https://images.unsplash.com/photo-1599427304963-c37a9dc6b10c", // Urban house
+  "https://images.unsplash.com/photo-1523217582562-09d0def993a6", // Small country house
+  "https://images.unsplash.com/photo-1597098273951-cfded59b95ab", // Modern brick house
+  "https://images.unsplash.com/photo-1571079931345-80e8ec9c6d8c", // Seaside house
+  "https://images.unsplash.com/photo-1600585153957-4593bdbb7e69", // Night view house
+  "https://images.unsplash.com/photo-1620579378798-1b03363144ab", // Small modern home
+  "https://images.unsplash.com/photo-1600585154106-d48f6a3d07ef", // Minimalist exterior
 ];
 
+const randomImage =
+  randomImages[Math.floor(Math.random() * randomImages.length)];
+
+// Filter options
 const filterOptions = [
   "featured",
   "duplex",
@@ -172,21 +52,59 @@ const filterOptions = [
 ];
 
 const TenantListingHouses = () => {
+  const [houses, setHouses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [filter, setFilter] = useState("featured");
-  const [liked, setLiked] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const toggleLike = (id) => {
-    setLiked((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  // Fetch properties from backend
+  useEffect(() => {
+    const fetchHouses = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/property`);
+        const responseData = res.data?.data;
 
-  const filteredHouses = houseData.filter((house) => {
-    if (filter === "featured") return house.featured;
-    if (filter === "most popular") return house.popular;
-    return house.type === filter;
-  });
+        if (!responseData) {
+          throw new Error("No data found in response");
+        }
 
+        // If responseData is a single property object, wrap it in an array
+        const properties = Array.isArray(responseData)
+          ? responseData
+          : [responseData.property || responseData]; // adjust as needed
+
+        const mapped = properties.map((property) => ({
+          id: property.id,
+          title: property.title,
+          address: property.address,
+          price: property.price,
+          type: property.type,
+          isAvailable: property.isAvailable,
+          latitude: property.latitude,
+          longitude: property.longitude,
+          position: [property.latitude, property.longitude],
+        }));
+
+        setHouses(mapped);
+      } catch (err) {
+        console.error("Error fetching houses:", err);
+        setError("Failed to load properties");
+        setHouses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHouses();
+  }, []);
+
+  // Filter available properties
+  const filteredHouses = houses.filter((house) => house.isAvailable);
+
+  // Pagination logic
   const totalPages = Math.ceil(filteredHouses.length / itemsPerPage);
   const paginatedHouses = filteredHouses.slice(
     (currentPage - 1) * itemsPerPage,
@@ -237,9 +155,9 @@ const TenantListingHouses = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             />
             {filteredHouses.map((house) => (
-              <Marker position={house.position} key={house.id}>
+              <Marker key={house.id} position={house.position}>
                 <Popup>
-                  <strong>{house.name}</strong> <br />₦
+                  <strong>{house.title}</strong> <br />₦
                   {house.price.toLocaleString()}
                 </Popup>
               </Marker>
@@ -247,60 +165,45 @@ const TenantListingHouses = () => {
           </MapContainer>
         </div>
 
-        {/* Cards */}
+        {/* Property Cards */}
         <div className="grid grid-cols-1 gap-6">
-          <AnimatePresence>
-            {paginatedHouses.map((house) => (
-              <motion.div
-                key={house.id}
-                layout
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.4 }}
-                className="rounded-xl relative grid lg:grid-cols-2 grid-cols-1 overflow-hidden p-4 shadow hover:shadow-lg transition bg-white"
-              >
-                <div className="">
-                  <img
-                    src={house.image}
-                    alt={house.name}
-                    className="w-full h-52 rounded-md object-cover"
-                  />
-                  <button
-                    onClick={() => toggleLike(house.id)}
-                    className={`absolute top-3 right-3 p-2 rounded-full shadow-md ${
-                      liked[house.id]
-                        ? "bg-[#0D7B0D]/50 text-white"
-                        : "bg-white text-gray-600 hover:text-[#0D7B0D]"
-                    } transition`}
-                  >
-                    <Heart weight={liked[house.id] ? "fill" : "regular"} />
-                  </button>
-                </div>
-                <div className="p-4 space-y-2">
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {house.name}
-                  </h3>
-                  <p className="text-sm text-gray-500">{house.address}</p>
-                  <span className="text-green-700 text-sm capitalize inline-block">
-                    {house.type}
-                  </span>
-                  <div className="pt-2">
-                    <div className="flex items-center gap-3 text-sm text-gray-600 flex-wrap">
-                      {house.amenities.map((item, idx) => (
-                        <h5 key={idx} className="border rounded-full px-4 py-1">
-                          {item}
-                        </h5>
-                      ))}
-                    </div>
+          {loading ? (
+            <p className="text-center">Loading properties...</p>
+          ) : error ? (
+            <p className="text-center text-red-500">{error}</p>
+          ) : filteredHouses.length === 0 ? (
+            <p className="text-center text-gray-500">No properties available</p>
+          ) : (
+            <AnimatePresence>
+              {paginatedHouses.map((property) => (
+                <motion.div
+                  key={property.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="rounded-xl grid lg:grid-cols-2 overflow-hidden p-4 shadow bg-white"
+                >
+                  <div>
+                    <img
+                      src={randomImage}
+                      alt={property.title}
+                      className="w-full h-52 object-cover rounded-md"
+                    />
                   </div>
-                  <p className="text-xl font-bold text-gray-800">
-                    ₦{house.price.toLocaleString()}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                  <div className="p-4 space-y-2">
+                    <h3 className="text-lg font-semibold">{property.title}</h3>
+                    <p className="text-sm text-gray-600">{property.address}</p>
+                    <p className="text-green-700 text-sm capitalize">
+                      {property.type.toLowerCase()}
+                    </p>
+                    <p className="text-xl font-bold text-gray-800">
+                      ₦{property.price.toLocaleString()}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          )}
         </div>
 
         {/* Pagination */}

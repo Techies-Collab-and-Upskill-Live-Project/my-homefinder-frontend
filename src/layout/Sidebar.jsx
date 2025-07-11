@@ -17,7 +17,7 @@ const Sidebar = ({ className }) => {
 
   return (
     <aside
-      className={`bg-white w-64 h-screen p-6 shadow-md z-30 transform transition-transform duration-300 ${
+      className={`bg-white w-64 h-[500px] p-6 shadow-md z-30 transform transition-transform duration-300 ${
         className ? "translate-x-0" : "-translate-x-full"
       } md:translate-x-0 md:relative fixed top-16 left-0`}
     >
