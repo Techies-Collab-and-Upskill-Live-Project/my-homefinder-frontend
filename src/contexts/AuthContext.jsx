@@ -1,5 +1,4 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -19,19 +18,18 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initializeAuth = () => {
       try {
-        const token = localStorage.getItem('authToken');
-        const userData = localStorage.getItem('userData');
+        // const token = localStorage.getItem('authToken');
+        const userData = JSON.parse(localStorage.getItem('user')).user;
         
-        if (token && userData) {
-          const parsedUser = JSON.parse(userData);
-          setUser(parsedUser);
+        if (userData) {
+        setUser(userData);
           setIsAuthenticated(true);
         }
       } catch (error) {
         console.error('Error initializing auth state:', error);
         // Clear corrupted data
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userData');
+        // localStorage.removeItem('authToken');
+        // localStorage.removeItem('userData');
       } finally {
         setLoading(false);
       }
@@ -41,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Secure login function
-  const login = (userData, token) => {
+  const login = (userData) => {
     try {
       // Store only necessary data, never store passwords
       const userToStore = {
@@ -60,7 +58,6 @@ export const AuthProvider = ({ children }) => {
 
       // Update state
       setUser(userToStore);
-      setIsAuthenticated(true);
 
       return true;
     } catch (error) {

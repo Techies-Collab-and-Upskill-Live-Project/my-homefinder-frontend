@@ -26,6 +26,43 @@ const TenantProfile = () => {
     type: "Debit Card",
   });
 
+  const handleSavePhoneNumber = async (newPhoneNumber) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("user")).token;
+
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/users/update-phone`,
+        { phone: newPhoneNumber },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setProfileData((prev) => ({
+        ...prev,
+        phoneNumber: newPhoneNumber,
+      }));
+
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        parsedUser.user.phone = newPhoneNumber;
+        localStorage.setItem("user", JSON.stringify(parsedUser));
+      }
+
+      setIsEditNumberModalOpen(false);
+    } catch (error) {
+      console.error("Failed to update phone number:", error);
+      alert(
+        error?.response?.data?.message ||
+          "Failed to update phone number. Try again."
+      );
+    }
+  };
+
+
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
@@ -296,6 +333,7 @@ const TenantProfile = () => {
         <EditNumberModal
           currentNumber={profileData.phoneNumber}
           onClose={() => setIsEditNumberModalOpen(false)}
+          onSave={handleSavePhoneNumber}
         />
       )}
       {showUpdateProfileModal && (

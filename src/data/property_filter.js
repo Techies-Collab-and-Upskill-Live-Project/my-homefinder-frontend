@@ -1,4 +1,4 @@
-export const properties = [
+export const property_filter = [
     {
       id: 1,
       type: "self-contain-apartment",
@@ -57,3 +57,5 @@ export const properties = [
       rentOrLease: "rent",
     },
       ];
+
+      

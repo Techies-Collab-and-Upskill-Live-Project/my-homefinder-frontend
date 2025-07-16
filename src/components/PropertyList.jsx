@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import {
   Bed,
   Toilet,
@@ -7,94 +9,41 @@ import {
 } from "@phosphor-icons/react";
 import React from "react";
 
-const properties = [
-  {
-    id: 1,
-    title: "Two bedroom Terrace",
-    location: "Victoria Garden City, Lagos",
-    price: "₦ 2,500,000",
-    image: "/public/images/property.jpg",
-    features: [
-      { icon: Bed, text: "2 Master Bedrooms" },
-      { icon: Toilet, text: "2 Bathrooms" },
-      { icon: Bed, text: "5m²" },
-      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
-      { icon: BeerBottle, text: "Bar" },
-    ],
-  },
-  {
-    id: 2,
-    title: "Two bedroom Terrace",
-    location: "Victoria Garden City, Lagos",
-    price: "₦ 2,500,000",
-    image: "/public/images/property.jpg",
-    features: [
-      { icon: Bed, text: "2 Master Bedrooms" },
-      { icon: Toilet, text: "2 Bathrooms" },
-      { icon: Bed, text: "5m²" },
-      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
-      { icon: BeerBottle, text: "Bar" },
-    ],
-  },
-  {
-    id: 3,
-    title: "Two bedroom Terrace",
-    location: "Victoria Garden City, Lagos",
-    price: "₦ 2,500,000",
-    image: "/public/images/property.jpg",
-    features: [
-      { icon: Bed, text: "2 Master Bedrooms" },
-      { icon: Toilet, text: "2 Bathrooms" },
-      { icon: Bed, text: "5m²" },
-      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
-      { icon: BeerBottle, text: "Bar" },
-    ],
-  },
-  {
-    id: 4,
-    title: "Two bedroom Terrace",
-    location: "Victoria Garden City, Lagos",
-    price: "₦ 2,500,000",
-    image: "/public/images/property.jpg",
-    features: [
-      { icon: Bed, text: "2 Master Bedrooms" },
-      { icon: Toilet, text: "2 Bathrooms" },
-      { icon: Bed, text: "5m²" },
-      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
-      { icon: BeerBottle, text: "Bar" },
-    ],
-  },
-  {
-    id: 5,
-    title: "Two bedroom Terrace",
-    location: "Victoria Garden City, Lagos",
-    price: "₦ 2,500,000",
-    image: "/public/images/property.jpg",
-    features: [
-      { icon: Bed, text: "2 Master Bedrooms" },
-      { icon: Toilet, text: "2 Bathrooms" },
-      { icon: Bed, text: "5m²" },
-      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
-      { icon: BeerBottle, text: "Bar" },
-    ],
-  },
-  {
-    id: 6,
-    title: "Two bedroom Terrace",
-    location: "Victoria Garden City, Lagos",
-    price: "₦ 2,500,000",
-    image: "/public/images/property.jpg",
-    features: [
-      { icon: Bed, text: "2 Master Bedrooms" },
-      { icon: Toilet, text: "2 Bathrooms" },
-      { icon: Bed, text: "5m²" },
-      { icon: SwimmingPoolIcon, text: "Swimming Pool" },
-      { icon: BeerBottle, text: "Bar" },
-    ],
-  },
-];
 
-const PropertyList = () => (
+
+const PropertyList = () => {
+  const [properties, setProperties] = useState([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
+
+useEffect(() => {
+  const fetchProperties = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/property`);
+
+      console.log("Fetched data:", res.data); // Debugging
+
+      let data = res.data.properties || [];
+
+      // Ensure it's always an array
+      if (!Array.isArray(data)) {
+        data = [data];
+      }
+
+      setProperties(data);
+    } catch (err) {
+      console.error("Error fetching properties:", err);
+      setError("Failed to fetch properties");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProperties();
+}, []);
+
+return (
+  
   <section className="flex flex-col items-center justify-center mt-[100px] px-4">
     <div className="text-center mb-8">
       <h2 className="text-xl sm:text-2xl font-medium mb-1">
@@ -105,44 +54,58 @@ const PropertyList = () => (
       </p>
     </div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
-      {properties.map((property) => (
-        <div
-          key={property.id}
-          className="bg-white rounded-lg overflow-hidden shadow"
-        >
-          <img
-            src={property.image.replace("/public", "")} // ✅ Corrected image path
-            alt="Property"
-            className="w-full h-48 object-cover"
-          />
-          <div className="p-4 mt-4">
-            <h3 className="font-semibold text-lg">{property.title}</h3>
-            <p className="text-sm flex items-center mt-1">
-              <MapPin className="w-4 h-4 mr-1 text-green-600" />
-              {property.location}
-            </p>
+    <div className="mt-8">
 
-            <div className="flex flex-wrap text-sm text-gray-700 mt-3 gap-3">
-              {property.features.map((feature, i) => (
-                <span key={i} className="flex items-center gap-1">
-                  <feature.icon className="w-4 h-4 text-gray-500" />
-                  {feature.text}
-                </span>
-              ))}
-            </div>
-
-            <div className="mt-4 flex justify-between items-center">
-              <span className="font-bold text-lg">{property.price}</span>
-              <button className="padding bg-green-600 text-white rounded-[12px] px-4 py-2 hover:bg-green-700">
-                Rent Now
-              </button>
-            </div>
+            {loading ? (
+              <p className="text-center">Loading properties...</p>
+            ) : error ? (
+              <p className="text-center text-red-500">{error}</p>
+            ) : properties.length === 0 ? (
+              <p className="text-center text-gray-500">No properties found.</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {properties.map((property, index) => (
+                  <motion.div
+                    key={property.id || index}
+                    className="rounded-xl overflow-hidden shadow bg-white"
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <img
+                      src={
+                        randomImages[
+                          Math.floor(Math.random() * randomImages.length)
+                        ]
+                      }
+                      alt={property.title || "Property"}
+                      className="w-full h-52 object-cover"
+                    />
+                    <div className="p-4 space-y-2">
+                      <h3 className="text-lg font-semibold">
+                        {property.title || "Untitled Property"}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {property.address || "No address"}
+                      </p>
+                      <p className="text-green-700 text-sm capitalize">
+                        {(property.type || "Unknown").toLowerCase()}
+                      </p>
+                      <p className="text-xl font-bold text-gray-800">
+                        ₦
+                        {property.price
+                          ? property.price.toLocaleString()
+                          : "N/A"}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Status:{" "}
+                        {property.isAvailable ? "Available" : "Not Available"}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-      ))}
-    </div>
   </section>
-);
+)};
 
 export default PropertyList;

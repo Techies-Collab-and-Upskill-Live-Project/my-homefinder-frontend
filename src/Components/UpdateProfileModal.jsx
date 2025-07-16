@@ -22,7 +22,7 @@ const UpdateProfileModal = ({ onClose }) => {
     setMessage({ type: "", text: "" });
 
     try {
-      const token = localStorage.getItem("authToken");
+      const token = JSON.parse(localStorage.getItem("user")).token.token;
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.patch(
