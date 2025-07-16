@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { property_filter } from "../data/property_filter";
 import { MagnifyingGlassIcon, MapPinIcon, Tag } from "@phosphor-icons/react";
 
 const SearchFeature = () => {
@@ -9,16 +10,43 @@ const SearchFeature = () => {
     price: "",
   });
 
+  const filterListings = () => {
+    let filtered = properties;
+
+    // Filter by Rent/Lease
+    if (isRent) {
+      filtered = filtered.filter(listing => listing.rentOrLease === "rent");
+     } else {
+        filtered = filtered.filter(listing => listing.rentOrLease === "lease"); 
+      } 
+    
+    // Filter by Property Type
+    if (searchCriteria.propertyType) {
+      filtered = filtered.filter(listing => listing.type === searchCriteria.propertyType); 
+    }
+
+    // Filter by Location
+    if (searchCriteria.propertyType) {
+      filtered = filtered.filter(listing => listing.type === searchCriteria.location);
+    }
+
+    // Filter by Price Range
+    if (searchCriteria.price) {
+      const [min, max] = searchCriteria.price.split("-").map(Number);
+      filtered = filtered.filter(listing => listing.price >= min && listing.price <= max);
+    }
+
+    return filtered
+    };
+
   const handleSelectChange = (e) => {
     const { name, value } = e.target;
     setSearchCriteria((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSearch = () => {
-    console.log("Search initiated:", {
-      type: isRent ? "Rent" : "Lease",
-      ...searchCriteria,
-    });
+    const results = filterListings();
+    console.log("Filtered Listings:", results)
   };
 
   return (
