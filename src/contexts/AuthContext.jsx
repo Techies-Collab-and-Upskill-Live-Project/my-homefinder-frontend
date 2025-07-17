@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
 
       // Store in localStorage with proper error handling
       localStorage.setItem('authToken', token);
-      localStorage.setItem('userData', JSON.stringify(userToStore));
+      localStorage.setItem('user', JSON.stringify(userToStore));
       localStorage.setItem('isAuthenticated', 'true');
 
       // Update state
