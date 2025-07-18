@@ -29,9 +29,9 @@ const TenantProfile = () => {
   const handleSavePhoneNumber = async (newPhoneNumber) => {
     try {
       const token = JSON.parse(localStorage.getItem("user")).token;
-
+      const API_URL = import.meta.env.VITE_API_URL;
       const response = await axios.patch(
-        `https://my-homefinder-backend.onrender.com/api/v1/users/update-phone`,
+        `${API_URL}/users/update-phone`,
         { phone: newPhoneNumber },
         {
           headers: {
@@ -174,8 +174,6 @@ const TenantProfile = () => {
           },
         }
       );
-
-      console.log(response.data);
 
       const imageUrl = response.data.imageUrl || response.data.url || response.data.profileImageUrl;
       if (!imageUrl) {

@@ -25,8 +25,9 @@ const UpdateProfileModal = ({ onClose }) => {
       const token = JSON.parse(localStorage.getItem("user")).token.token;
       if (!token) throw new Error("No authentication token found");
 
+      const API_URL = import.meta.env.VITE_API_URL;
       const response = await axios.patch(
-        `https://my-homefinder-backend.onrender.com/api/v1/users/update`,
+        `${API_URL}/users/update`,
         {
           fullName,
           email,

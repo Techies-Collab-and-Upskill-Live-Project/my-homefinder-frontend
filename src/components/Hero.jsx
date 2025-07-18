@@ -1,4 +1,5 @@
 import DecisionSection from "../layout/DecisionSection";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -15,9 +16,11 @@ const Hero = () => {
           Browse verified listings, connect with landlords, and rent with
           confidence.
         </p>
+        <Link to="/tenantSignUpPage">
         <button className="px-6 py-3 text-white bg-green-700 hover:bg-green-600 rounded-xl text-sm md:text-base font-semibold transition duration-300">
           Get Started
         </button>
+        </Link>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import UserImage from "/images/image8.png";
 import { PencilLineIcon, TrashIcon } from "@phosphor-icons/react";
 import axios from "axios";
-import AddPropertyModal from "../Components/AddPropertyModal";
+import AddPropertyModal from "../components/AddPropertyModal"
 
 const EditBioModal = ({ onClose, onSave, initialBio, loading }) => {
   const [newBio, setNewBio] = useState(initialBio);
@@ -41,6 +41,7 @@ const EditBioModal = ({ onClose, onSave, initialBio, loading }) => {
 export default function LandlordProfileB4Listing() {
   const [isEditBioModalOpen, setIsEditBioModalOpen] = useState(false);
   const [isAddPropertyModalOpen, setIsAddPropertyModalOpen] = useState(false);
+  const [isEditImageModalOpen, setIsEditImageModalOpen] = useState(false);
 
   const [phone, setPhone] = useState("");
   const [bio, setBio] = useState("");
@@ -104,10 +105,11 @@ export default function LandlordProfileB4Listing() {
     <div className="max-w-4xl mx-auto px-6 py-8 font-sans leading-normal border border-gray-300 rounded-xl shadow-lg space-y-8">
       <div className="flex justify-center mt-20 gap-x-4 items-center mb-6">
         <div className="flex flex-col items-center">
-          <img
-            src={UserImage}
+        <img
+            src={userData?.image || UserImage}
             alt="Profile"
-            className="w-20 h-20 rounded-full object-cover border border-gray-300 p-2"
+            className="w-24 h-24 rounded-full object-cover cursor-pointer hover:opacity-80 transition-all"
+            onClick={() => setIsEditImageModalOpen(true)}
           />
           <p className="mt-2 text-lg font-medium">
             {userData?.fullName || "User"}
@@ -195,6 +197,11 @@ export default function LandlordProfileB4Listing() {
           onClose={() => setIsEditBioModalOpen(false)}
           onSave={saveBio}
           loading={bioLoading}
+
+          {
+          ...isEditImageModalOpen && (<><
+            AddPropertyModal/></>
+          )}
         />
       )}
     </div>

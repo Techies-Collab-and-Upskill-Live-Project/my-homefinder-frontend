@@ -14,13 +14,12 @@ export default function HomePage() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const API_URL = import.meta.env.VITE_API_URL;
   const handleSubmit = async (values, { setSubmitting }) => {
     setError("");
     try {
       const { data } = await axios.post(
-        // `${import.meta.env.VITE_API_URL}/auth/login`,
-        "https://my-homefinder-backend.onrender.com/api/v1/auth/login",
+        `${API_URL}/auth/login`,
         values
       );
       console.log("Login success:", data.user);

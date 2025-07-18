@@ -69,7 +69,7 @@ const Navbar = () => {
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-6">
           {nav_links.map((item, index) => (
-            <Link key={index} to={item.path}>
+            <Link to={"/tenantSignUpPage"}>
               <h5 className="text-sm font-semibold text-black hover:text-green-600 transition">
                 {item.text}
               </h5>
