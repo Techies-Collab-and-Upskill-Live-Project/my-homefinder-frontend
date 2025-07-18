@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import UserImage from "/images/image8.png";
 import { PencilLineIcon, TrashIcon } from "@phosphor-icons/react";
 import axios from "axios";
-import AddPropertyModal from "../components/AddPropertyModal"
+import AddPropertyModal from "../Components/AddPropertyModal"
 
 const EditBioModal = ({ onClose, onSave, initialBio, loading }) => {
   const [newBio, setNewBio] = useState(initialBio);
