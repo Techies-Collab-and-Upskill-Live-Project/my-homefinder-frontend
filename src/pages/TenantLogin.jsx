@@ -19,7 +19,8 @@ export default function HomePage() {
     setError("");
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/login`,
+        // `${import.meta.env.VITE_API_URL}/auth/login`,
+        "https://my-homefinder-backend.onrender.com/api/v1/auth/login",
         values
       );
       console.log("Login success:", data.user);

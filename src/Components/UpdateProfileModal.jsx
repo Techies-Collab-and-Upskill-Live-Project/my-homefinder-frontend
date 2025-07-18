@@ -26,7 +26,7 @@ const UpdateProfileModal = ({ onClose }) => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/users/update`,
+        `https://my-homefinder-backend.onrender.com/api/v1/users/update`,
         {
           fullName,
           email,

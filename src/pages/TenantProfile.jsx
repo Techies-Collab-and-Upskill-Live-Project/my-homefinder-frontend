@@ -31,7 +31,7 @@ const TenantProfile = () => {
       const token = JSON.parse(localStorage.getItem("user")).token;
 
       const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/users/update-phone`,
+        `https://my-homefinder-backend.onrender.com/api/v1/users/update-phone`,
         { phone: newPhoneNumber },
         {
           headers: {
@@ -57,7 +57,7 @@ const TenantProfile = () => {
       console.error("Failed to update phone number:", error);
       alert(
         error?.response?.data?.message ||
-          "Failed to update phone number. Try again."
+        "Failed to update phone number. Try again."
       );
     }
   };
@@ -126,26 +126,63 @@ const TenantProfile = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    if (!file.type.startsWith("image/")) {
+      setImageError("Please upload a valid image file.");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setImageError("Image size should be less than 2MB.");
+      return;
+    }
+
     setIsImageSaving(true);
     setImageError("");
 
     try {
-      const token = localStorage.getItem("authToken");
+      let token;
+      const user = JSON.parse(localStorage.getItem("user"));
+      ("authToken");
+
+
+      // Added this line to properly retrive auth token from local storage
+      if (user?.token) {
+        token = typeof user.token === "object" ? user.token.token : user.token;
+      } else {
+        token = localStorage.getItem("authToken");
+      }
+
+      if (!token) {
+        setImageError("You must be logged in to upload an image.");
+        setIsImageSaving(false);
+        return;
+      }
+
+      console.log(token)
+
       const formData = new FormData();
       formData.append("profileImage", file);
+      formData.append("folder", "profile-pictures");
+      formData.append("format", file.type);
 
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/users/uploadprofilepic`,
+        `https://my-homefinder-backend.onrender.com/api/v1/users/uploadprofilepic`,
         formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            // "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      const imageUrl = response.data.imageUrl;
+      console.log(response.data);
+
+      const imageUrl = response.data.imageUrl || response.data.url || response.data.profileImageUrl;
+      if (!imageUrl) {
+        setImageError("No image URL returned from server.");
+        return;
+      }
+
       localStorage.setItem("profileImage", imageUrl);
       setProfileData((prev) => ({ ...prev, image: imageUrl }));
 
@@ -268,7 +305,7 @@ const TenantProfile = () => {
                 className="text-sm text-gray-600 hover:text-gray-800"
                 disabled={isImageSaving}
               >
-                Cancel
+                {isImageSaving ? "Loading..." : "Cancel"}
               </button>
             </div>
           </div>

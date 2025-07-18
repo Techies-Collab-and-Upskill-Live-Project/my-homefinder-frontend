@@ -20,9 +20,9 @@ export const AuthProvider = ({ children }) => {
       try {
         // const token = localStorage.getItem('authToken');
         const userData = JSON.parse(localStorage.getItem('user')).user;
-        
+
         if (userData) {
-        setUser(userData);
+          setUser(userData);
           setIsAuthenticated(true);
         }
       } catch (error) {
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('authToken');
       localStorage.removeItem('userData');
       localStorage.removeItem('isAuthenticated');
-      
+
       // Clear any other auth-related items
       localStorage.removeItem('name');
       localStorage.removeItem('email');
