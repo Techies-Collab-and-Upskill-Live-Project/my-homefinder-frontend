@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const validationSchema = Yup.object({
   fullName: Yup.string().required("Full name is required"),
@@ -12,7 +14,11 @@ const validationSchema = Yup.object({
     .required("Email is required"),
   phone: Yup.string().required("Phone number is required"),
   password: Yup.string()
-    .min(6, "Minimum 6 characters")
+    .min(8, "Minimum 8 characters")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d!@#$%^&*]+$/,
+      "Password must include uppercase, lowercase, number, and special character"
+    )
     .required("Password is required"),
   passwordRepeat: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
@@ -25,9 +31,7 @@ const validationSchema = Yup.object({
 export default function TenantSignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
   const [error, setError] = useState("");
-
   const navigate = useNavigate();
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -37,14 +41,18 @@ export default function TenantSignUpPage() {
         `${import.meta.env.VITE_API_URL}/auth/signup`,
         values
       );
-      console.log("Signup success:", data);
-      localStorage.setItem("user", JSON.stringify(data));
 
-      if (data) {
-        setShowPopup(true);
-      } else {
-        setError("Failed to store authentication data");
-      }
+      localStorage.setItem("user", JSON.stringify(data));
+      toast.success(
+        "Signup successful! An otp was sent to your email, please use it to verify your account",
+        {
+          position: "top-right",
+        }
+      );
+
+      setTimeout(() => {
+        navigate("/otpverification");
+      }, 5000);
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");
     } finally {
@@ -52,13 +60,9 @@ export default function TenantSignUpPage() {
     }
   };
 
-  const closePopup = () => {
-    setShowPopup(false);
-    navigate("/TenantLogin");
-  };
-
   return (
     <div className="relative overflow-hidden min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <ToastContainer />
       <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full top-[-100px] right-[-100px]" />
       <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full bottom-[-100px] left-[-100px]" />
       <img
@@ -82,7 +86,7 @@ export default function TenantSignUpPage() {
         >
           {({ isSubmitting }) => (
             <Form className="space-y-4">
-              <h2 className="text-2xl font-semibold text-center">
+              <h2 className="text-2xl font-semibold text-center text-gray-800">
                 Create Your MyHomeFinder Account
               </h2>
 
@@ -133,7 +137,7 @@ export default function TenantSignUpPage() {
                   <Field
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
+                    className="w-full h-12 px-4 border rounded-md focus:ring-green-400 pr-10"
                   />
                   <button
                     type="button"
@@ -158,7 +162,7 @@ export default function TenantSignUpPage() {
                   <Field
                     name="passwordRepeat"
                     type={showConfirmPassword ? "text" : "password"}
-                    className="w-full h-12 px-4 border rounded-md focus:ring-green-400"
+                    className="w-full h-12 px-4 border rounded-md focus:ring-green-400 pr-10"
                   />
                   <button
                     type="button"
@@ -200,7 +204,7 @@ export default function TenantSignUpPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-12 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+                className="w-full h-12 bg-green-500 text-white rounded-md hover:bg-green-600 transition disabled:opacity-50"
               >
                 {isSubmitting ? "Signing Up..." : "Sign Up"}
               </button>
@@ -219,26 +223,6 @@ export default function TenantSignUpPage() {
           )}
         </Formik>
       </div>
-
-      {/* Success Popup */}
-      {showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-white p-6 rounded-xl text-center w-[90%] max-w-md">
-            <h3 className="text-lg font-semibold mb-3 text-green-700">
-              Registration Successful!
-            </h3>
-            <p className="text-gray-600 mb-4">
-              Please log in using your newly created account details.
-            </p>
-            <button
-              onClick={closePopup}
-              className="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition"
-            >
-              Proceed to Login
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

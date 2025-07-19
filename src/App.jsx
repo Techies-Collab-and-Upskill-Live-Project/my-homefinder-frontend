@@ -56,7 +56,7 @@ function App() {
             path="/tenantprofile"
             element={
               // <ProtectedRoute>
-                <TenantProfile />
+              <TenantProfile />
               // </ProtectedRoute>
             }
           />
@@ -80,7 +80,7 @@ function App() {
             path="/landlordProfile"
             element={
               // <ProtectedRoute>
-                <LandlordProfileB4Listing />
+              <LandlordProfileB4Listing />
               // </ProtectedRoute>
             }
           />

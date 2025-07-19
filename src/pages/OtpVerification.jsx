@@ -1,30 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import OtpInput from "../components/otpInput";
-import { sendOtp, verifyOtp } from "../data/dummyOtpService";
+import { toast } from "react-toastify";
 
 const OtpVerification = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { method, destination } = location.state || {};
-
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [error, setError] = useState("");
   const [countdown, setCountdown] = useState(30);
   const [loading, setLoading] = useState(false);
-
   const fullOtp = otp.join("");
 
-  // Redirect if no method or destination
-  useEffect(() => {
-    if (!method || !destination) {
-      navigate("/otp-method");
-    } else {
-      sendOtp(method, destination);
-    }
-  }, [method, destination, navigate]);
-
-  // Countdown timer for resend
   useEffect(() => {
     const timer =
       countdown > 0 &&
@@ -34,47 +19,78 @@ const OtpVerification = () => {
 
   const handleVerify = async () => {
     if (fullOtp.length !== 6) {
-      setError("Please enter the complete 6-digit code.");
+      toast.error("Please enter the complete 6-digit code.");
       return;
     }
 
     try {
       setLoading(true);
-      setError("");
-      const res = await verifyOtp(fullOtp);
-      alert(res);
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/verify-otp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ otp: fullOtp }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Verification failed");
+      }
+
+      toast.success("OTP Verified Successfully!");
+      setTimeout(() => {
+        const userRole = data.user.role.name;
+        if (userRole === "RENTER") {
+          navigate("/tenantlisting");
+          window.location.reload();
+        } else if (userRole === "LANDLORD") {
+          navigate("/landlordListing");
+          window.location.reload();
+        } else {
+          navigate("/");
+        }
+      }, 5000);
+    } catch (error) {
+      toast.error(error.message || "An error occurred");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleResend = () => {
-    setCountdown(30);
-    sendOtp(method, destination);
-    setError("");
+  const handleResend = async () => {
+    try {
+      setCountdown(30);
+      const response = await fetch("https://yourapi.com/api/resend-otp", {
+        method: "POST",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to resend OTP");
+      }
+
+      toast.success("OTP resent successfully.");
+    } catch (error) {
+      toast.error(error.message || "Failed to resend OTP.");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center relative">
-        <h2 className="text-2xl font-bold mb-2">
-          Verify Your {method === "email" ? "Email" : "Phone"}
-        </h2>
+        <h2 className="text-2xl font-bold mb-2">OTP Verification</h2>
         <p className="text-sm text-gray-600 mb-6">
-          Enter the 6-digit code sent to{" "}
-          <span className="font-medium">{destination}</span>
+          Enter the 6-digit code sent to your contact.
         </p>
 
-        {/* OTP Input */}
         <OtpInput otp={otp} setOtp={setOtp} />
 
-        {/* Error message */}
-        {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
-
-        {/* Verify button */}
         <button
           onClick={handleVerify}
           disabled={loading || fullOtp.length !== 6}
@@ -87,7 +103,6 @@ const OtpVerification = () => {
           {loading ? "Verifying..." : "Verify"}
         </button>
 
-        {/* Countdown and Resend */}
         <div className="text-xs text-gray-500 mt-4">
           {countdown > 0 ? (
             <p>Resend code in {countdown}s</p>
