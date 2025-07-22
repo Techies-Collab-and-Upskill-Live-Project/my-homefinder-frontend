@@ -36,15 +36,16 @@ export default function TenantSignUpPage() {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setError("");
+    const { passwordRepeat, ...signupData } = values; // ⬅️ Exclude passwordRepeat
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/signup`,
-        values
+        signupData // ⬅️ Send only the rest
       );
 
       localStorage.setItem("user", JSON.stringify(data));
       toast.success(
-        "Signup successful! An otp was sent to your email, please use it to verify your account",
+        "Signup successful! An OTP was sent to your email, please use it to verify your account",
         {
           position: "top-right",
         }
