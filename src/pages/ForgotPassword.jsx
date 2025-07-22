@@ -3,6 +3,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -11,14 +13,10 @@ const validationSchema = Yup.object({
 });
 
 export default function ForgotPasswordPage() {
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    setMessage("");
-    setError("");
     setLoading(true);
 
     try {
@@ -26,13 +24,13 @@ export default function ForgotPasswordPage() {
         `${import.meta.env.VITE_API_URL}/auth/forgot-password`,
         values
       );
-      setMessage(data.message || "Password reset link sent to your email.");
+
+      toast.success(data.message || "Password reset link sent to your email.");
       setTimeout(() => {
-        setMessage(null);
+        navigate("/resetPassword");
       }, 3000);
-      navigate("/resetPassword");
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to send reset email");
+      toast.error(err.response?.data?.message || "Failed to send reset email");
     } finally {
       setLoading(false);
       setSubmitting(false);
@@ -41,13 +39,14 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="relative overflow-hidden min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <ToastContainer />
       <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full top-[-100px] right-[-100px]" />
       <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full bottom-[-100px] left-[-100px]" />
 
       <div className="relative z-10 w-full max-w-md bg-white p-8 rounded-3xl shadow-lg">
         <h2 className="text-2xl font-semibold text-center">Forgot Password</h2>
         <p className="text-center text-gray-600">
-          Enter your email to receive a reset link
+          Enter your email to receive an OTP
         </p>
 
         <Formik
@@ -71,21 +70,12 @@ export default function ForgotPasswordPage() {
                 />
               </div>
 
-              {error && (
-                <div className="text-red-500 text-sm text-center">{error}</div>
-              )}
-              {message && (
-                <div className="text-green-600 text-sm text-center">
-                  {message}
-                </div>
-              )}
-
               <button
                 type="submit"
                 disabled={isSubmitting || loading}
                 className="w-full h-12 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
               >
-                {loading ? "Sending..." : "Send Reset Link"}
+                {loading ? "Sending..." : "Send OTP"}
               </button>
             </Form>
           )}
