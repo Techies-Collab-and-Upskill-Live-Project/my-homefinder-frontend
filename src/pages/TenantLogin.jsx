@@ -21,10 +21,20 @@ export default function HomePage() {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const { data } = await axios.post(`${API_URL}/auth/login`, values);
-      toast.success("Login successful");
 
       localStorage.setItem("user", JSON.stringify(data));
-      const userRole = data.user.role.name;
+
+      const user = JSON.parse(localStorage.getItem("user")).data;
+      const isVerified = user?.isVerified;
+
+      if (!isVerified) {
+        toast.warning("Please verify your account before logging in.");
+        return;
+      }
+
+      toast.success("Login successful");
+
+      const userRole = user.role?.name;
 
       if (userRole === "RENTER") {
         navigate("/tenantlisting");
