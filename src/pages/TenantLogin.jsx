@@ -59,7 +59,7 @@ export default function HomePage() {
         <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full top-[-100px] right-[-100px]" />
         <div className="absolute w-[250px] h-[250px] bg-green-500 rounded-full bottom-[-100px] left-[-100px]" />
         <img
-          src="/Images/Logo.png"
+          src="/images/Logo.png"
           alt="Logo"
           className="absolute top-4 left-4 h-20"
         />
