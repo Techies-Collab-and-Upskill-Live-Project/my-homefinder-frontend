@@ -48,10 +48,10 @@ const OtpVerification = () => {
       setTimeout(() => {
         const userRole = data.role.name;
         if (userRole === "RENTER") {
-          navigate("/tenantlisting");
+          navigate("/idSelection");
           window.location.reload();
         } else if (userRole === "LANDLORD") {
-          navigate("/landlordListing");
+          navigate("/idSelection");
           window.location.reload();
         } else {
           navigate("/");

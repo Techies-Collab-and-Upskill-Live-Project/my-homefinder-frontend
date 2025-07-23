@@ -1,40 +1,64 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function IDTypeSelection (){
+export default function IDTypeSelection() {
+  const navigate = useNavigate();
 
-    const IDtypes = [
-        {
-            id: "1",
-            name: "Driver's License",
-            image: '/images/DriverID.png'
-        },
-        {
-            id: "2",
-            name: "National ID card",
-            image: '/images/NationalID.png'
-        },
-        {
-            id: "3",
-            name: "Passport",
-            image: '/images/Passport.png'
-        },
-    ];
+  const IDtypes = [
+    {
+      id: "1",
+      name: "Driver's License",
+      image: "/images/DriverID.png",
+      route: "/idDetails",
+    },
+    {
+      id: "2",
+      name: "National ID card",
+      image: "/images/NationalID.png",
+      route: "/idDetails",
+    },
+    {
+      id: "3",
+      name: "Passport",
+      image: "/images/Passport.png",
+      route: "/idDetails",
+    },
+  ];
 
-    return(
-        <section className="h-screen">
-            <div className="text-black mx-10">
-                <h1 className="text-center text-3xl font-semibold font-sans">Verify Your Identity</h1>
-                <h3 className="text-xl font-montserrat font-semibold mt-3">Select ID Type</h3>
-                <h5 className="text-md font-montserrat font-normal mt-1">Which photo ID would you like to use?</h5>
-                <div className="flex flex-col gap-y-6 mt-3">
-                    {IDtypes.map((idType) => (
-                        <button key={idType.id} className="hover:bg-gray-100 rounded-xl flex justify-between items-center px-3 py-2 bg-none border-1 border-gray-950 text-md font-sans">
-                            {idType.name} 
-                            <img src={idType.image} alt={idType.name} />
-                        </button>
-                    ))} 
-                </div>
-            </div>
-        </section>
-    )
+  const handleSelection = (route, selectedIDType) => {
+    const sanitizedIDType = selectedIDType.name.replace(/[^a-zA-Z0-9]/g, "");
+    localStorage.setItem("selectedIDType", sanitizedIDType);
+    navigate(route);
+  };
+
+  return (
+    <section className="h-screen bg-gray-50 flex items-center justify-center">
+      <div className="w-full max-w-md p-6 bg-white rounded-2xl shadow-md">
+        <h1 className="text-3xl font-bold text-center text-gray-800">
+          Verify Your Identity
+        </h1>
+        <p className="text-lg mt-4 font-medium text-gray-700">Select ID Type</p>
+        <p className="text-sm text-gray-500 mb-6">
+          Which photo ID would you like to use?
+        </p>
+
+        <div className="flex flex-col gap-4">
+          {IDtypes.map((idType) => (
+            <button
+              key={idType.id}
+              onClick={() => handleSelection(idType.route, idType)}
+              className="flex items-center justify-between w-full px-4 py-3 border border-gray-300 rounded-xl hover:shadow-md transition-all duration-200 hover:bg-gray-100"
+            >
+              <span className="text-gray-800 font-medium">{idType.name}</span>
+              <img
+                src={idType.image}
+                alt={idType.name}
+                className="w-12 h-12 object-contain"
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }

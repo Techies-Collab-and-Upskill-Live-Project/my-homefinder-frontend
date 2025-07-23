@@ -25,12 +25,12 @@ export default function HomePage() {
       localStorage.setItem("user", JSON.stringify(data));
 
       const user = JSON.parse(localStorage.getItem("user")).data;
-      const isVerified = user?.isVerified;
+      // const isVerified = user?.isVerified;
 
-      if (!isVerified) {
-        toast.warning("Please verify your account before logging in.");
-        return;
-      }
+      // if (!isVerified) {
+      //   toast.warning("Please verify your account before logging in.");
+      //   return;
+      // }
 
       toast.success("Login successful");
 

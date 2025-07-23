@@ -18,6 +18,10 @@ import ForgotPasswordPage from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import LandlordProfileB4Listing from "./pages/LandlordProfileB4Listing";
+import IDTypeSelection from "./pages/IDTypeSelection";
+import IdDetails from "./pages/IdDetails";
+import ProcessingPage from "./pages/ProcessingPage";
+import ProfileVerified from "./pages/ProfileVerified";
 
 function App() {
   return (
@@ -26,6 +30,10 @@ function App() {
         <Route element={<Layout />}>
           <Route index element={<Landing />} />
           <Route path="/decisionpage" element={<DecisionPage />} />
+          <Route path="/idSelection" element={<IDTypeSelection />} />
+          <Route path="/idDetails" element={<IdDetails />} />
+          <Route path="/processing" element={<ProcessingPage />} />
+          <Route path="/verified" element={<ProfileVerified />} />
           <Route
             path="/landlordlistingpage"
             element={
@@ -42,7 +50,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/otpselection" element={<OtpSelection />} />
           <Route path="/otpverification" element={<OtpVerification />} />
           <Route
             path="/profileform"
@@ -56,7 +63,7 @@ function App() {
             path="/tenantprofile"
             element={
               <ProtectedRoute>
-              <TenantProfile />
+                <TenantProfile />
               </ProtectedRoute>
             }
           />
@@ -80,7 +87,7 @@ function App() {
             path="/landlordProfile"
             element={
               <ProtectedRoute>
-              <LandlordProfileB4Listing />
+                <LandlordProfileB4Listing />
               </ProtectedRoute>
             }
           />

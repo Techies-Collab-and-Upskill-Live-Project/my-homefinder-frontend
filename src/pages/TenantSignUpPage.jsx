@@ -36,11 +36,11 @@ export default function TenantSignUpPage() {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setError("");
-    const { passwordRepeat, ...signupData } = values; // ⬅️ Exclude passwordRepeat
+    const { ...signupData } = values;
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/signup`,
-        signupData // ⬅️ Send only the rest
+        signupData
       );
 
       localStorage.setItem("user", JSON.stringify(data));
