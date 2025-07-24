@@ -11,6 +11,8 @@ const OtpVerification = () => {
   const [loading, setLoading] = useState(false);
   const fullOtp = otp.join("");
   const email = JSON.parse(localStorage.getItem("user")).data.email;
+  const user = JSON.parse(localStorage.getItem("user"))
+
 
   useEffect(() => {
     const timer =
