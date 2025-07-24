@@ -86,9 +86,9 @@ function App() {
           <Route
             path="/landlordProfile"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
                 <LandlordProfileB4Listing />
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
           <Route path="/tenantlogin" element={<TenantLogin />} />

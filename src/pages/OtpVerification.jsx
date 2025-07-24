@@ -46,7 +46,7 @@ const OtpVerification = () => {
 
       toast.success("OTP Verified Successfully!");
       setTimeout(() => {
-        const userRole = data.role.name;
+        const userRole = user.data.role.name;
         if (userRole === "RENTER") {
           navigate("/idSelection");
           window.location.reload();

@@ -24,7 +24,7 @@ export default function HomePage() {
 
       localStorage.setItem("user", JSON.stringify(data));
 
-      const user = JSON.parse(localStorage.getItem("user")).data;
+      const user = JSON.parse(localStorage.getItem("user")).user;
       // const isVerified = user?.isVerified;
 
       // if (!isVerified) {
