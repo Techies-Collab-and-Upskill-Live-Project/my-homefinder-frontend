@@ -53,24 +53,23 @@ const ProfileFormLandlord = () => {
     fullName: Yup.string()
       .min(3, "Full name must be at least 3 characters")
       .required("Full name is required"),
-    phone: Yup.string()
+    phoneNumber: Yup.string()
       .matches(
         /^(\+234|0)[789]\d{9}$/,
-        "Phone number is not valid (e.g., 08012345678 or +2348012345678)"
+        "phone number is not valid (e.g., 08012345678 or +2348012345678)"
       )
-      .required("Phone number is required"),
+      .required("phoneNumber number is required"),
     street: Yup.string().required("Street address is required"),
     city: Yup.string().required("City is required"),
     state: Yup.string()
       .oneOf(nigerianStates, "Please select a valid state")
       .required("State is required"),
-    driverLicence: Yup.string().required("Driver's License is required"),
-    nin: Yup.string()
+    driversLicense: Yup.string(),
+    NIN: Yup.string()
       .matches(/^\d{11}$/, "NIN must be 11 digits")
       .required("NIN is required"),
-    contactPreference: Yup.string()
-      .oneOf(["call", "chat", "both"])
-      .required("Please select a contact preference"),
+    // contactPreference: Yup.string()
+    //   .oneOf(["call", "chat", "both"]),
     otherInfo: Yup.string(), // Optional field
   });
   const userId = JSON.parse(localStorage.getItem("user")).user.id;
@@ -79,13 +78,13 @@ const ProfileFormLandlord = () => {
   const formik = useFormik({
     initialValues: {
       fullName: "",
-      phone: "",
+      phoneNumber: "",
       street: "",
       city: "",
       state: "",
-      driverLicence: "",
-      nin: "",
-      contactPreference: "",
+      driversLicense: "",
+      NIN: "",
+      // contactPreference: "",
       otherInfo: "",
     },
     validationSchema: validationSchema,
@@ -94,7 +93,7 @@ const ProfileFormLandlord = () => {
         toast.info("Submitting your profile...");
 
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/${userId}`,
+          `${import.meta.env.VITE_API_URL}/users/updateprofile`,
           {
             method: "PATCH",
             headers: {
@@ -112,9 +111,12 @@ const ProfileFormLandlord = () => {
 
         const result = await response.json();
         localStorage.setItem("completed_verification", "true");
-
         toast.success("Profile updated successfully!");
-        navigate("/landlordProfileB4Listing", { state: values });
+
+        setTimeout(() => {
+          navigate("/landlordListing", { state: values });
+          window.location.reload();
+        }, 2000);
       } catch (error) {
         console.error("Error submitting form:", error);
         toast.error(`Submission failed: ${error.message}`);
@@ -188,20 +190,20 @@ const ProfileFormLandlord = () => {
             ) : null}
           </div>
 
-          {/* Phone Number Field */}
+          {/* phoneNumber Field */}
           <div className="input-group relative mb-2.5 flex-1">
             <input
-              name="phone"
-              value={formik.values.phone}
+              name="phoneNumber"
+              value={formik.values.phoneNumber}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              type="tel" // Use type="tel" for better mobile keyboard experience
-              id="phone"
+              type="tel"
+              id="phoneNumber"
               placeholder=" "
               className="peer w-full h-11 pt-4 pb-2 px-2.5 text-base border border-gray-300 rounded-md outline-none focus:outline-none"
             />
             <label
-              htmlFor="phone"
+              htmlFor="phoneNumber"
               className="absolute top-[-19px] left-2 bg-white px-7 py-2.5 text-xs text-gray-800 pointer-events-none transition-all duration-200 ease-in-out border border-gray-300 rounded-xl w-auto flex items-center gap-1.5 shadow-lg
              peer-focus:top-[-30px] peer-not-placeholder-shown:top-[-19px]"
             >
@@ -223,9 +225,9 @@ const ProfileFormLandlord = () => {
               </svg>
               Phone Number
             </label>
-            {formik.touched.phone && formik.errors.phone ? (
+            {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
               <div className="text-red-500 text-sm mt-1">
-                {formik.errors.phone}
+                {formik.errors.phoneNumber}
               </div>
             ) : null}
           </div>
@@ -463,6 +465,7 @@ const ProfileFormLandlord = () => {
                 <input
                   name="contactPreference"
                   value="call"
+                  disabled
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   checked={formik.values.contactPreference === "call"}
@@ -477,6 +480,7 @@ const ProfileFormLandlord = () => {
                 <input
                   name="contactPreference"
                   value="chat"
+                  disabled
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   checked={formik.values.contactPreference === "chat"}
@@ -493,10 +497,10 @@ const ProfileFormLandlord = () => {
                   value="both"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.contactPreference === "both"}
+                  checked={true}
                   type="radio"
                 />
-                Both
+                Email
               </label>
             </div>
             {formik.touched.contactPreference &&
@@ -514,17 +518,17 @@ const ProfileFormLandlord = () => {
 
           <div className="input-group relative mb-2.5 flex-1">
             <input
-              name="nin"
-              value={formik.values.nin}
+              name="NIN"
+              value={formik.values.NIN}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="text"
-              id="nin"
+              id="NIN"
               placeholder=" "
               className="peer w-full h-11 pt-4 pb-2 px-2.5 text-base border border-gray-300 rounded-md outline-none focus:outline-none"
             />
             <label
-              htmlFor="nin"
+              htmlFor="NIN"
               className="absolute top-[-19px] left-2 bg-white px-7 py-2.5 text-xs text-gray-800 pointer-events-none transition-all duration-200 ease-in-out border border-gray-300 rounded-xl w-auto flex items-center gap-1.5 shadow-lg
              peer-focus:top-[-30px] peer-not-placeholder-shown:top-[-19px]"
             >
@@ -543,9 +547,9 @@ const ProfileFormLandlord = () => {
               </svg>
               NIN
             </label>
-            {formik.touched.nin && formik.errors.nin ? (
+            {formik.touched.NIN && formik.errors.NIN ? (
               <div className="text-red-500 text-sm mt-1">
-                {formik.errors.nin}
+                {formik.errors.NIN}
               </div>
             ) : null}
           </div>
@@ -553,8 +557,8 @@ const ProfileFormLandlord = () => {
           <div className="input-group relative mb-2.5 flex-1">
             <input
               type="text"
-              name="driverLicence"
-              value={formik.values.driverLicence}
+              name="driversLicense"
+              value={formik.values.driversLicense}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               id="driver"
@@ -581,9 +585,9 @@ const ProfileFormLandlord = () => {
               </svg>
               Drivers Licence
             </label>
-            {formik.touched.driverLicence && formik.errors.driverLicence ? (
+            {formik.touched.driversLicense && formik.errors.driversLicense ? (
               <div className="text-red-500 text-sm mt-1">
-                {formik.errors.driverLicence}
+                {formik.errors.driversLicense}
               </div>
             ) : null}
           </div>

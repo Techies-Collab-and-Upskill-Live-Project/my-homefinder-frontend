@@ -25,29 +25,26 @@ const LandlordListingPage = () => {
   };
 
   useEffect(() => {
-    const fetchProperties = async () => {
+    const fetchUserProperties = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/property`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/property/user`,
+          {
+            withCredentials: true, // ensure cookies/token are sent
+          }
+        );
 
-        console.log("Fetched data:", res.data); // Debugging
-
-        let data = res.data.properties || [];
-
-        // Ensure it's always an array
-        if (!Array.isArray(data)) {
-          data = [data];
-        }
-
-        setProperties(data);
+        const data = res.data?.data?.properties || [];
+        setProperties(Array.isArray(data) ? data : [data]);
       } catch (err) {
-        console.error("Error fetching properties:", err);
-        setError("Failed to fetch properties");
+        console.error("Error fetching user properties:", err);
+        setError("Failed to fetch your properties.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProperties();
+    fetchUserProperties();
   }, []);
 
   return (
@@ -86,6 +83,7 @@ const LandlordListingPage = () => {
                   >
                     <img
                       src={
+                        property.images?.[0]?.url ||
                         randomImages[
                           Math.floor(Math.random() * randomImages.length)
                         ]

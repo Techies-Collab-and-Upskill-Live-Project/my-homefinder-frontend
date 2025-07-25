@@ -41,7 +41,7 @@ const Navbar = () => {
         );
 
         localStorage.setItem("authUser", JSON.stringify(data));
-        setUser(data.fullName); // or update state accordingly
+        setUser(data.landlordProfile.fullName);
       } catch (err) {
         console.error("Failed to fetch user by ID:", err);
         setUser(null);
@@ -95,7 +95,7 @@ const Navbar = () => {
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-6">
           {nav_links.map((item, index) => (
-            <Link key={index} to={"/tenantSignUpPage"}>
+            <Link key={index} to={item.path}>
               <h5 className="text-sm font-semibold text-black hover:text-green-600 transition">
                 {item.text}
               </h5>
@@ -119,12 +119,14 @@ const Navbar = () => {
               </span>
 
               {/* Message Icon */}
-              <button
-                title="Messages"
-                className="text-gray-600 hover:text-green-500 transition"
-              >
-                <ChatIcon size={18} />
-              </button>
+              <Link to="/messages">
+                <button
+                  title="Messages"
+                  className="text-gray-600 hover:text-green-500 transition"
+                >
+                  <ChatIcon size={18} />
+                </button>
+              </Link>
 
               {/* Logout Icon */}
               <button
@@ -198,12 +200,14 @@ const Navbar = () => {
 
                   <span className="flex items-center gap-2">
                     {/* Message Icon */}
-                    <button
-                      title="Messages"
-                      className="text-gray-600 hover:text-green-500 transition"
-                    >
-                      <ChatIcon size={18} />
-                    </button>
+                    <Link to="/messages">
+                      <button
+                        title="Messages"
+                        className="text-gray-600 hover:text-green-500 transition"
+                      >
+                        <ChatIcon size={18} />
+                      </button>
+                    </Link>
 
                     {/* Logout Icon */}
                     <button

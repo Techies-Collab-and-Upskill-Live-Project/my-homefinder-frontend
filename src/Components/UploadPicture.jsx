@@ -25,7 +25,8 @@ const UploadPicture = ({ onImageSelect, initialImage, disabled }) => {
 
     const formData = new FormData();
     formData.append("image", file);
-    const token = JSON.parse(localStorage.getItem("user")).token;
+
+    const token = JSON.parse(localStorage.getItem("user")).token.token;
     const mimeTypeToFormat = {
       "image/jpeg": "jpg",
       "image/png": "png",
@@ -40,7 +41,7 @@ const UploadPicture = ({ onImageSelect, initialImage, disabled }) => {
       const res = await axios.post(
         `${
           import.meta.env.VITE_API_URL
-        }/user/uploadprofilepic?folder=profilePic&format=${fileFormat}`,
+        }/users/uploadprofilepic?folder=profilePic&format=${fileFormat}`,
         formData,
         {
           headers: {
@@ -50,15 +51,19 @@ const UploadPicture = ({ onImageSelect, initialImage, disabled }) => {
         }
       );
 
-      const imageUrl = res.data?.imageUrl;
-      if (imageUrl) {
-        updateProfile({ image: imageUrl });
-        onImageSelect?.(imageUrl);
-        toast.success("Profile picture updated!");
-      } else {
-        throw new Error("Invalid response from server");
+      const uploadedImage = res.data?.imageUrl;
+
+      if (uploadedImage) {
+        updateProfile({ image: uploadedImage });
+        onImageSelect?.(uploadedImage);
       }
+
+      toast.success(
+        res?.data?.uploadMessage?.message ||
+          "Profile picture uploaded successfully!"
+      );
     } catch (err) {
+      console.error("Upload error:", err);
       toast.error(err.response?.data?.message || "Upload failed");
     }
   };

@@ -1,43 +1,73 @@
-import { useState } from "react";
-
-// Updated property images from Unsplash and Pexels
-const images = [
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", // Modern House Exterior
-  "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80", // Minimalist Living Space
-  "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80", // Apartment Interior
-  "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800",
-  "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=800",
-  "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
-  "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=800",
-];
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const PropertyHero = () => {
-  const [mainImage, setMainImage] = useState(images[0]);
+  const [properties, setProperties] = useState([]);
+  const [mainImage, setMainImage] = useState("");
+  const [allImages, setAllImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/property`);
+        const data = res.data?.data?.properties || [];
+
+        const safeProperties = Array.isArray(data) ? data : [data];
+        setProperties(safeProperties);
+
+        // Flatten all image URLs from all properties
+        const images = safeProperties.flatMap(
+          (property) => property.images?.map((img) => img.url) || []
+        );
+
+        setAllImages(images);
+
+        // Set the first image as main image
+        if (images.length > 0) {
+          setMainImage(images[0]);
+        }
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+        setError("Failed to fetch properties");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p className="text-red-600">{error}</p>;
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6">
-      <h1 className="text-3xl font-bold mb-6">Property</h1>
+      <h1 className="text-3xl font-bold mb-6">Top Movers</h1>
 
       {/* Main Image */}
       <div className="w-full mb-4">
-        <img
-          src={mainImage}
-          alt="Main property"
-          className="w-full h-72 object-cover rounded-lg"
-        />
+        {mainImage && (
+          <img
+            src={mainImage}
+            alt="Main Display"
+            className="w-full h-72 object-cover rounded-lg"
+          />
+        )}
       </div>
 
-      {/* Carousel */}
+      {/* Image Carousel */}
       <div className="flex gap-4 overflow-x-auto">
-        {images.map((img, index) => (
+        {allImages.map((imgUrl, index) => (
           <img
             key={index}
-            src={img}
+            src={imgUrl}
             alt={`Thumbnail ${index + 1}`}
             className={`w-24 h-24 object-cover rounded-md cursor-pointer border-2 ${
-              mainImage === img ? "border-green-600" : "border-transparent"
+              mainImage === imgUrl ? "border-green-600" : "border-transparent"
             }`}
-            onClick={() => setMainImage(img)}
+            onClick={() => setMainImage(imgUrl)}
           />
         ))}
       </div>

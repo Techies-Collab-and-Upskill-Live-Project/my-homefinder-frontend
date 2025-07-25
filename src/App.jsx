@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Layout from "./layout/Layout";
@@ -23,8 +23,34 @@ import IdDetails from "./pages/IdDetails";
 import ProcessingPage from "./pages/ProcessingPage";
 import ProfileVerified from "./pages/ProfileVerified";
 import ProfileFormLandlord from "./pages/ProfileFormLandlord";
+import HouseDetails from "./pages/HouseDetails";
+import axios from "axios";
+import Explore from "./pages/Explore";
 
 function App() {
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [id, setId] = useState(null);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/property`);
+        const data = res.data?.data?.properties || [];
+        setProperties(Array.isArray(data) ? data : [data]);
+        setId(properties.id);
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+        setError("Failed to fetch properties");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, []);
   return (
     <>
       <Routes>
@@ -33,8 +59,15 @@ function App() {
           <Route path="/decisionpage" element={<DecisionPage />} />
           <Route path="/idSelection" element={<IDTypeSelection />} />
           <Route path="/idDetails" element={<IdDetails />} />
-          <Route path="/processing" element={<ProcessingPage />} />
-          <Route path="/verified" element={<ProfileVerified />} />
+          <Route
+            path="/explore"
+            element={<Explore properties={properties} />}
+          />
+
+          <Route
+            path="/property/:id"
+            element={<HouseDetails properties={properties} />}
+          />
           <Route
             path="/landlordlistingpage"
             element={
@@ -80,7 +113,7 @@ function App() {
             path="/tenantlisting"
             element={
               <ProtectedRoute>
-                <TenantListing />
+                <TenantListing properties={properties} />
               </ProtectedRoute>
             }
           />
@@ -88,7 +121,7 @@ function App() {
             path="/landlordListing"
             element={
               <ProtectedRoute>
-                <LandlordListingPage />
+                <LandlordListingPage properties={properties} />
               </ProtectedRoute>
             }
           />

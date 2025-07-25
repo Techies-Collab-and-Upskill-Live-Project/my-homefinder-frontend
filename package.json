@@ -26,6 +26,7 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^7.6.2",
     "react-toastify": "^11.0.5",
+    "swiper": "^11.2.10",
     "tailwindcss": "^4.1.8",
     "yup": "^1.6.1"
   },

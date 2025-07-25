@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const TenantListingHeader = () => {
+const TenantListingHeader = ({ properties }) => {
   const fallbackNames = [
     "Home Seeker",
     "Friend",
@@ -16,16 +16,25 @@ const TenantListingHeader = () => {
   };
 
   useEffect(() => {
+    const storedAuthUser = localStorage.getItem("authUser");
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
+
+    const parseAndSetName = (data) => {
       try {
-        const user = JSON.parse(storedUser);
-        const userName = user.user.fullName;
+        const parsed = JSON.parse(data);
+        const userName =
+          parsed?.user?.fullName || parsed?.landlordProfile.fullName;
         setName(userName || randomFallback());
       } catch (error) {
         console.error("Error parsing user data:", error);
         setName(randomFallback());
       }
+    };
+
+    if (storedAuthUser) {
+      parseAndSetName(storedAuthUser);
+    } else if (storedUser) {
+      parseAndSetName(storedUser);
     } else {
       setName(randomFallback());
     }
@@ -35,8 +44,8 @@ const TenantListingHeader = () => {
     <header>
       <h1 className="text-3xl mt-20 font-black mb-2">Hi {name},</h1>
       <p className="text-md font-semibold">
-        We found <span className="text-[#0D7B0D]">120</span> homes In Lagos that
-        match your search
+        We found <span className="text-[#0D7B0D]">{properties.length}</span>{" "}
+        available houses
       </p>
       <small>Select and rent your dream house in the search list below</small>
     </header>
