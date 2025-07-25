@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { MapPin } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import React from "react";
-import PropertyAccess from "./PropertyAccess";
+import PropertyAccess from "../Components/PropertyAccess";
 import { useNavigate } from "react-router-dom";
 
 const PropertyList = () => {
