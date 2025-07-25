@@ -25,26 +25,30 @@ export default function HomePage() {
       localStorage.setItem("user", JSON.stringify(data));
 
       const user = JSON.parse(localStorage.getItem("user")).user;
-      // const isVerified = user?.isVerified;
-
-      // if (!isVerified) {
-      //   toast.warning("Please verify your account before logging in.");
-      //   return;
-      // }
+      const shouldLogin = localStorage.getItem("completed_verification");
+      const userRole = user.role?.name;
 
       toast.success("Login successful");
 
-      const userRole = user.role?.name;
-
-      if (userRole === "RENTER") {
-        navigate("/tenantlisting");
-        window.location.reload();
-      } else if (userRole === "LANDLORD") {
-        navigate("/landlordListing");
-        window.location.reload();
-      } else {
-        navigate("/");
-      }
+      setTimeout(() => {
+        if (shouldLogin === "true") {
+          if (userRole === "RENTER") {
+            navigate("/tenantListing");
+          } else if (userRole === "LANDLORD") {
+            navigate("/landlordListing");
+          } else {
+            navigate("/");
+          }
+        } else {
+          if (userRole === "RENTER") {
+            navigate("/tenantForm");
+          } else if (userRole === "LANDLORD") {
+            navigate("/idSelection");
+          } else {
+            navigate("/");
+          }
+        }
+      }, 1000); // optional delay before navigating
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed");
     } finally {

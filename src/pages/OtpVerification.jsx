@@ -11,8 +11,7 @@ const OtpVerification = () => {
   const [loading, setLoading] = useState(false);
   const fullOtp = otp.join("");
   const email = JSON.parse(localStorage.getItem("user")).data.email;
-  const user = JSON.parse(localStorage.getItem("user"))
-
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     const timer =
@@ -46,18 +45,11 @@ const OtpVerification = () => {
         throw new Error(data.message || "Verification failed");
       }
 
-      toast.success("OTP Verified Successfully!");
+      toast.success(
+        "OTP Verified Successfully! You can login with your credentials."
+      );
       setTimeout(() => {
-        const userRole = user.data.role.name;
-        if (userRole === "RENTER") {
-          navigate("/idSelection");
-          window.location.reload();
-        } else if (userRole === "LANDLORD") {
-          navigate("/idSelection");
-          window.location.reload();
-        } else {
-          navigate("/");
-        }
+        navigate("/tenantlogin");
       }, 5000);
     } catch (error) {
       toast.error(error.message || "An error occurred");

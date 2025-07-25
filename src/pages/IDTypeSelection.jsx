@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function IDTypeSelection() {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user")).user
 
   const IDtypes = [
     {

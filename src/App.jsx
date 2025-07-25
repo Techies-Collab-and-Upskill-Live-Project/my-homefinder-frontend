@@ -22,6 +22,7 @@ import IDTypeSelection from "./pages/IDTypeSelection";
 import IdDetails from "./pages/IdDetails";
 import ProcessingPage from "./pages/ProcessingPage";
 import ProfileVerified from "./pages/ProfileVerified";
+import ProfileFormLandlord from "./pages/ProfileFormLandlord";
 
 function App() {
   return (
@@ -52,10 +53,18 @@ function App() {
           />
           <Route path="/otpverification" element={<OtpVerification />} />
           <Route
-            path="/profileform"
+            path="/tenantForm"
             element={
               <ProtectedRoute>
                 <ProfileForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/landlordForm"
+            element={
+              <ProtectedRoute>
+                <ProfileFormLandlord />
               </ProtectedRoute>
             }
           />
@@ -86,9 +95,9 @@ function App() {
           <Route
             path="/landlordProfile"
             element={
-              // <ProtectedRoute>
+              <ProtectedRoute>
                 <LandlordProfileB4Listing />
-              // </ProtectedRoute>
+              </ProtectedRoute>
             }
           />
           <Route path="/tenantlogin" element={<TenantLogin />} />

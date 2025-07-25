@@ -17,12 +17,12 @@ export default function IdDetails() {
     if (statusPopup === "success") {
       const timeout = setTimeout(() => {
         const userData = JSON.parse(localStorage.getItem("user"));
-        const role = userData?.data.role.name;
+        const role = userData?.user.role.name;
 
         if (role === "RENTER") {
           navigate("/tenantlisting");
         } else if (role === "LANDLORD") {
-          navigate("/landlordlisting");
+          navigate("/landlordForm");
         } else {
           navigate("/login");
         }
@@ -75,7 +75,7 @@ export default function IdDetails() {
 
         const baseUrl = import.meta.env.VITE_API_URL;
         const url = `${baseUrl}/upload/document?type=${documentType}&format=${fileFormat}&folder=document`;
-        const token = JSON.parse(localStorage.getItem("user")).data.token;
+        const token = JSON.parse(localStorage.getItem("user")).token.token;
 
         await axios.post(url, formData, {
           headers: {
@@ -89,6 +89,11 @@ export default function IdDetails() {
         resetForm();
         setSelectedFile(null);
         localStorage.removeItem("selectedIDType");
+
+        setTimeout(() => {
+          toast.success("ID submitted successfully!");
+          navigate("/landlordForm");
+        }, 2000);
       } catch (error) {
         setStatusPopup("error");
         toast.error(

@@ -3,26 +3,52 @@ import { nav_links } from "../data/data";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbarlogo from "/images/Navbarlogo.svg";
-import { List, SignOutIcon, UserCircleIcon, X } from "@phosphor-icons/react";
+import {
+  ChatIcon,
+  List,
+  SignOutIcon,
+  UserCircleIcon,
+  X,
+} from "@phosphor-icons/react";
+import axios from "axios";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const validUser = localStorage.getItem("completed_verification");
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
+    const fetchUserById = async () => {
+      const stored = localStorage.getItem("user");
+
+      if (!stored) return;
+
       try {
-        const userName = storedUser?.fullName || storedUser?.user?.fullName;
-        setUser(userName);
-      } catch (error) {
-        console.error("Error parsing user data:", error);
+        const parsed = JSON.parse(localStorage.getItem("user"));
+        const userId = parsed?.user?.id;
+        const token = parsed?.token.token;
+
+        if (!userId || !token) return;
+
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        localStorage.setItem("authUser", JSON.stringify(data));
+        setUser(data.fullName); // or update state accordingly
+      } catch (err) {
+        console.error("Failed to fetch user by ID:", err);
         setUser(null);
       }
-    } else {
-      setUser(null);
-    }
+    };
+
+    fetchUserById();
   }, []);
 
   const handleLogout = () => {
@@ -69,7 +95,7 @@ const Navbar = () => {
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-6">
           {nav_links.map((item, index) => (
-            <Link to={"/tenantSignUpPage"}>
+            <Link key={index} to={"/tenantSignUpPage"}>
               <h5 className="text-sm font-semibold text-black hover:text-green-600 transition">
                 {item.text}
               </h5>
@@ -79,20 +105,34 @@ const Navbar = () => {
 
         {/* Auth Buttons or Profile */}
         <div className="hidden md:flex items-center gap-3">
-          {user ? (
-            <div className="flex items-center gap-2 cursor-pointer">
+          {validUser === "true" ? (
+            <div className="flex items-center gap-4 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer">
+              {/* Profile Icon */}
               <UserCircleIcon className="w-8 h-8 text-gray-600" />
+
+              {/* Greeting Text */}
               <span
-                className="text-sm font-medium"
+                className="text-sm font-semibold text-gray-700"
                 onClick={handleProfileClick}
               >
                 {getGreeting()}, {user?.split(" ")[0] || "User"}
               </span>
+
+              {/* Message Icon */}
+              <button
+                title="Messages"
+                className="text-gray-600 hover:text-green-500 transition"
+              >
+                <ChatIcon size={18} />
+              </button>
+
+              {/* Logout Icon */}
               <button
                 onClick={handleLogout}
-                className="text-xs text-red-500 cursor-pointer ml-2"
+                title="Logout"
+                className="text-red-500 hover:bg-red-600 hover:text-white p-2 transition ease-in-out duration-300"
               >
-                <SignOutIcon size={20} />
+                <SignOutIcon size={18} />
               </button>
             </div>
           ) : (
@@ -141,27 +181,39 @@ const Navbar = () => {
                 </Link>
               ))}
               <hr className="my-2" />
-              {user ? (
-                <div className="flex items-center gap-2">
-                  <UserCircleIcon className="w-8 h-8 text-gray-600" />
-                  <span
-                    className="text-sm font-medium"
-                    onClick={() => {
-                      handleProfileClick();
-                      setIsOpen(false);
-                    }}
-                  >
-                    {getGreeting()}, {user?.split(" ")[0] || "User"}
+              {validUser === "true" ? (
+                <div className="flex items-center justify-between gap-4 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer">
+                  <span className="flex items-center gap-2">
+                    {/* Profile Icon */}
+                    <UserCircleIcon className="w-8 h-8 text-gray-600" />
+
+                    {/* Greeting Text */}
+                    <span
+                      className="text-sm font-semibold text-gray-700"
+                      onClick={handleProfileClick}
+                    >
+                      {getGreeting()}, {user?.split(" ")[0] || "User"}
+                    </span>
                   </span>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsOpen(false);
-                    }}
-                    className="text-xs text-red-500 cursor-pointer ml-2"
-                  >
-                    <SignOutIcon size={20} />
-                  </button>
+
+                  <span className="flex items-center gap-2">
+                    {/* Message Icon */}
+                    <button
+                      title="Messages"
+                      className="text-gray-600 hover:text-green-500 transition"
+                    >
+                      <ChatIcon size={18} />
+                    </button>
+
+                    {/* Logout Icon */}
+                    <button
+                      onClick={handleLogout}
+                      title="Logout"
+                      className="text-red-500 hover:bg-red-600 hover:text-white p-2 transition ease-in-out duration-300"
+                    >
+                      <SignOutIcon size={18} />
+                    </button>
+                  </span>
                 </div>
               ) : (
                 <>
