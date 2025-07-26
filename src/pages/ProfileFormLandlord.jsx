@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ProfileFormLandlord = () => {
+  const authUser = JSON.parse(localStorage.getItem("authUser"));
   const navigate = useNavigate();
 
   const nigerianStates = [
@@ -152,7 +153,7 @@ const ProfileFormLandlord = () => {
           <div className="input-group relative mb-2.5 flex-1">
             <input
               name="fullName"
-              value={formik.values.fullName}
+              value={authUser.fullName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="text"
@@ -194,16 +195,16 @@ const ProfileFormLandlord = () => {
           <div className="input-group relative mb-2.5 flex-1">
             <input
               name="phoneNumber"
-              value={formik.values.phoneNumber}
+              value={authUser.phone}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="tel"
-              id="phoneNumber"
+              id="phone"
               placeholder=" "
               className="peer w-full h-11 pt-4 pb-2 px-2.5 text-base border border-gray-300 rounded-md outline-none focus:outline-none"
             />
             <label
-              htmlFor="phoneNumber"
+              htmlFor="phone"
               className="absolute top-[-19px] left-2 bg-white px-7 py-2.5 text-xs text-gray-800 pointer-events-none transition-all duration-200 ease-in-out border border-gray-300 rounded-xl w-auto flex items-center gap-1.5 shadow-lg
              peer-focus:top-[-30px] peer-not-placeholder-shown:top-[-19px]"
             >
@@ -225,9 +226,9 @@ const ProfileFormLandlord = () => {
               </svg>
               Phone Number
             </label>
-            {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
+            {formik.touched.phone && formik.errors.phone ? (
               <div className="text-red-500 text-sm mt-1">
-                {formik.errors.phoneNumber}
+                {formik.errors.phone}
               </div>
             ) : null}
           </div>

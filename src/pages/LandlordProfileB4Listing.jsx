@@ -125,6 +125,8 @@ export default function LandlordProfileB4Listing() {
         <h5 className="text-sm text-slate-400 mt-2 font-normal">{phone}</h5>
       </div>
 
+      
+
       <div className="flex flex-col border border-gray-300 rounded-xl shadow-lg p-6 space-y-2">
         <div className="flex justify-between items-center">
           <p className="text-base font-normal">Bio</p>

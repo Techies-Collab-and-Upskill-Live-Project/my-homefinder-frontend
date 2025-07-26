@@ -6,6 +6,7 @@ import { PencilLine } from "@phosphor-icons/react";
 import axios from "axios";
 
 const TenantProfile = () => {
+  const authUser = JSON.parse(localStorage.getItem("authUser"));
   const [isEditNumberModalOpen, setIsEditNumberModalOpen] = useState(false);
   const [showUpdateProfileModal, setShowUpdateProfileModal] = useState(false);
   const [isEditCardModalOpen, setIsEditCardModalOpen] = useState(false);

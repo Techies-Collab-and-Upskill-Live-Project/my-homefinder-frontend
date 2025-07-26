@@ -10,6 +10,7 @@ import { useProfile } from "../Profile/Assets/ProfileContext";
 
 
 const LandlordProfileB4Listing = () => {
+    const authUser = JSON.parse(localStorage.getItem("authUser"));
     const { profileData, updatePhoneNumber } = useProfile();
     const [isEditNumberModalOpen, setIsEditNumberModalOpen] = useState(false);
     const openEditNumberModal = () => setIsEditNumberModalOpen(true);
@@ -25,11 +26,11 @@ const LandlordProfileB4Listing = () => {
                 <div className="flex justify-center gap-x-4 items-center mb-6">
                     <div className="flex flex-col items-center">
                         <img
-                            src={profileData.image || UserImage}
+                            src={authUser.profileImage}
                             alt="Profile"
                             className="w-20 h-20 rounded-full object-cover border border-gray-300 p-2"
                         />
-                        <p className="mt-2 text-lg font-medium">{profileData.name || "Lucy Favy"}</p>
+                        <p className="mt-2 text-lg font-medium">{authUser.fullName || "Lucy Favy"}</p>
                     </div>
 
                     
@@ -50,11 +51,11 @@ const LandlordProfileB4Listing = () => {
                     </div>
                     <div className="border-t border-gray-300 rounded-full w-full"></div>
                     <div className="flex flex-row justify-between items-center">
-                        <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
+                        <p className="text-base font-normal">{authUser.phone || "08157648539"}</p>
                         <PencilLine size={32} onClick={openEditNumberModal} className="cursor-pointer" />
                     </div>
                     <div className="flex flex-row justify-between items-center">
-                        <p className="text-base font-normal">{profileData.phoneNumber || "08157648539"}</p>
+                        <p className="text-base font-normal">{authUser.phone || "08157648539"}</p>
                         <PencilLine size={32} onClick={openEditNumberModal} className="cursor-pointer" />
                     </div>
                 </div>
@@ -84,7 +85,7 @@ const LandlordProfileB4Listing = () => {
 
             {isEditNumberModalOpen && (
                 <EditNumberModal
-                    currentNumber={profileData.phoneNumber}
+                    currentNumber={authUser.phone}
                     onClose={closeEditNumberModal}
                     updatePhoneNumber={updatePhoneNumber}
                 />

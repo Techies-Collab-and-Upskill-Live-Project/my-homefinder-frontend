@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 
 const Navbar = () => {
+  const authUser = JSON.parse(localStorage.getItem("authUser"));
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const Navbar = () => {
         );
 
         localStorage.setItem("authUser", JSON.stringify(data));
-        setUser(data.landlordProfile.fullName);
+        setUser(authUser.fullName);
       } catch (err) {
         console.error("Failed to fetch user by ID:", err);
         setUser(null);
