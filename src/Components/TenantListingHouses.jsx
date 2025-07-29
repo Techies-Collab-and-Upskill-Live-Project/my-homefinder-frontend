@@ -70,8 +70,8 @@ const TenantListingHouses = ({ properties = [] }) => {
   };
 
   return (
-    <section className="mt-10 grid grid-cols-3 gap-10">
-      <TenantListingSidebar />
+    <section className="mt-10 gap-10">
+      {/* <TenantListingSidebar /> */}
 
       <div className="lg:col-span-2 col-span-3 space-y-6">
         {/* Filters */}

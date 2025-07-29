@@ -68,23 +68,23 @@ const ProfileFormLandlord = () => {
     NIN: Yup.string()
       .matches(/^\d{11}$/, "NIN must be 11 digits")
       .required("NIN is required"),
-    // contactPreference: Yup.string()
-    //   .oneOf(["call", "chat", "both"]),
+    preference: Yup.string().oneOf(["CALL", "CHAT", "BOTH"]),
     otherInfo: Yup.string(), // Optional field
   });
   const userId = JSON.parse(localStorage.getItem("user")).user.id;
   const token = JSON.parse(localStorage.getItem("user")).token.token;
+  const fullName = JSON.parse(localStorage.getItem("user")).user.fullName;
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
-      phoneNumber: "",
+      fullName: "" || fullName,
+      phoneNumber: "" || JSON.parse(localStorage.getItem("user")).user.phone,
       street: "",
       city: "",
       state: "",
       driversLicense: "",
       NIN: "",
-      // contactPreference: "",
+      preference: "",
       otherInfo: "",
     },
     validationSchema: validationSchema,
@@ -110,7 +110,7 @@ const ProfileFormLandlord = () => {
         }
 
         const result = await response.json();
-        localStorage.setItem("completed_verification", "true");
+        localStorage.setItem("completed_verification_landlord", "true");
         toast.success("Profile updated successfully!");
 
         setTimeout(() => {
@@ -463,12 +463,11 @@ const ProfileFormLandlord = () => {
                 className="flex flex-row justify-center items-center gap-1"
               >
                 <input
-                  name="contactPreference"
-                  value="call"
-                  disabled
+                  name="preference"
+                  value="CALLS"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.contactPreference === "call"}
+                  checked={formik.values.preference === "CALL"}
                   type="radio"
                 />
                 Calls
@@ -478,12 +477,11 @@ const ProfileFormLandlord = () => {
                 className="flex flex-row justify-center items-center gap-1"
               >
                 <input
-                  name="contactPreference"
-                  value="chat"
-                  disabled
+                  name="preference"
+                  value="CHAT"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.contactPreference === "chat"}
+                  checked={formik.values.preference === "CHAT"}
                   type="radio"
                 />
                 Chat
@@ -493,20 +491,19 @@ const ProfileFormLandlord = () => {
                 className="flex flex-row justify-center items-center gap-1"
               >
                 <input
-                  name="contactPreference"
-                  value="both"
+                  name="preference"
+                  value="BOTH"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={true}
+                  checked={formik.values.preference === "BOTH"}
                   type="radio"
                 />
-                Email
+                Both
               </label>
             </div>
-            {formik.touched.contactPreference &&
-            formik.errors.contactPreference ? (
+            {formik.touched.preference && formik.errors.preference ? (
               <div className="text-red-500 text-sm mt-1 text-center">
-                {formik.errors.contactPreference}
+                {formik.errors.preference}
               </div>
             ) : null}
           </div>

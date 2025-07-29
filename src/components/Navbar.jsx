@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { nav_links } from "../data/data";
+import { nav_links, auth_links } from "../data/data";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbarlogo from "/images/Navbarlogo.svg";
@@ -16,21 +16,26 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const validUser = localStorage.getItem("completed_verification");
+  const [profileImage, setProfileImage] = useState(null);
+  const [navLinks, setNavLinks] = useState(nav_links);
 
   useEffect(() => {
     const fetchUserById = async () => {
       const stored = localStorage.getItem("user");
 
-      if (!stored) return;
-
+      if (!stored) {
+        setNavLinks(nav_links);
+        return;
+      }
       try {
-        const parsed = JSON.parse(localStorage.getItem("user"));
+        const parsed = JSON.parse(stored);
         const userId = parsed?.user?.id;
-        const token = parsed?.token.token;
+        const token = parsed?.token?.token;
 
-        if (!userId || !token) return;
-
+        if (!userId || !token) {
+          setNavLinks(nav_links);
+          return;
+        }
         const { data } = await axios.get(
           `${import.meta.env.VITE_API_URL}/users/${userId}`,
           {
@@ -41,24 +46,46 @@ const Navbar = () => {
         );
 
         localStorage.setItem("authUser", JSON.stringify(data));
-        setUser(data.landlordProfile.fullName);
+
+        const fullName =
+          data?.landlordProfile?.fullName || data?.tenantProfile?.fullName;
+        const image =
+          data?.landlordProfile?.profileImage ||
+          data?.tenantProfile?.profileImage;
+
+        setUser(fullName || "User");
+        setProfileImage(image || null);
+        setNavLinks(auth_links);
       } catch (err) {
         console.error("Failed to fetch user by ID:", err);
         setUser(null);
+        setProfileImage(null);
       }
     };
 
     fetchUserById();
   }, []);
 
+  const handleSmoothScroll = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+      setIsOpen(false);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("authUser");
     setUser(null);
     setIsOpen(false);
     navigate("/");
   };
+  const isAuthenticated =
+    localStorage.getItem("user") || localStorage.getItem("authUser");
 
   const handleProfileClick = () => {
+    setIsOpen(false);
     const userData = JSON.parse(localStorage.getItem("user"));
     const roleName = userData?.role || userData?.user?.role.name;
 
@@ -94,21 +121,41 @@ const Navbar = () => {
 
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-6">
-          {nav_links.map((item, index) => (
-            <Link key={index} to={item.path}>
-              <h5 className="text-sm font-semibold text-black hover:text-green-600 transition">
+          {navLinks.map((item, index) =>
+            item.scroll ? (
+              <button
+                key={index}
+                onClick={() => handleSmoothScroll(item.path)}
+                className="text-sm font-semibold text-black hover:text-green-600 transition"
+              >
                 {item.text}
-              </h5>
-            </Link>
-          ))}
+              </button>
+            ) : (
+              <Link
+                key={index}
+                to={item.path}
+                className="text-sm font-semibold text-black hover:text-green-600 transition"
+              >
+                {item.text}
+              </Link>
+            )
+          )}
         </div>
 
         {/* Auth Buttons or Profile */}
         <div className="hidden md:flex items-center gap-3">
-          {validUser === "true" ? (
+          {isAuthenticated ? (
             <div className="flex items-center gap-4 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer">
               {/* Profile Icon */}
-              <UserCircleIcon className="w-8 h-8 text-gray-600" />
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="w-8 h-8 rounded-full object-cover"
+                />
+              ) : (
+                <UserCircleIcon className="w-8 h-8 text-gray-600" />
+              )}
 
               {/* Greeting Text */}
               <span
@@ -121,6 +168,10 @@ const Navbar = () => {
               {/* Message Icon */}
               <Link to="/messages">
                 <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/messages");
+                  }}
                   title="Messages"
                   className="text-gray-600 hover:text-green-500 transition"
                 >
@@ -172,23 +223,41 @@ const Navbar = () => {
             transition={{ duration: 0.3 }}
           >
             <div className="flex flex-col gap-4">
-              {nav_links.map((item, index) => (
-                <Link
-                  key={index}
-                  to={item.path}
-                  onClick={() => setIsOpen(false)}
-                  className="text-sm font-medium text-gray-700 hover:text-green-600"
-                >
-                  {item.text}
-                </Link>
-              ))}
+              {nav_links.map((item, index) =>
+                item.scroll ? (
+                  <button
+                    key={index}
+                    onClick={() => handleSmoothScroll(item.path)}
+                    className="text-sm font-medium text-left text-gray-700 hover:text-green-600"
+                  >
+                    {item.text}
+                  </button>
+                ) : (
+                  <Link
+                    key={index}
+                    to={item.path}
+                    onClick={() => setIsOpen(false)}
+                    className="text-sm font-medium text-left text-gray-700 hover:text-green-600"
+                  >
+                    {item.text}
+                  </Link>
+                )
+              )}
+
               <hr className="my-2" />
-              {validUser === "true" ? (
+              {isAuthenticated ? (
                 <div className="flex items-center justify-between gap-4 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer">
                   <span className="flex items-center gap-2">
                     {/* Profile Icon */}
-                    <UserCircleIcon className="w-8 h-8 text-gray-600" />
-
+                    {profileImage ? (
+                      <img
+                        src={profileImage}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <UserCircleIcon className="w-8 h-8 text-gray-600" />
+                    )}
                     {/* Greeting Text */}
                     <span
                       className="text-sm font-semibold text-gray-700"
@@ -202,6 +271,10 @@ const Navbar = () => {
                     {/* Message Icon */}
                     <Link to="/messages">
                       <button
+                        onClick={() => {
+                          setIsOpen(false);
+                          navigate("/messages");
+                        }}
                         title="Messages"
                         className="text-gray-600 hover:text-green-500 transition"
                       >

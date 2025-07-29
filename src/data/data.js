@@ -128,19 +128,17 @@ export const messages = [
 ];
 
 export const nav_links = [
+  { text: "Home", path: "/", scroll: false },
+  { text: "About Us", path: "about", scroll: true },
+  { text: "How it Works", path: "how-it-works", scroll: true },
+  { text: "Explore", path: "/explore", scroll: false },
+];
+
+const role = JSON.parse(localStorage.getItem("user"))?.user;
+export const auth_links = [
   {
-    id: 1,
-    path: "/explore",
-    text: "Explore",
+    text: "Overview",
+    path: role?.role.name === "LANDLORD" ? "/landlordListing" : "tenantlisting",
   },
-  {
-    id: 2,
-    path: "/",
-    text: "About Us",
-  },
-  {
-    id: 3,
-    path: "/",
-    text: "How it Works",
-  },
+  { text: "Explore", path: "/explore" },
 ];

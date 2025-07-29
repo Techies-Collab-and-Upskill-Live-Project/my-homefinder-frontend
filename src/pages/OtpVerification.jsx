@@ -91,7 +91,7 @@ const OtpVerification = () => {
         <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center relative">
           <h2 className="text-2xl font-bold mb-2">OTP Verification</h2>
           <p className="text-sm text-gray-600 mb-6">
-            Enter the 6-digit code sent to your contact.
+            Enter the 6-digit code sent to your Email Address.
           </p>
 
           <OtpInput otp={otp} setOtp={setOtp} />

@@ -25,7 +25,9 @@ export default function HomePage() {
       localStorage.setItem("user", JSON.stringify(data));
 
       const user = JSON.parse(localStorage.getItem("user")).user;
-      const shouldLogin = localStorage.getItem("completed_verification");
+      const shouldLogin =
+        localStorage.getItem("completed_verification_landlord") ||
+        localStorage.getItem("completed_verification_tenant");
       const userRole = user.role?.name;
 
       toast.success("Login successful");
@@ -34,8 +36,10 @@ export default function HomePage() {
         if (shouldLogin === "true") {
           if (userRole === "RENTER") {
             navigate("/tenantListing");
+            window.location.reload();
           } else if (userRole === "LANDLORD") {
             navigate("/landlordListing");
+            window.location.reload();
           } else {
             navigate("/");
           }

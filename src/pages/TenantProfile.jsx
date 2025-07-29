@@ -57,17 +57,19 @@ const TenantProfile = () => {
       console.error("Failed to update phone number:", error);
       alert(
         error?.response?.data?.message ||
-        "Failed to update phone number. Try again."
+          "Failed to update phone number. Try again."
       );
     }
   };
-
 
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
       const storedUser = localStorage.getItem("user");
+      const storedAuthUser = localStorage.getItem("authUser");
+
       let userData = null;
+      let authUserData = null;
 
       if (storedUser) {
         try {
@@ -78,11 +80,23 @@ const TenantProfile = () => {
         }
       }
 
+      if (storedAuthUser) {
+        try {
+          authUserData = JSON.parse(storedAuthUser);
+        } catch {
+          authUserData = null;
+        }
+      }
+
       const name = userData?.fullName || "Lucy Favy";
       const email = userData?.email || "lucyfavy@email.com";
       const phone = userData?.phone || "08157648539";
+
       const image =
-        localStorage.getItem("profileImage") || generateAvatar(name);
+        authUserData?.tenantProfile?.profileImage ||
+        authUserData?.landlordProfile?.profileImage ||
+        localStorage.getItem("profileImage") ||
+        generateAvatar(name);
 
       setProfileData({
         name,
@@ -91,7 +105,6 @@ const TenantProfile = () => {
         image,
       });
 
-      // Leave the card details untouched
       const storedCardNumber = localStorage.getItem("cardNumber");
       const storedCardType = localStorage.getItem("cardType");
       setCardDetails({
@@ -143,7 +156,6 @@ const TenantProfile = () => {
       const user = JSON.parse(localStorage.getItem("user"));
       ("authToken");
 
-
       // Added this line to properly retrive auth token from local storage
       if (user?.token) {
         token = typeof user.token === "object" ? user.token.token : user.token;
@@ -157,7 +169,7 @@ const TenantProfile = () => {
         return;
       }
 
-      console.log(token)
+      console.log(token);
 
       const formData = new FormData();
       formData.append("profileImage", file);
@@ -175,7 +187,10 @@ const TenantProfile = () => {
         }
       );
 
-      const imageUrl = response.data.imageUrl || response.data.url || response.data.profileImageUrl;
+      const imageUrl =
+        response.data.imageUrl ||
+        response.data.url ||
+        response.data.profileImageUrl;
       if (!imageUrl) {
         setImageError("No image URL returned from server.");
         return;
