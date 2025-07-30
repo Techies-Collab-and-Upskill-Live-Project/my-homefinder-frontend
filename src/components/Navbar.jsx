@@ -13,7 +13,6 @@ import {
 import axios from "axios";
 
 const Navbar = () => {
-  const authUser = JSON.parse(localStorage.getItem("authUser"));
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
