@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import UserImage from "/images/image8.png";
-import { PencilLineIcon, TrashIcon } from "@phosphor-icons/react";
+import {
+  CheckCircleIcon,
+  PencilLineIcon,
+  TrashIcon,
+} from "@phosphor-icons/react";
 import axios from "axios";
-import AddPropertyModal from "../Components/AddPropertyModal"
+import AddPropertyModal from "../Components/AddPropertyModal";
 
 const EditBioModal = ({ onClose, onSave, initialBio, loading }) => {
   const [newBio, setNewBio] = useState(initialBio);
@@ -52,17 +56,41 @@ export default function LandlordProfileB4Listing() {
   const [propertyLoading, setPropertyLoading] = useState(false);
 
   useEffect(() => {
-    const userDetails = JSON.parse(localStorage.getItem("user"));
-    if (userDetails?.user) {
-      setUserData(userDetails.user);
-      setPhone(userDetails.user.phone || "");
-    }
-    setBio(localStorage.getItem("bio") || "No bio added yet.");
+    const fetchUserData = async () => {
+      const userDetails = JSON.parse(localStorage.getItem("user"));
+      const authUser = JSON.parse(localStorage.getItem("authUser"));
 
-    const storedProperties = JSON.parse(
-      localStorage.getItem("properties") || "[]"
-    );
-    setProperties(Array.isArray(storedProperties) ? storedProperties : []);
+      if (userDetails?.user) {
+        const sourceUser = authUser || userDetails.user;
+
+        setUserData({
+          ...sourceUser,
+          image:
+            authUser?.landlordProfile?.profileImage ||
+            authUser?.tenantProfile?.profileImage ||
+            UserImage,
+        });
+
+        setPhone(sourceUser.phone || "");
+      }
+
+      setBio(localStorage.getItem("bio") || "No bio added yet.");
+
+      try {
+        const token = userDetails?.token?.token;
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/property/mine`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setProperties(res.data.properties || []);
+      } catch (err) {
+        console.error("Failed to fetch user's properties", err);
+      }
+    };
+
+    fetchUserData();
   }, []);
 
   const saveBio = (newBio) => {
@@ -75,26 +103,32 @@ export default function LandlordProfileB4Listing() {
     }, 3000);
   };
 
-  const saveNewProperty = async (propertyData) => {
+  const saveNewProperty = async (formData) => {
     setPropertyLoading(true);
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const token = user?.token?.token;
 
+      const format = formData.get("format") || "jpg";
+      const folder = "propertyPics";
+
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/property`,
-        propertyData,
+        `${
+          import.meta.env.VITE_API_URL
+        }/property?format=${format}&folder=${folder}`,
+        formData,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
-      const addedProperty = res.data.property || propertyData;
-      const updatedProperties = [...properties, addedProperty];
-      setProperties(updatedProperties);
-      localStorage.setItem("properties", JSON.stringify(updatedProperties));
+      const addedProperty = res.data.property;
+      setProperties((prev) => [...prev, addedProperty]);
     } catch (error) {
-      console.error("Error adding property:", error);
+      console.error("Error uploading property:", error);
     } finally {
       setPropertyLoading(false);
       setIsAddPropertyModalOpen(false);
@@ -105,14 +139,19 @@ export default function LandlordProfileB4Listing() {
     <div className="max-w-4xl mx-auto px-6 py-8 font-sans leading-normal border border-gray-300 rounded-xl shadow-lg space-y-8">
       <div className="flex justify-center mt-20 gap-x-4 items-center mb-6">
         <div className="flex flex-col items-center">
-        <img
+          <img
             src={userData?.image || UserImage}
             alt="Profile"
             className="w-24 h-24 rounded-full object-cover cursor-pointer hover:opacity-80 transition-all"
             onClick={() => setIsEditImageModalOpen(true)}
           />
-          <p className="mt-2 text-lg font-medium">
+          <p className="mt-4 text-lg font-medium flex items-center gap-2">
             {userData?.fullName || "User"}
+            {userData?.isVerified ? (
+              <img src="/images/verified.png" className="w-8" />
+            ) : (
+              ""
+            )}
           </p>
         </div>
       </div>
@@ -199,11 +238,11 @@ export default function LandlordProfileB4Listing() {
           onClose={() => setIsEditBioModalOpen(false)}
           onSave={saveBio}
           loading={bioLoading}
-
-          {
-          ...isEditImageModalOpen && (<><
-            AddPropertyModal/></>
-          )}
+          {...(isEditImageModalOpen && (
+            <>
+              <AddPropertyModal />
+            </>
+          ))}
         />
       )}
     </div>

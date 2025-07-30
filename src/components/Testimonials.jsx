@@ -29,7 +29,7 @@ const testimonials = [
 ];
 
 const Testimonials = () => (
-  <section className="w-full flex justify-center mt-[200px] mb-48 padding_four bg-gray-50">
+  <section className="w-full flex justify-center mt-[200px] mb-48 py-20 px-6 md:px-20 bg-gray-100">
     <div className="w-full max-w-6xl px-4">
       <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
         Hear from Our Happy Customers

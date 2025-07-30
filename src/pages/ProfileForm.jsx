@@ -129,7 +129,7 @@ const ProfileForm = () => {
 
         const result = await response.json();
 
-        localStorage.setItem("completed_verification", "true");
+        localStorage.setItem("completed_verification_tenant", "true");
         setTimeout(() => {
           toast.success("Profile saved successfully!");
           navigate("/tenantListing");

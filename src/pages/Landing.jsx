@@ -5,6 +5,8 @@ import PropertyList from "../components/PropertyList";
 import Testimonials from "../components/Testimonials";
 import SearchFeature from "../components/SearchFeature";
 import SubSection from "../Components/SubSection";
+import AboutUs from "../Components/AboutUs";
+import HowItWorks from "../Components/HowItWorks";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <SearchFeature />
       </div>
       <SubSection />
+      <AboutUs />
+      <HowItWorks />
       <PropertyList />
       <Testimonials />
     </section>

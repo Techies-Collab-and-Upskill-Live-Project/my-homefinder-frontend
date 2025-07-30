@@ -23,7 +23,10 @@ const TenantListingHeader = ({ properties }) => {
       try {
         const parsed = JSON.parse(data);
         const userName =
-          parsed?.user?.fullName || parsed?.landlordProfile.fullName;
+          parsed?.user?.fullName ||
+          parsed?.landlordProfile?.fullName ||
+          parsed?.tenantProfile?.fullName;
+
         setName(userName || randomFallback());
       } catch (error) {
         console.error("Error parsing user data:", error);
