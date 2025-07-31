@@ -177,8 +177,9 @@ const TenantProfile = () => {
       formData.append("folder", "profile-pictures");
       formData.append("format", file.type);
 
+      const API_URL = import.meta.env.VITE_API_URL;
       const response = await axios.post(
-        `https://my-homefinder-backend.onrender.com/api/v1/users/uploadprofilepic`,
+        `${API_URL}/users/uploadprofilepic`,
         formData,
         {
           headers: {
