@@ -1,9 +1,7 @@
-import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const { isAuthenticated, loading, hasRole } = useAuth();
-  const location = useLocation();
 
   const authUser = JSON.parse(localStorage.getItem("authUser"));
   const user = authUser || null;
@@ -19,21 +17,14 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
     );
   }
 
+  // If not authenticated or no user data, render nothing
   if (!isAuthenticated || !user) {
-    return <Navigate to="/tenantlogin" state={{ from: location }} replace />;
+    return null;
   }
 
+  // If role is required but user doesn't have it
   if (requiredRole && !hasRole(requiredRole)) {
-    const roleName = user?.role?.name || user?.role;
-
-    switch (roleName) {
-      case "RENTER":
-        return <Navigate to="/tenantlisting" replace />;
-      case "LANDLORD":
-        return <Navigate to="/landlordListing" replace />;
-      default:
-        return <Navigate to="/" replace />;
-    }
+    return null;
   }
 
   return children;

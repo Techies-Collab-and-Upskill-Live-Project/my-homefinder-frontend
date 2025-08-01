@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function IDTypeSelection() {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user")).user
+  const user = JSON.parse(localStorage.getItem("user")).user;
 
   const IDtypes = [
     {
@@ -30,6 +30,7 @@ export default function IDTypeSelection() {
     const sanitizedIDType = selectedIDType.name.replace(/[^a-zA-Z0-9]/g, "");
     localStorage.setItem("selectedIDType", sanitizedIDType);
     navigate(route);
+    window.location.reload();
   };
 
   return (
