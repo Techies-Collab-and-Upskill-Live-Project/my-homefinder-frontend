@@ -3,10 +3,11 @@ import { useAuth } from "../contexts/AuthContext";
 
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const { isAuthenticated, loading, hasRole } = useAuth();
-  const user = JSON.parse(localStorage.getItem("user")).user;
   const location = useLocation();
 
-  // Show loading while checking auth status
+  const authUser = JSON.parse(localStorage.getItem("authUser"));
+  const user = authUser || null;
+
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gray-100">
@@ -18,20 +19,20 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
     );
   }
 
-  // Redirect to login if not authenticated
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user) {
     return <Navigate to="/tenantlogin" state={{ from: location }} replace />;
   }
 
-  // Check role if required
   if (requiredRole && !hasRole(requiredRole)) {
-    // Redirect to appropriate page based on user's actual role
-    if (user?.role.name === "RENTER") {
-      return <Navigate to="/tenantlisting" replace />;
-    } else if (user?.role === "LANDLORD") {
-      return <Navigate to="/landlordListing" replace />;
-    } else {
-      return <Navigate to="/" replace />;
+    const roleName = user?.role?.name || user?.role;
+
+    switch (roleName) {
+      case "RENTER":
+        return <Navigate to="/tenantlisting" replace />;
+      case "LANDLORD":
+        return <Navigate to="/landlordListing" replace />;
+      default:
+        return <Navigate to="/" replace />;
     }
   }
 
