@@ -20,50 +20,23 @@ const Navbar = () => {
   const [navLinks, setNavLinks] = useState(nav_links);
 
   useEffect(() => {
-    const fetchUserById = async () => {
-      const stored = localStorage.getItem("user");
+    const storedAuthUser = localStorage.getItem("authUser");
 
-      if (!stored) {
-        setNavLinks(nav_links);
-        return;
-      }
-      try {
-        const parsed = JSON.parse(stored);
-        const userId = parsed?.user?.id;
-        const token = parsed?.token?.token;
+    if (storedAuthUser) {
+      const parsed = JSON.parse(storedAuthUser);
 
-        if (!userId || !token) {
-          setNavLinks(nav_links);
-          return;
-        }
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_API_URL}/users/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+      const fullName =
+        parsed?.landlordProfile?.fullName || parsed?.tenantProfile?.fullName;
+      const image =
+        parsed?.landlordProfile?.profileImage ||
+        parsed?.tenantProfile?.profileImage;
 
-        localStorage.setItem("authUser", JSON.stringify(data));
-
-        const fullName =
-          data?.landlordProfile?.fullName || data?.tenantProfile?.fullName;
-        const image =
-          data?.landlordProfile?.profileImage ||
-          data?.tenantProfile?.profileImage;
-
-        setUser(fullName || "User");
-        setProfileImage(image || null);
-        setNavLinks(auth_links);
-      } catch (err) {
-        console.error("Failed to fetch user by ID:", err);
-        setUser(null);
-        setProfileImage(null);
-      }
-    };
-
-    fetchUserById();
+      setUser(fullName);
+      setProfileImage(image || null);
+      setNavLinks(auth_links);
+    } else {
+      setNavLinks(nav_links);
+    }
   }, []);
 
   const handleSmoothScroll = (id) => {
@@ -80,6 +53,7 @@ const Navbar = () => {
     setUser(null);
     setIsOpen(false);
     navigate("/");
+    window.location.reload();
   };
   const isAuthenticated =
     localStorage.getItem("user") || localStorage.getItem("authUser");
@@ -165,28 +139,30 @@ const Navbar = () => {
                 {getGreeting()}, {user?.split(" ")[0] || "User"}
               </span>
 
-              {/* Message Icon */}
-              <Link to="/messages">
-                <button
-                  onClick={() => {
-                    setIsOpen(false);
-                    navigate("/messages");
-                  }}
-                  title="Messages"
-                  className="text-gray-600 hover:text-green-500 transition"
-                >
-                  <ChatIcon size={18} />
-                </button>
-              </Link>
+              <span className="flex items-center">
+                {/* Message Icon */}
+                <Link to="/messages">
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      navigate("/messages");
+                    }}
+                    title="Messages"
+                    className="text-gray-600 p-2 hover:text-green-500 transition"
+                  >
+                    <ChatIcon size={18} />
+                  </button>
+                </Link>
 
-              {/* Logout Icon */}
-              <button
-                onClick={handleLogout}
-                title="Logout"
-                className="text-red-500 hover:bg-red-600 hover:text-white p-2 transition ease-in-out duration-300"
-              >
-                <SignOutIcon size={18} />
-              </button>
+                {/* Logout Icon */}
+                <button
+                  onClick={handleLogout}
+                  title="Logout"
+                  className="text-red-500 hover:bg-red-600 hover:text-white p-2 transition ease-in-out duration-300"
+                >
+                  <SignOutIcon size={18} />
+                </button>
+              </span>
             </div>
           ) : (
             <>
@@ -223,7 +199,7 @@ const Navbar = () => {
             transition={{ duration: 0.3 }}
           >
             <div className="flex flex-col gap-4">
-              {nav_links.map((item, index) =>
+              {navLinks.map((item, index) =>
                 item.scroll ? (
                   <button
                     key={index}
@@ -267,7 +243,7 @@ const Navbar = () => {
                     </span>
                   </span>
 
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center">
                     {/* Message Icon */}
                     <Link to="/messages">
                       <button
@@ -276,7 +252,7 @@ const Navbar = () => {
                           navigate("/messages");
                         }}
                         title="Messages"
-                        className="text-gray-600 hover:text-green-500 transition"
+                        className="text-gray-600 p-2 hover:text-green-500 transition"
                       >
                         <ChatIcon size={18} />
                       </button>

@@ -6,8 +6,14 @@ import axios from "axios";
 import { UploadSimpleIcon } from "@phosphor-icons/react";
 
 const UploadPicture = ({ onImageSelect, initialImage, disabled }) => {
+  const authUser = JSON.parse(localStorage.getItem("authUser"));
+  const img =
+    authUser?.landlordProfile?.profileImage ||
+    authUser?.tenantProfile?.profileImage ||
+    null;
+
   const { updateProfile } = useProfile();
-  const [preview, setPreview] = useState(initialImage || null);
+  const [preview, setPreview] = useState(initialImage || img);
   const fileInputRef = useRef(null);
 
   useEffect(() => {

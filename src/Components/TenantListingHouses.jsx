@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TenantListingSidebar from "./TenantListingSidebar";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -38,8 +38,33 @@ const filterOptions = [
 
 const TenantListingHouses = ({ properties = [] }) => {
   const [filter, setFilter] = useState("featured");
+  const [filterOptions, setFilterOptions] = useState(["featured"]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    const fetchPropertyTypes = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/property`);
+        const data = await res.json();
+        const properties = data?.data?.properties || [];
+
+        const types = Array.from(
+          new Set(
+            properties
+              .map((p) => p.type?.toLowerCase())
+              .filter((type) => !!type)
+          )
+        );
+
+        setFilterOptions(["featured", ...types]);
+      } catch (err) {
+        console.error("Failed to fetch property types:", err);
+      }
+    };
+
+    fetchPropertyTypes();
+  }, []);
 
   // Filter and format
   const filteredHouses = properties
@@ -71,8 +96,6 @@ const TenantListingHouses = ({ properties = [] }) => {
 
   return (
     <section className="mt-10 gap-10">
-      {/* <TenantListingSidebar /> */}
-
       <div className="lg:col-span-2 col-span-3 space-y-6">
         {/* Filters */}
         <div className="flex flex-wrap gap-3">

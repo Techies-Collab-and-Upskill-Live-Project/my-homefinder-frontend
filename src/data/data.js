@@ -136,6 +136,7 @@ export const nav_links = [
 
 const role = JSON.parse(localStorage.getItem("user"))?.user;
 export const auth_links = [
+  { text: "Home", path: "/" },
   {
     text: "Overview",
     path: role?.role.name === "LANDLORD" ? "/landlordListing" : "tenantlisting",

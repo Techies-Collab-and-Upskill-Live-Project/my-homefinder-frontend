@@ -52,7 +52,11 @@ const ProfileForm = () => {
   const navigate = useNavigate();
   const [showSkipModal, setShowSkipModal] = useState(false);
   const userId = JSON.parse(localStorage.getItem("user")).user.id;
-  const user = JSON.parse(localStorage.getItem("user")).user;
+  const user = JSON.parse(localStorage.getItem("authUser"));
+  const fullName =
+    user?.landlordProfile?.fullName || user?.tenantProfile?.fullName;
+  const image =
+    user?.landlordProfile?.profileImage || user?.tenantProfile?.profileImage;
   const token = JSON.parse(localStorage.getItem("user")).token.token;
 
   const handleSkip = () => {
@@ -91,7 +95,7 @@ const ProfileForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      fullName: user.fullName || "",
+      fullName: fullName || "",
       // phone: "",
       // city: "",
       // state: "",
@@ -107,8 +111,6 @@ const ProfileForm = () => {
           fullName,
           NIN,
         };
-
-        console.log("Submitting profile data:", payload);
 
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/users/updateprofile`,
@@ -130,6 +132,12 @@ const ProfileForm = () => {
         const result = await response.json();
 
         localStorage.setItem("completed_verification_tenant", "true");
+
+        toast.success("Profile saved successfully!");
+
+        setTimeout(() => {
+          navigate("/tenantListing");
+        }, 1000);
         setTimeout(() => {
           toast.success("Profile saved successfully!");
           navigate("/tenantListing");

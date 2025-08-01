@@ -69,7 +69,7 @@ const ProfileFormLandlord = () => {
     NIN: Yup.string()
       .matches(/^\d{11}$/, "NIN must be 11 digits")
       .required("NIN is required"),
-    preference: Yup.string().oneOf(["CALL", "CHAT", "BOTH"]),
+    preference: Yup.string().oneOf(["CALLS", "CHAT", "BOTH"]),
     otherInfo: Yup.string(), // Optional field
   });
   const userId = JSON.parse(localStorage.getItem("user")).user.id;
@@ -468,7 +468,7 @@ const ProfileFormLandlord = () => {
                   value="CALLS"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preference === "CALL"}
+                  checked={formik.values.preference === "CALLS"}
                   type="radio"
                 />
                 Calls
@@ -480,9 +480,10 @@ const ProfileFormLandlord = () => {
                 <input
                   name="preference"
                   value="CHAT"
+                  disabled
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preference === "CHAT"}
+                  // checked={formik.values.preference === "CHAT"}
                   type="radio"
                 />
                 Chat

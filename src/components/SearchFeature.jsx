@@ -1,62 +1,60 @@
 import React, { useState } from "react";
-import { property_filter } from "../data/property_filter";
+import axios from "axios";
 import { MagnifyingGlassIcon, MapPinIcon, Tag } from "@phosphor-icons/react";
 
 const SearchFeature = () => {
   const [isRent, setIsRent] = useState(true);
-  
-  // Helper function to format strings (remove hyphens)
-  const formatString = (str) => {
-    return str.replace(/-/g, ' ');
-  };
   const [searchCriteria, setSearchCriteria] = useState({
     propertyType: "",
     location: "",
     price: "",
   });
+  const [searchResults, setSearchResults] = useState([]);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const filterListings = () => {
-    let filtered = property_filter;
-
-    // Filter by Rent/Lease
-    if (isRent) {
-      filtered = filtered.filter(listing => listing.rentOrLease === "rent");
-     } else {
-        filtered = filtered.filter(listing => listing.rentOrLease === "lease"); 
-      } 
-    
-    // Filter by Property Type
-    if (searchCriteria.propertyType) {
-      filtered = filtered.filter(listing => listing.type === searchCriteria.propertyType); 
-    }
-
-    // Filter by Location
-    if (searchCriteria.location) {
-      filtered = filtered.filter(listing => listing.location === searchCriteria.location);
-    }
-
-    // Filter by Price Range
-    if (searchCriteria.price) {
-      const [min, max] = searchCriteria.price.split("-").map(Number);
-      filtered = filtered.filter(listing => listing.price >= min && listing.price <= max);
-    }
-
-    return filtered
-    };
+  const formatString = (str) => str.replace(/-/g, " ");
 
   const handleSelectChange = (e) => {
     const { name, value } = e.target;
     setSearchCriteria((prev) => ({ ...prev, [name]: value }));
   };
 
-  const [searchResults, setSearchResults] = useState([]);
-  const [hasSearched, setHasSearched] = useState(false);
+  const handleSearch = async () => {
+    const { propertyType, location, price } = searchCriteria;
+    const [minPrice, maxPrice] = price
+      ? price.split("-").map(Number)
+      : [undefined, undefined];
 
-  const handleSearch = () => {
-    const results = filterListings();
-    setSearchResults(results);
-    setHasSearched(true);
+    setLoading(true);
+    setHasSearched(false);
+
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/property`, {
+        params: {
+          type: propertyType || undefined,
+          location: location || undefined,
+          rentOrLease: isRent ? "rent" : "lease",
+          minPrice,
+          maxPrice,
+        },
+      });
+
+      const data = res.data?.data?.properties || [];
+      setSearchResults(Array.isArray(data) ? data : [data]);
+    } catch (err) {
+      console.error("Failed to fetch search results:", err);
+      setSearchResults([]);
+    } finally {
+      setLoading(false);
+      setHasSearched(true);
+    }
   };
+
+  const isSearchDisabled =
+    !searchCriteria.propertyType &&
+    !searchCriteria.location &&
+    !searchCriteria.price;
 
   return (
     <>
@@ -101,10 +99,16 @@ const SearchFeature = () => {
                 <option value="self-contain-apartment">
                   Self-Contain Apartment
                 </option>
-                <option value="2-bed-room-apartment">2-Bed Room Apartment</option>
+                <option value="2-bed-room-apartment">
+                  2-Bed Room Apartment
+                </option>
                 <option value="duplex">Duplex</option>
-                <option value="3-bed-room-apartment">3-BedRoom Apartment</option>
-                <option value="4-bed-room-apartment">4-BedRoom Apartment</option>
+                <option value="3-bed-room-apartment">
+                  3-BedRoom Apartment
+                </option>
+                <option value="4-bed-room-apartment">
+                  4-BedRoom Apartment
+                </option>
                 <option value="warehouse">Warehouse</option>
                 <option value="church-hall">Church Hall</option>
                 <option value="studio">Studio</option>
@@ -156,7 +160,12 @@ const SearchFeature = () => {
           <div className="flex justify-center">
             <button
               onClick={handleSearch}
-              className="w-full sm:w-auto px-6 py-3 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition duration-300"
+              disabled={isSearchDisabled}
+              className={`w-full sm:w-auto px-6 py-3 text-sm font-semibold rounded-xl transition duration-300 ${
+                isSearchDisabled
+                  ? "bg-gray-400 text-white cursor-not-allowed"
+                  : "bg-green-600 text-white hover:bg-green-700"
+              }`}
             >
               Search
             </button>
@@ -164,7 +173,7 @@ const SearchFeature = () => {
         </div>
       </div>
 
-      {/* Search Results - Outside the absolutely positioned container */}
+      {/* Search Results */}
       {hasSearched && (
         <div className="w-full max-w-7xl mx-auto px-4 mt-32">
           <div className="bg-white rounded-2xl shadow-lg p-6">
@@ -173,14 +182,21 @@ const SearchFeature = () => {
                 Search Results
               </h3>
               <p className="text-sm text-gray-600">
-                Found {searchResults.length} propert{searchResults.length !== 1 ? 'ies' : 'y'}
+                Found {searchResults.length} propert
+                {searchResults.length !== 1 ? "ies" : "y"}
               </p>
             </div>
 
-            {searchResults.length === 0 ? (
+            {loading ? (
+              <p className="text-center text-gray-500">Loading results...</p>
+            ) : searchResults.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-500 text-lg">No properties found matching your criteria.</p>
-                <p className="text-sm text-gray-400 mt-2">Try adjusting your search filters.</p>
+                <p className="text-gray-500 text-lg">
+                  No properties found matching your criteria.
+                </p>
+                <p className="text-sm text-gray-400 mt-2">
+                  Try adjusting your search filters.
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -192,7 +208,9 @@ const SearchFeature = () => {
                     <div className="h-48 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
                       <div className="text-center">
                         <div className="text-4xl mb-2">🏠</div>
-                        <p className="text-sm text-gray-600 capitalize">{formatString(property.type)}</p>
+                        <p className="text-sm text-gray-600 capitalize">
+                          {formatString(property.type)}
+                        </p>
                       </div>
                     </div>
                     <div className="p-4 flex flex-col gap-2 flex-grow">

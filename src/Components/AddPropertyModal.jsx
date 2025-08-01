@@ -148,10 +148,10 @@ export default function AddPropertyModal({ onClose, onSave }) {
               }
             >
               <option value="APARTMENT">Apartment</option>
-              <option value="DUPLEX">Duplex</option>
-              <option value="SELF-CONTAIN">Self Contain</option>
-              <option value="BUNGALOW">Bungalow</option>
               <option value="HOUSE">House</option>
+              <option value="STUDIO">Studio</option>
+              <option value="ROOM">Room</option>
+              <option value="OFFICE">Office</option>
             </select>
           </div>
         </form>

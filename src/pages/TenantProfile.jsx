@@ -65,21 +65,10 @@ const TenantProfile = () => {
 
   useEffect(() => {
     setIsLoading(true);
+
     setTimeout(() => {
-      const storedUser = localStorage.getItem("user");
       const storedAuthUser = localStorage.getItem("authUser");
-
-      let userData = null;
       let authUserData = null;
-
-      if (storedUser) {
-        try {
-          const parsedUser = JSON.parse(storedUser);
-          userData = parsedUser.user;
-        } catch {
-          userData = null;
-        }
-      }
 
       if (storedAuthUser) {
         try {
@@ -89,13 +78,15 @@ const TenantProfile = () => {
         }
       }
 
-      const name = userData?.fullName || "Lucy Favy";
-      const email = userData?.email || "lucyfavy@email.com";
-      const phone = userData?.phone || "08157648539";
+      const profile =
+        authUserData?.tenantProfile || authUserData?.landlordProfile || {};
+
+      const name = profile?.fullName || "Lucy Favy";
+      const email = authUserData?.email || "lucyfavy@email.com";
+      const phone = profile?.phoneNumber || "08157648539";
 
       const image =
-        authUserData?.tenantProfile?.profileImage ||
-        authUserData?.landlordProfile?.profileImage ||
+        profile?.profileImage ||
         localStorage.getItem("profileImage") ||
         generateAvatar(name);
 
@@ -170,8 +161,6 @@ const TenantProfile = () => {
         return;
       }
 
-      console.log(token);
-
       const formData = new FormData();
       formData.append("profileImage", file);
       formData.append("folder", "profile-pictures");
@@ -229,7 +218,6 @@ const TenantProfile = () => {
             src={profileData.image}
             alt="Profile"
             className="w-24 h-24 rounded-full object-cover cursor-pointer hover:opacity-80 transition-all"
-            onClick={() => setIsEditImageModalOpen(true)}
           />
           <div className="flex flex-col items-center sm:items-start">
             <p className="text-xl font-semibold text-gray-800">
@@ -251,11 +239,6 @@ const TenantProfile = () => {
           <p className="text-base font-semibold text-gray-700">
             Contact Details
           </p>
-          <PencilLine
-            size={24}
-            onClick={() => setIsEditNumberModalOpen(true)}
-            className="cursor-pointer text-gray-500 hover:text-gray-700"
-          />
         </div>
         <div className="border-t border-gray-200 my-2" />
         <div className="flex flex-col gap-3">
@@ -269,116 +252,6 @@ const TenantProfile = () => {
           </div>
         </div>
       </div>
-
-      {/* Payments */}
-      <div className="border border-gray-200 rounded-xl p-6 flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <p className="text-base font-semibold text-gray-700">
-            Payment Methods
-          </p>
-          <button
-            onClick={() => setIsEditCardModalOpen(true)}
-            className="text-sm font-medium text-black bg-transparent border border-gray-300 px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
-          >
-            Edit
-          </button>
-        </div>
-        <div className="border-t border-gray-200 my-2" />
-        <div className="flex items-center gap-4">
-          <img
-            src={Mastercard}
-            alt="Mastercard"
-            className="w-12 h-8 object-contain"
-          />
-          <div className="flex flex-col">
-            <p className="text-base text-gray-800">{cardDetails.number}</p>
-            <p className="text-sm text-gray-500 -mt-1">{cardDetails.type}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Edit Image Popup */}
-      {isEditImageModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold mb-4">
-              Upload New Profile Image
-            </h3>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              disabled={isImageSaving}
-              className="mb-4"
-            />
-            {imageError && (
-              <p className="text-red-600 text-sm mb-4">{imageError}</p>
-            )}
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setIsEditImageModalOpen(false)}
-                className="text-sm text-gray-600 hover:text-gray-800"
-                disabled={isImageSaving}
-              >
-                {isImageSaving ? "Loading..." : "Cancel"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Card Popup */}
-      {isEditCardModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold mb-4">Edit Card Details</h3>
-            <form
-              onSubmit={handleSaveCardDetails}
-              className="flex flex-col gap-4"
-            >
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Card Number
-                </label>
-                <input
-                  type="text"
-                  name="cardNumber"
-                  defaultValue={cardDetails.number}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 mt-1"
-                  required
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Card Type
-                </label>
-                <input
-                  type="text"
-                  name="cardType"
-                  defaultValue={cardDetails.type}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 mt-1"
-                  required
-                />
-              </div>
-              <div className="flex justify-end gap-3 mt-4">
-                <button
-                  type="button"
-                  onClick={() => setIsEditCardModalOpen(false)}
-                  className="text-sm text-gray-600 hover:text-gray-800"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="text-sm bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Other Modals */}
       {isEditNumberModalOpen && (

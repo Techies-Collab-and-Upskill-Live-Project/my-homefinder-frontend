@@ -48,13 +48,17 @@ const HouseDetails = ({ properties }) => {
             ))}
           </div>
 
-          {images?.length > 4 && (
-            <button
-              onClick={() => setShowAllImages(true)}
-              className="text-sm text-green-600 mt-2 hover:underline"
-            >
-              View more images
-            </button>
+          {images?.length > 1 && (
+            <div className="grid grid-cols-2 overflow-x-scroll md:grid-cols-3 gap-4">
+              {images.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img.url}
+                  alt={`Image ${idx}`}
+                  className="rounded-lg h-40 w-full object-cover"
+                />
+              ))}
+            </div>
           )}
         </div>
 
@@ -110,33 +114,6 @@ const HouseDetails = ({ properties }) => {
           </div>
         </div>
       </div>
-
-      {/* All Images Modal */}
-      {showAllImages && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6">
-          <div className="bg-white p-4 rounded-xl max-h-[80vh] overflow-y-auto w-full max-w-4xl">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold">All Images</h3>
-              <button
-                onClick={() => setShowAllImages(false)}
-                className="text-gray-600 hover:text-red-600 text-sm"
-              >
-                Close
-              </button>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {images.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img.url}
-                  alt={`Image ${idx}`}
-                  className="rounded-lg h-40 w-full object-cover"
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Featured Properties */}
       <div className="mt-10">

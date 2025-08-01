@@ -17,17 +17,12 @@ const PropertyHero = () => {
         const safeProperties = Array.isArray(data) ? data : [data];
         setProperties(safeProperties);
 
-        // Flatten all image URLs from all properties
         const images = safeProperties.flatMap(
           (property) => property.images?.map((img) => img.url) || []
         );
 
         setAllImages(images);
-
-        // Set the first image as main image
-        if (images.length > 0) {
-          setMainImage(images[0]);
-        }
+        if (images.length > 0) setMainImage(images[0]);
       } catch (err) {
         console.error("Error fetching properties:", err);
         setError("Failed to fetch properties");
@@ -39,37 +34,41 @@ const PropertyHero = () => {
     fetchProperties();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="text-gray-600">Loading properties...</p>;
   if (error) return <p className="text-red-600">{error}</p>;
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
-      <h1 className="text-3xl font-bold mb-6">Top Movers</h1>
+    <div className="bg-white rounded-2xl shadow-lg p-6">
+      <h1 className="text-3xl font-semibold mb-6 text-gray-800">Top Movers</h1>
 
-      {/* Main Image */}
-      <div className="w-full mb-4">
-        {mainImage && (
-          <img
-            src={mainImage}
-            alt="Main Display"
-            className="w-full h-72 object-cover rounded-lg"
-          />
-        )}
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Main Image */}
+        <div className="md:col-span-2">
+          {mainImage && (
+            <img
+              src={mainImage}
+              alt="Main Display"
+              className="w-full h-[500px] object-cover rounded-xl shadow-sm"
+            />
+          )}
+        </div>
 
-      {/* Image Carousel */}
-      <div className="flex gap-4 overflow-x-auto">
-        {allImages.map((imgUrl, index) => (
-          <img
-            key={index}
-            src={imgUrl}
-            alt={`Thumbnail ${index + 1}`}
-            className={`w-24 h-24 object-cover rounded-md cursor-pointer border-2 ${
-              mainImage === imgUrl ? "border-green-600" : "border-transparent"
-            }`}
-            onClick={() => setMainImage(imgUrl)}
-          />
-        ))}
+        {/* Thumbnails */}
+        <div className="md:col-span-1 content-start grid grid-cols-3 sm:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto pr-2">
+          {allImages.map((imgUrl, index) => (
+            <img
+              key={index}
+              src={imgUrl}
+              alt={`Thumbnail ${index + 1}`}
+              className={`w-full h-24 object-cover rounded-md cursor-pointer border-2 transition duration-300 ${
+                mainImage === imgUrl
+                  ? "border-green-600 scale-105"
+                  : "border-gray-200"
+              }`}
+              onClick={() => setMainImage(imgUrl)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

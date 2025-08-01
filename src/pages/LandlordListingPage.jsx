@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import TopNavbar from "../layout/TopNavbar";
-import Sidebar from "../layout/Sidebar";
+import { useNavigate } from "react-router-dom";
 import PropertyHero from "../components/PropertyHero";
 import { motion } from "framer-motion";
 
-// Random image list
 const randomImages = [
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
   "https://images.unsplash.com/photo-1572120360610-d971b9b7886d?auto=format&fit=crop&w=800&q=80",
@@ -15,22 +13,23 @@ const randomImages = [
 ];
 
 const LandlordListingPage = () => {
-  const [showMenu, setShowMenu] = useState(false);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
-  };
+  const userId = JSON.parse(localStorage.getItem("user"))?.user.id;
+  const token = JSON.parse(localStorage.getItem("user"))?.token.token;
 
   useEffect(() => {
     const fetchUserProperties = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/property/user`,
+          `${
+            import.meta.env.VITE_API_URL
+          }/property/landlord/${userId}?page=1&limit=10`,
           {
-            withCredentials: true, // ensure cookies/token are sent
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
@@ -47,16 +46,20 @@ const LandlordListingPage = () => {
     fetchUserProperties();
   }, []);
 
+  const handlePropertyClick = (id) => {
+    navigate(`/property/${id}`);
+  };
+
   return (
     <section className="flex flex-col min-h-screen bg-gray-50">
       <div className="flex flex-1">
-        {/* Main Content */}
         <div className="flex-1 p-4 md:p-8 mt-[95px]">
           <PropertyHero />
 
-          {/* Property Listings */}
           <div className="mt-8">
-            <h2 className="text-xl font-bold mb-4">My Properties</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              My Properties
+            </h2>
 
             {loading ? (
               <p className="text-center">Loading properties...</p>
@@ -65,11 +68,12 @@ const LandlordListingPage = () => {
             ) : properties.length === 0 ? (
               <p className="text-center text-gray-500">No properties found.</p>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {properties.map((property, index) => (
                   <motion.div
                     key={property.id || index}
-                    className="rounded-xl overflow-hidden shadow bg-white"
+                    onClick={() => handlePropertyClick(property.id)}
+                    className="cursor-pointer group bg-white rounded-2xl overflow-hidden shadow hover:shadow-lg transition-all duration-300"
                     whileHover={{ scale: 1.02 }}
                   >
                     <img
@@ -80,16 +84,16 @@ const LandlordListingPage = () => {
                         ]
                       }
                       alt={property.title || "Property"}
-                      className="w-full h-52 object-cover"
+                      className="w-full h-52 object-cover group-hover:brightness-95 transition"
                     />
-                    <div className="p-4 space-y-2">
-                      <h3 className="text-lg font-semibold">
+                    <div className="p-4 space-y-1">
+                      <h3 className="text-lg font-semibold text-gray-900 truncate">
                         {property.title || "Untitled Property"}
                       </h3>
-                      <p className="text-sm text-gray-600">
-                        {property.address || "No address"}
+                      <p className="text-sm text-gray-500 truncate">
+                        {property.address || "No address provided"}
                       </p>
-                      <p className="text-green-700 text-sm capitalize">
+                      <p className="text-green-600 text-sm capitalize">
                         {(property.type || "Unknown").toLowerCase()}
                       </p>
                       <p className="text-xl font-bold text-gray-800">
@@ -100,7 +104,15 @@ const LandlordListingPage = () => {
                       </p>
                       <p className="text-xs text-gray-500">
                         Status:{" "}
-                        {property.isAvailable ? "Available" : "Not Available"}
+                        <span
+                          className={
+                            property.isAvailable
+                              ? "text-green-700"
+                              : "text-red-500"
+                          }
+                        >
+                          {property.isAvailable ? "Available" : "Not Available"}
+                        </span>
                       </p>
                     </div>
                   </motion.div>

@@ -24,35 +24,49 @@ export default function HomePage() {
 
       localStorage.setItem("user", JSON.stringify(data));
 
-      const user = JSON.parse(localStorage.getItem("user")).user;
-      const shouldLogin =
-        localStorage.getItem("completed_verification_landlord") ||
-        localStorage.getItem("completed_verification_tenant");
+      const token = data?.token?.token;
+      const userId = data?.user?.id;
+
+      if (token && userId) {
+        const response = await axios.get(`${API_URL}/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        localStorage.setItem("authUser", JSON.stringify(response.data));
+      }
+
+      const user = data?.user;
+      const completedVerificationRenter = localStorage.getItem(
+        "completed_verification_tenant"
+      );
       const userRole = user.role?.name;
 
       toast.success("Login successful");
 
       setTimeout(() => {
-        if (shouldLogin === "true") {
-          if (userRole === "RENTER") {
+        if (userRole === "RENTER") {
+          if (completedVerificationRenter === "true") {
             navigate("/tenantListing");
             window.location.reload();
-          } else if (userRole === "LANDLORD") {
+          } else {
+            navigate("/tenantForm");
+          }
+        } else if (userRole === "LANDLORD") {
+          const completedVerificationLandlord = localStorage.getItem(
+            "completed_verification_landlord"
+          );
+          if (completedVerificationLandlord === "true") {
             navigate("/landlordListing");
             window.location.reload();
           } else {
-            navigate("/");
+            navigate("/idSelection");
           }
         } else {
-          if (userRole === "RENTER") {
-            navigate("/tenantForm");
-          } else if (userRole === "LANDLORD") {
-            navigate("/idSelection");
-          } else {
-            navigate("/");
-          }
+          navigate("/");
         }
-      }, 1000); // optional delay before navigating
+      }, 1000);
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed");
     } finally {
