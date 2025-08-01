@@ -52,6 +52,7 @@ export default function HomePage() {
             window.location.reload();
           } else {
             navigate("/tenantForm");
+            window.location.reload();
           }
         } else if (userRole === "LANDLORD") {
           const completedVerificationLandlord = localStorage.getItem(
