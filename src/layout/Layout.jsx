@@ -1,11 +1,16 @@
 import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "axios";
 
 const Layout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const hideNavbarRoutes = ["/messages"];
+
+  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   useEffect(() => {
     const fetchAuthUser = async () => {
@@ -45,7 +50,7 @@ const Layout = () => {
       } catch (err) {
         console.error("Failed to fetch authenticated user:", err);
         if (err.response?.status === 401) {
-          navigate("/login");
+          navigate("/");
         }
       }
     };
@@ -59,7 +64,7 @@ const Layout = () => {
       <main>
         <Outlet />
       </main>
-      <Footer />
+      {!shouldHideNavbar && <Footer />}
     </div>
   );
 };

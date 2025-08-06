@@ -32,7 +32,6 @@ function App() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState(null);
 
   useEffect(() => {
@@ -54,94 +53,94 @@ function App() {
   }, []);
   return (
     <MessagingProvider>
-    <>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route index element={<Landing />} />
-          <Route path="/decisionpage" element={<DecisionPage />} />
-          <Route path="/idSelection" element={<IDTypeSelection />} />
-          <Route path="/idDetails" element={<IdDetails />} />
-          <Route
-            path="/explore"
-            element={<Explore properties={properties} />}
-          />
+      <>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<Landing />} />
+            <Route path="/decisionpage" element={<DecisionPage />} />
+            <Route path="/idSelection" element={<IDTypeSelection />} />
+            <Route path="/idDetails" element={<IdDetails />} />
+            <Route
+              path="/explore"
+              element={<Explore properties={properties} />}
+            />
 
-          <Route
-            path="/property/:id"
-            element={<HouseDetails properties={properties} />}
-          />
-          <Route
-            path="/landlordlistingpage"
-            element={
-              <ProtectedRoute requiredRole="landlord">
-                <LandlordListingPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/messages"
-            element={
-              // <ProtectedRoute>
+            <Route
+              path="/property/:id"
+              element={<HouseDetails properties={properties} />}
+            />
+            <Route
+              path="/landlordlistingpage"
+              element={
+                <ProtectedRoute requiredRole="landlord">
+                  <LandlordListingPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                // <ProtectedRoute>
                 <Messages />
-              // </ProtectedRoute>
-            }
-          />
-          <Route path="/otpverification" element={<OtpVerification />} />
-          <Route
-            path="/tenantForm"
-            element={
-              <ProtectedRoute>
-                <ProfileForm />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/landlordForm"
-            element={
-              <ProtectedRoute>
-                <ProfileFormLandlord />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/tenantprofile"
-            element={
-              <ProtectedRoute>
-                <TenantProfile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/tenantlisting"
-            element={
-              <ProtectedRoute>
-                <TenantListing properties={properties} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/landlordListing"
-            element={
-              <ProtectedRoute>
-                <LandlordListingPage properties={properties} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/landlordProfile"
-            element={
-              <ProtectedRoute>
-                <LandlordProfileB4Listing />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/tenantlogin" element={<TenantLogin />} />
-          <Route path="/tenantsignuppage" element={<TenantSignUpPage />} />
-          <Route path="/forgotPassword" element={<ForgotPasswordPage />} />
-          <Route path="/resetPassword" element={<ResetPasswordPage />} />
-        </Route>
-      </Routes>
-    </>
+                // </ProtectedRoute>
+              }
+            />
+            <Route path="/otpverification" element={<OtpVerification />} />
+            <Route
+              path="/tenantForm"
+              element={
+                <ProtectedRoute>
+                  <ProfileForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/landlordForm"
+              element={
+                <ProtectedRoute>
+                  <ProfileFormLandlord />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/tenantprofile"
+              element={
+                <ProtectedRoute>
+                  <TenantProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/tenantlisting"
+              element={
+                <ProtectedRoute>
+                  <TenantListing properties={properties} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/landlordListing"
+              element={
+                <ProtectedRoute>
+                  <LandlordListingPage properties={properties} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/landlordProfile"
+              element={
+                <ProtectedRoute>
+                  <LandlordProfileB4Listing />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/tenantlogin" element={<TenantLogin />} />
+            <Route path="/tenantsignuppage" element={<TenantSignUpPage />} />
+            <Route path="/forgotPassword" element={<ForgotPasswordPage />} />
+            <Route path="/resetPassword" element={<ResetPasswordPage />} />
+          </Route>
+        </Routes>
+      </>
     </MessagingProvider>
   );
 }
