@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AllMessages from "../Components/AllMessages";
 import MessageDetails from "../Components/MessageDetails";
+import { useMessaging } from "../contexts/MessagingContext";
+
 
 const Messages = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
@@ -13,6 +15,21 @@ const Messages = () => {
   const handleBack = () => {
     setSelectedMessage(null);
   };
+
+  const { messages, sendMessage } = useMessaging();
+
+const handleSend = () => {
+  const msg = {
+    id: "",
+    senderId: "user1",
+    receiverId: "user2",
+    content: "Hello!",
+    propertyId: "123",
+    createdAt: new Date().toISOString(),
+  };
+  sendMessage(msg);
+};
+
 
   useEffect(() => {
     const handleResize = () => {

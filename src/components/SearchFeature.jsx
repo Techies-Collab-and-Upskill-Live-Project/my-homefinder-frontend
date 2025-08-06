@@ -15,7 +15,7 @@ const SearchFeature = () => {
 
   const formatString = (str) => str.replace(/-/g, " ");
 
-  const handleSelectChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSearchCriteria((prev) => ({ ...prev, [name]: value }));
   };
@@ -89,70 +89,40 @@ const SearchFeature = () => {
             {/* Property Type */}
             <div className="relative flex items-center gap-2 border border-slate-300 rounded-lg px-3 py-2 focus-within:border-green-500 transition">
               <MagnifyingGlassIcon className="text-gray-400" size={20} />
-              <select
+              <input
+                type="text"
                 name="propertyType"
                 value={searchCriteria.propertyType}
-                onChange={handleSelectChange}
-                className="w-full bg-transparent border-none outline-none text-sm"
-              >
-                <option value="">Property Type</option>
-                <option value="self-contain-apartment">
-                  Self-Contain Apartment
-                </option>
-                <option value="2-bed-room-apartment">
-                  2-Bed Room Apartment
-                </option>
-                <option value="duplex">Duplex</option>
-                <option value="3-bed-room-apartment">
-                  3-BedRoom Apartment
-                </option>
-                <option value="4-bed-room-apartment">
-                  4-BedRoom Apartment
-                </option>
-                <option value="warehouse">Warehouse</option>
-                <option value="church-hall">Church Hall</option>
-                <option value="studio">Studio</option>
-              </select>
+                onChange={handleInputChange}
+                placeholder="Property Type (e.g., apartment, duplex)"
+                className="w-full bg-transparent border-none outline-none text-sm placeholder-gray-400"
+              />
             </div>
 
             {/* Location */}
             <div className="relative flex items-center gap-2 border border-slate-300 rounded-lg px-3 py-2 focus-within:border-green-500 transition">
               <MapPinIcon className="text-gray-400" size={20} />
-              <select
+              <input
+                type="text"
                 name="location"
                 value={searchCriteria.location}
-                onChange={handleSelectChange}
-                className="w-full bg-transparent border-none outline-none text-sm"
-              >
-                <option value="">Location</option>
-                <option value="lagos">Lagos</option>
-                <option value="ikeja">Ikeja</option>
-                <option value="surulere">Surulere</option>
-                <option value="lekki-phase-1">Lekki Phase 1</option>
-                <option value="shomolu">Shomolu</option>
-                <option value="oshodi-isolo">Oshodi/Isolo</option>
-                <option value="illupeju">Illupeju</option>
-                <option value="victoria-island">Victoria Island</option>
-                <option value="badagry">Badagry</option>
-              </select>
+                onChange={handleInputChange}
+                placeholder="Location (e.g., Lagos, Ikeja)"
+                className="w-full bg-transparent border-none outline-none text-sm placeholder-gray-400"
+              />
             </div>
 
             {/* Price */}
             <div className="relative flex items-center gap-2 border border-slate-300 rounded-lg px-3 py-2 focus-within:border-green-500 transition">
               <Tag className="text-gray-400" size={20} />
-              <select
+              <input
+                type="text"
                 name="price"
                 value={searchCriteria.price}
-                onChange={handleSelectChange}
-                className="w-full bg-transparent border-none outline-none text-sm"
-              >
-                <option value="">Price</option>
-                <option value="100000-200000">100,000 - 200,000</option>
-                <option value="201000-300000">201,000 - 300,000</option>
-                <option value="301000-400000">301,000 - 400,000</option>
-                <option value="401000-500000">401,000 - 500,000</option>
-                <option value="501000-600000">501,000 - 600,000</option>
-              </select>
+                onChange={handleInputChange}
+                placeholder="Price range (e.g., 100000-200000)"
+                className="w-full bg-transparent border-none outline-none text-sm placeholder-gray-400"
+              />
             </div>
           </div>
 

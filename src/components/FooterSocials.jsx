@@ -1,5 +1,10 @@
 const FooterSocials = () => {
-  const socials = ["Facebook", "LinkedIn", "Instagram", "X"];
+  const socials = [
+    {name: "Facebook", url:"https://facebook.com"},
+    {name: "LinkedIn", url:"https://linkedin.com"},
+    {name: "Instagram", url:"https://instagram.com"},
+    {name: "X", url:"https://x.com"},
+  ];
 
   return (
     <div>
@@ -8,10 +13,11 @@ const FooterSocials = () => {
         {socials.map((social, index) => (
           <li key={index}>
             <a
-              href="/"
+              href={social.url}
               className="text-gray-700 hover:text-green-600 transition"
+              target="blank"
             >
-              {social}
+              {social.name}
             </a>
           </li>
         ))}
