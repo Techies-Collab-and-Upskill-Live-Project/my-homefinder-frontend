@@ -80,9 +80,9 @@ function App() {
               <Route
                 path="/messages"
                 element={
-                  // <ProtectedRoute>
+                  <ProtectedRoute>
                   <Messages />
-                  // </ProtectedRoute>
+                  </ProtectedRoute>
                 }
               />
               <Route path="/otpverification" element={<OtpVerification />} />
