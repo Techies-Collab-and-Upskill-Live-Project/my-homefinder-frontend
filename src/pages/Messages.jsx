@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
 import AllMessages from "../Components/AllMessages";
-import MessageDetails from "../components/MessageDetails";
+import MessageDetails from "../Components/MessageDetails";
 import { useMessaging } from "../contexts/MessagingContext";
 import { useAuth } from "../contexts/AuthContext";
 
