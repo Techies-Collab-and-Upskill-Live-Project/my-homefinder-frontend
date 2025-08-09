@@ -162,11 +162,6 @@ export default function LandlordProfileB4Listing() {
             />
             <p className="mt-4 text-lg font-medium flex items-center gap-2">
               {userData?.fullName || "User"}
-              {userData?.isVerified ? (
-                <img src="/images/verified.png" className="w-8" />
-              ) : (
-                ""
-              )}
             </p>
             <small className="text-green-600">{userData?.email}</small>
           </div>

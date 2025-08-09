@@ -1,6 +1,9 @@
 import { HeartIcon, MailboxIcon, Star } from "@phosphor-icons/react";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const StarRating = ({ rating, onChange }) => {
   return (
@@ -21,55 +24,131 @@ const StarRating = ({ rating, onChange }) => {
   );
 };
 
-const HouseDetails = ({ properties }) => {
+const HouseDetails = ({ properties, setProperties }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const house = properties.find((item) => item.id === id);
-  const [showAllImages, setShowAllImages] = useState(false);
+  const token = JSON.parse(localStorage.getItem("user"))?.token.token;
+  const ratingMap = {
+    1: "ONE",
+    2: "TWO",
+    3: "THREE",
+    4: "FOUR",
+    5: "FIVE",
+  };
+
+  // Add this helper mapping near the top of your component
+  const ratingValueMap = {
+    ONE: 1,
+    TWO: 2,
+    THREE: 3,
+    FOUR: 4,
+    FIVE: 5,
+  };
 
   // Review-related states
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
-  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const propertyId = id;
 
   useEffect(() => {
-    const fetchReviews = async () => {
+    const getReviews = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/reviews/${id}`
+        const rev = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/reviews/property/${propertyId}?limit=5`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        if (!response.ok) throw new Error("Failed to fetch reviews");
-        const data = await response.json();
-        setReviews(data);
+        setReviews(rev.data);
       } catch (err) {
-        setError(err.message);
+        console.error(err);
+      }
+    };
+    getReviews();
+  }, [reviews]);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/property`);
+        const data = res.data?.data?.properties || [];
+
+        const matched = data.find((property) => property.id === id);
+        if (matched) {
+          setReviews(matched.reviews || []);
+        } else {
+          setError("Property not found");
+        }
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+        setError("Failed to fetch reviews");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchReviews();
-  }, [id]);
+    fetchProperties();
+  }, [id, setProperties, setReviews]);
 
-  const handleReviewSubmit = () => {
-    if (!reviewText.trim() || rating < 1) return;
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    if (!reviewText.trim() || rating < 1) {
+      toast.warn("Please add a rating and a comment before submitting.");
+      return;
+    }
+
+    const reviewerId = JSON.parse(localStorage.getItem("user"))?.user?.id;
+    const propertyId = id;
 
     const newReview = {
-      id: Date.now(),
-      text: reviewText,
-      rating,
-      date: new Date().toLocaleDateString(),
+      reviewerId,
+      propertyId,
+      rating: ratingMap[rating],
+      comment: reviewText.trim(),
     };
 
-    const updatedReviews = [newReview, ...reviews];
-    setReviews(updatedReviews);
-    localStorage.setItem(`reviews-${id}`, JSON.stringify(updatedReviews));
+    setSubmitting(true);
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/reviews/property/${propertyId}`,
+        newReview,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    // Reset inputs
-    setReviewText("");
-    setRating(0);
+      // Add the new review immediately to the state
+      setReviews((prev) => [
+        {
+          ...newReview,
+          createdAt: new Date().toISOString(), // fallback until backend returns proper date
+          id: res.data?.id || Date.now(), // temporary id until refresh
+        },
+        ...prev,
+      ]);
+
+      toast.success("Your review has been submitted!");
+    } catch (err) {
+      console.error(err.response?.data?.message || "Unable to add review");
+      toast.error(err.response?.data?.message || "Unable to add review");
+    } finally {
+      setReviewText("");
+      setRating(0);
+      setSubmitting(false);
+    }
   };
 
   if (!house)
@@ -87,39 +166,48 @@ const HouseDetails = ({ properties }) => {
     type,
     landlord,
   } = house;
+  const [mainImage, setMainImage] = useState(
+    images?.[0]?.url || "/placeholder.jpg"
+  );
+
+  useEffect(() => {
+    setMainImage(images?.[0]?.url || "/placeholder.jpg");
+  }, [images]);
 
   const featured = properties.filter((item) => item.id !== id).slice(0, 3);
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-8 space-y-10">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       {/* Main Layout */}
       <div className="grid md:grid-cols-2 gap-10 lg:mt-40 mt-20">
         {/* Images */}
         <div className="space-y-4">
           <img
-            src={images?.[0]?.url || "/placeholder.jpg"}
+            src={mainImage}
             alt={title}
             className="rounded-xl w-full h-[420px] object-cover shadow-md"
           />
-          <div className="grid grid-cols-3 gap-3">
-            {images?.slice(1, 4).map((img, idx) => (
-              <img
-                key={idx}
-                src={img.url}
-                alt={`Thumbnail ${idx}`}
-                className="rounded-lg h-24 object-cover w-full cursor-pointer hover:scale-105 transition"
-              />
-            ))}
-          </div>
 
           {images?.length > 1 && (
-            <div className="grid grid-cols-2 overflow-x-scroll md:grid-cols-3 gap-4">
+            <div className="flex items-center overflow-x-scroll gap-4">
               {images.map((img, idx) => (
                 <img
                   key={idx}
                   src={img.url}
+                  onClick={() => setMainImage(img.url)}
                   alt={`Image ${idx}`}
-                  className="rounded-lg h-40 w-full object-cover"
+                  className="rounded-lg h-30 w-full object-cover"
                 />
               ))}
             </div>
@@ -191,10 +279,7 @@ const HouseDetails = ({ properties }) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Rating
             </label>
-            <StarRating
-              rating={reviews.rating}
-              onChange={(star) => setReviews({ ...reviews, rating: star })}
-            />
+            <StarRating rating={rating} onChange={setRating} />
           </div>
 
           {/* Comment */}
@@ -204,10 +289,8 @@ const HouseDetails = ({ properties }) => {
             </label>
             <div className="relative">
               <textarea
-                value={reviews.comment}
-                onChange={(e) =>
-                  setReviews({ ...reviews, comment: e.target.value })
-                }
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
                 placeholder="Write your thoughts here... What did you enjoy or dislike?"
                 rows={5}
                 className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition resize-none"
@@ -221,7 +304,7 @@ const HouseDetails = ({ properties }) => {
               type="submit"
               className="inline-flex items-center justify-center px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-xl shadow-sm transition"
             >
-              Submit Review
+              {submitting ? "Submitting..." : "Submit Review"}
             </button>
           </div>
         </form>
@@ -238,26 +321,38 @@ const HouseDetails = ({ properties }) => {
         </div>
       ) : reviews.length > 0 ? (
         <div className="bg-white rounded-xl shadow-md p-6 space-y-6">
-          <h2 className="text-2xl font-semibold">User Reviews</h2>
+          <h2 className="text-2xl font-semibold">What People Think</h2>
           <div className="space-y-4">
-            {reviews.map((review) => (
-              <div key={review.id} className="border-b pb-4 border-gray-200">
+            {reviews.map((review, index) => (
+              <div key={index} className="border-b pb-4 border-gray-200">
+                <p className="text-gray-700">{review.comment}</p>
                 <div className="flex items-center gap-1 mb-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
                       key={star}
                       size={18}
-                      weight={star <= review.rating ? "fill" : "regular"}
+                      weight={
+                        star <= ratingValueMap[review.rating]
+                          ? "fill"
+                          : "regular"
+                      }
                       className={
-                        star <= review.rating
+                        star <= ratingValueMap[review.rating]
                           ? "text-yellow-500"
                           : "text-gray-300"
                       }
                     />
                   ))}
                 </div>
-                <p className="text-gray-700">{review.text}</p>
-                <p className="text-xs text-gray-400 mt-1">{review.date}</p>
+                <p className="text-xs text-gray-400 mt-1">
+                  {new Date(review.createdAt).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
               </div>
             ))}
           </div>
