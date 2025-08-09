@@ -3,31 +3,44 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { Phone, SmileyIcon, VideoCameraIcon } from "@phosphor-icons/react";
 import { ArrowLeft } from "@phosphor-icons/react";
+import { useMessaging } from "../contexts/MessagingContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const MessageDetails = ({ message, onBack }) => {
-  const [chat, setChat] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const { messages, sendMessage, isConnected, currentConversationId } = useMessaging();
+  const { user } = useAuth();
 
-  // Load initial message when `message` prop updates
-  useEffect(() => {
-    if (message) {
-      setChat([
-        {
-          text: message.text,
-          time: message.time,
-          fromUser: false,
-        },
-      ]);
-    }
-  }, [message]);
+  // Filter messages for this specific conversation
+  const conversationMessages = messages.filter(msg => {
+    // Check by conversationId first
+    if (msg.conversationId === message?.conversationId) return true;
+    
+    // Check by sender/receiver matching the contact
+    if (msg.senderId === message?.contact || msg.receiverId === message?.contact) return true;
+    
+    // Check by receiverId if available (for property conversations)
+    if (message?.receiverId && (msg.receiverId === message.receiverId || msg.senderId === message.receiverId)) return true;
+    
+    return false;
+  });
+
+
 
   const handleSend = () => {
-    if (newMessage.trim()) {
-      setChat((prevChat) => [
-        ...prevChat,
-        { text: newMessage, time: "Now", fromUser: true },
-      ]);
+    if (newMessage.trim() && message) {
+      const messageData = {
+        id: Date.now().toString(),
+        senderId: user?.id || "currentUser",
+        receiverId: message.contact,
+        content: newMessage,
+        propertyId: message.propertyId || "123",
+        conversationId: message.conversationId,
+        createdAt: new Date().toISOString(),
+      };
+      
+      sendMessage(messageData);
       setNewMessage("");
     }
   };
@@ -36,6 +49,14 @@ const MessageDetails = ({ message, onBack }) => {
     setNewMessage((prev) => prev + emoji.native);
     setShowEmojiPicker(false);
   };
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    const chatContainer = document.querySelector('.chat-messages');
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  }, [conversationMessages]);
 
   if (!message) {
     return (
@@ -71,7 +92,17 @@ const MessageDetails = ({ message, onBack }) => {
           <div className="w-12 h-12 border-2 border-green-400 rounded-full bg-slate-500 flex items-center justify-center text-white font-bold">
             {message.contact?.charAt(0).toUpperCase()}
           </div>
-          {message.contact}
+          <div>
+            <div>{message.contact}</div>
+            <div className="text-xs text-gray-500 flex items-center gap-1">
+              {isConnected ? (
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+              ) : (
+                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+              )}
+              {isConnected ? "Online" : "Offline"}
+            </div>
+          </div>
         </div>
 
         <span className="flex items-center gap-4">
@@ -81,24 +112,35 @@ const MessageDetails = ({ message, onBack }) => {
       </div>
 
       {/* Chat bubbles */}
-      <div className="flex-1 overflow-y-auto space-y-4 p-6">
-        {chat.map((msg, index) => (
+      <div className="flex-1 overflow-y-auto space-y-4 p-6 chat-messages">
+        {conversationMessages.length === 0 && (
+          <div className="text-center text-gray-500 py-8">
+            <p>No messages yet. Start the conversation!</p>
+          </div>
+        )}
+        
+        {conversationMessages.map((msg, index) => (
           <div
-            key={index}
-            className={`flex ${msg.fromUser ? "justify-end" : "justify-start"}`}
+            key={msg.id || index}
+            className={`flex ${msg.senderId === (user?.id || "currentUser") ? "justify-end" : "justify-start"}`}
           >
             <div
               className={`max-w-xs md:max-w-md px-4 py-2 rounded-lg shadow border break-words
           ${
-            msg.fromUser
+            msg.senderId === (user?.id || "currentUser")
               ? "bg-green-100 text-right border-green-300"
               : "bg-white text-left border-gray-300"
           }`}
             >
               <p className="text-sm text-gray-800 break-words whitespace-pre-wrap">
-                {msg.text}
+                {msg.content}
               </p>
-              <p className="text-[10px] text-gray-400 mt-1">{msg.time}</p>
+              <p className="text-[10px] text-gray-400 mt-1">
+                {new Date(msg.createdAt).toLocaleTimeString([], { 
+                  hour: '2-digit', 
+                  minute: '2-digit' 
+                })}
+              </p>
             </div>
           </div>
         ))}
@@ -128,10 +170,12 @@ const MessageDetails = ({ message, onBack }) => {
             onChange={(e) => setNewMessage(e.target.value.replace(/\n$/, ""))}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
             className="flex-1 p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+            disabled={!isConnected}
           />
           <button
             onClick={handleSend}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
+            disabled={!isConnected || !newMessage.trim()}
+            className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg transition"
           >
             Send
           </button>
