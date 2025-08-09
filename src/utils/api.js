@@ -42,4 +42,29 @@ api.interceptors.response.use(
   }
 );
 
+// Messaging API functions - Only the available endpoint
+export const messagingAPI = {
+  // Send a new message - Matches backend API expectations
+  sendMessage: async (messageData) => {
+    try {
+      // Only send the fields that the backend expects
+      const backendPayload = {
+        receiverId: messageData.receiverId,
+        content: messageData.content,
+        propertyId: messageData.propertyId
+      };
+
+      console.log('📤 Sending to backend:', backendPayload);
+      
+      const response = await api.post('/api/v1/message/send', backendPayload);
+      
+      // Return the data field from the response
+      return response.data.data;
+    } catch (error) {
+      console.error('Error sending message:', error);
+      throw error;
+    }
+  }
+};
+
 export default api; 

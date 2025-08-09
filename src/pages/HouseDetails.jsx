@@ -1,6 +1,8 @@
 import { HeartIcon, MailboxIcon, Star } from "@phosphor-icons/react";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Messages from "./Messages";
 
 const StarRating = ({ rating, onChange }) => {
   return (
@@ -169,9 +171,17 @@ const HouseDetails = ({ properties }) => {
           </div>
 
           <div className="flex items-center gap-4 pt-2">
-            <button className="flex items-center gap-2 px-6 py-3 bg-green-700 text-white rounded-xl hover:bg-green-800 transition">
-              <MailboxIcon className="w-5 h-5" /> Contact Now
-            </button>
+            <Link 
+              to={`/messages?propertyId=${house.id}&propertyTitle=${encodeURIComponent(house.title)}&landlordId=${house.landlord?.id || 'unknown'}&landlordName=${encodeURIComponent(house.landlord?.name || 'Property Owner')}`}
+              state={{ 
+                property: house,
+                landlord: house.landlord || { id: 'unknown', name: 'Property Owner' }
+              }}
+            >
+              <button className="flex items-center gap-2 px-6 py-3 bg-green-700 text-white rounded-xl hover:bg-green-800 transition">
+                <MailboxIcon className="w-5 h-5" /> Contact Now
+              </button>
+            </Link>
             <button className="p-2 border rounded-full text-gray-600 hover:text-red-600 hover:border-red-400 transition">
               <HeartIcon className="w-5 h-5" />
             </button>
