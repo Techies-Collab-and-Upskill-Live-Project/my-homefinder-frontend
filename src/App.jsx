@@ -27,6 +27,7 @@ import HouseDetails from "./pages/HouseDetails";
 import axios from "axios";
 import Explore from "./pages/Explore";
 import { MessagingProvider } from "./contexts/MessagingContext";
+import ScrollToTop from "./Components/ScrollToTop";
 
 function App() {
   const [properties, setProperties] = useState([]);
@@ -55,6 +56,7 @@ function App() {
   return (
     <>
       <MessagingProvider>
+        <ScrollToTop />
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<Landing />} />
