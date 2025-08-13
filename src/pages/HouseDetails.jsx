@@ -5,7 +5,6 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import Messages from "./Messages";
 
 const StarRating = ({ rating, onChange }) => {
   return (
@@ -31,6 +30,7 @@ const HouseDetails = ({ properties, setProperties }) => {
   const navigate = useNavigate();
   const house = properties.find((item) => item.id === id);
   const token = JSON.parse(localStorage.getItem("user"))?.token.token;
+
   const ratingMap = {
     1: "ONE",
     2: "TWO",
@@ -39,7 +39,6 @@ const HouseDetails = ({ properties, setProperties }) => {
     5: "FIVE",
   };
 
-  // Add this helper mapping near the top of your component
   const ratingValueMap = {
     ONE: 1,
     TWO: 2,
@@ -48,14 +47,23 @@ const HouseDetails = ({ properties, setProperties }) => {
     FIVE: 5,
   };
 
-  // Review-related states
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [mainImage, setMainImage] = useState(
+    house?.images?.[0]?.url || "/placeholder.jpg"
+  );
+
   const propertyId = id;
+
+  useEffect(() => {
+    if (house?.images) {
+      setMainImage(house.images[0]?.url || "/placeholder.jpg");
+    }
+  }, [house]);
 
   useEffect(() => {
     const getReviews = async () => {
@@ -71,13 +79,13 @@ const HouseDetails = ({ properties, setProperties }) => {
             },
           }
         );
-        setReviews(rev.data);
+        setReviews(Array.isArray(rev.data) ? rev.data : []);
       } catch (err) {
         console.error(err);
       }
     };
     getReviews();
-  }, [reviews]);
+  }, [propertyId, token]);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -100,7 +108,7 @@ const HouseDetails = ({ properties, setProperties }) => {
     };
 
     fetchProperties();
-  }, [id, setProperties, setReviews]);
+  }, [id, setProperties]);
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
@@ -110,8 +118,6 @@ const HouseDetails = ({ properties, setProperties }) => {
     }
 
     const reviewerId = JSON.parse(localStorage.getItem("user"))?.user?.id;
-    const propertyId = id;
-
     const newReview = {
       reviewerId,
       propertyId,
@@ -132,12 +138,11 @@ const HouseDetails = ({ properties, setProperties }) => {
         }
       );
 
-      // Add the new review immediately to the state
       setReviews((prev) => [
         {
           ...newReview,
-          createdAt: new Date().toISOString(), // fallback until backend returns proper date
-          id: res.data?.id || Date.now(), // temporary id until refresh
+          createdAt: new Date().toISOString(),
+          id: res.data?.id || Date.now(),
         },
         ...prev,
       ]);
@@ -168,13 +173,6 @@ const HouseDetails = ({ properties, setProperties }) => {
     type,
     landlord,
   } = house;
-  const [mainImage, setMainImage] = useState(
-    images?.[0]?.url || "/placeholder.jpg"
-  );
-
-  useEffect(() => {
-    setMainImage(images?.[0]?.url || "/placeholder.jpg");
-  }, [images]);
 
   const featured = properties.filter((item) => item.id !== id).slice(0, 3);
 
@@ -259,11 +257,20 @@ const HouseDetails = ({ properties, setProperties }) => {
           </div>
 
           <div className="flex items-center gap-4 pt-2">
-            <Link 
-              to={`/messages?propertyId=${house.id}&propertyTitle=${encodeURIComponent(house.title)}&landlordId=${house.landlord?.id || 'unknown'}&landlordName=${encodeURIComponent(house.landlord?.name || 'Property Owner')}`}
-              state={{ 
+            <Link
+              to={`/messages?propertyId=${
+                house.id
+              }&propertyTitle=${encodeURIComponent(house.title)}&landlordId=${
+                house.landlord?.id || "unknown"
+              }&landlordName=${encodeURIComponent(
+                house.landlord?.name || "Property Owner"
+              )}`}
+              state={{
                 property: house,
-                landlord: house.landlord || { id: 'unknown', name: 'Property Owner' }
+                landlord: house.landlord || {
+                  id: "unknown",
+                  name: "Property Owner",
+                },
               }}
             >
               <button className="flex items-center gap-2 px-6 py-3 bg-green-700 text-white rounded-xl hover:bg-green-800 transition">

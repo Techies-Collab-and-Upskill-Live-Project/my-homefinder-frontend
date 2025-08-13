@@ -15,13 +15,13 @@ const FooterBrandContact = () => {
 
       <div className="text-sm flex items-start gap-2 text-gray-700">
         <MapPinIcon size={20} weight="bold" />
-        <span>5123 Market St., #22B, Charlottesville, California 44635</span>
+        <span>Lagos, Nigeria</span>
       </div>
 
       <div className="text-sm flex items-center gap-2 text-gray-700">
         <PhoneIcon size={20} weight="bold" />
         <a href="tel:+2344345464356" className="hover:text-green-600">
-          434-546-4356
+          +234 123 4567 890
         </a>
       </div>
 
@@ -31,7 +31,7 @@ const FooterBrandContact = () => {
           href="mailto:contact@myhomefinder.com"
           className="hover:text-green-600"
         >
-          contact@myhomefinder.com
+          myhomefinder20@gmailcom
         </a>
       </div>
     </div>

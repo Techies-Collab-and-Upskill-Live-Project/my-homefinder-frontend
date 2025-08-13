@@ -5,7 +5,6 @@ import { MagnifyingGlassIcon, MapPinIcon, Tag } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 
 const statesInNigeria = [
-  "Ikorodu",
   "Abia",
   "Adamawa",
   "Akwa Ibom",
@@ -45,21 +44,15 @@ const statesInNigeria = [
   "Zamfara",
 ];
 
-const propertyTypes = [
-  "Studio",
-  "Duplex",
-  "Bungalow",
-  "Detached",
-  "Terrace",
-  "Land",
-];
+const propertyTypes = ["APARTMENT", "HOUSE", "STUDIO", "ROOM", "OFFICE"];
 
 const priceRanges = [
-  "100000-200000",
-  "50000-100000",
-  "200000-500000",
-  "500000-1000000",
-  "1000000-2000000",
+  "100,000-200,000",
+  "300,000-400,000",
+  "500,000-100,000",
+  "200,000-500,000",
+  "500,000-1,000,000",
+  "1,000,000-2,000,000",
 ];
 
 const toSelectOptions = (array) =>
@@ -105,7 +98,7 @@ const SearchFeature = () => {
             type: propertyType.toUpperCase(),
             minPrice,
             maxPrice,
-            city: location,
+            state: location,
             page: 1,
             limit: 10,
             sortBy: "price",
@@ -294,7 +287,7 @@ const SearchFeature = () => {
                   >
                     <div className="text-center">
                       <img
-                        src={property.images[0].url}
+                        src={property?.images[0]?.url}
                         alt=""
                         className="w-full h-52"
                       />

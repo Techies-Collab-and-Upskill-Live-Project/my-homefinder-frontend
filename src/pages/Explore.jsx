@@ -20,9 +20,17 @@ const Explore = ({ properties }) => {
   const others = properties.slice(1);
 
   const handleViewDetails = (propertyId) => {
-    const user = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("user");
+    let user = null;
 
-    if (user) {
+    try {
+      user = storedUser ? JSON.parse(storedUser) : null;
+    } catch (e) {
+      user = null; // invalid JSON
+    }
+
+    if (user && user.user) {
+      // or any property that confirms user is logged in
       navigate(`/property/${propertyId}`);
     } else {
       setShowPopup(true);
@@ -55,12 +63,6 @@ const Explore = ({ properties }) => {
               <h2 className="text-2xl font-semibold text-gray-900">
                 Latest Listing
               </h2>
-              <Link
-                onClick={() => handleViewDetails(property.id)}
-                className="text-green-600 hover:underline text-sm"
-              >
-                View Details
-              </Link>
             </div>
             <h3 className="text-xl font-bold text-gray-800">{latest.title}</h3>
             <p className="text-gray-600 line-clamp-3">{latest.description}</p>
@@ -73,12 +75,12 @@ const Explore = ({ properties }) => {
               </p>
             </div>
             <div className="flex justify-between pt-4">
-              <Link
+              <button
                 onClick={() => handleViewDetails(latest.id)}
                 className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800"
               >
                 Contact Poster
-              </Link>
+              </button>
               <button className="text-red-500 hover:text-red-600">
                 <HeartIcon className="w-6 h-6" />
               </button>
@@ -89,7 +91,7 @@ const Explore = ({ properties }) => {
         {/* All Other Properties */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {others.map((property) => (
-            <Link
+            <div
               onClick={() => handleViewDetails(property.id)}
               key={property.id}
               className="group bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden"
@@ -112,7 +114,7 @@ const Explore = ({ properties }) => {
                   ₦{property.price.toLocaleString()}
                 </p>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
