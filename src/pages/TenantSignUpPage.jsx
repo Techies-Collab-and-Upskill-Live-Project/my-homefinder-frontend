@@ -3,9 +3,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
+import { EyeIcon, EyeSlashIcon, ArrowClockwise } from "@phosphor-icons/react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
 const validationSchema = Yup.object({
   fullName: Yup.string().required("Full name is required"),
@@ -21,7 +23,10 @@ const validationSchema = Yup.object({
     )
     .required("Password is required"),
   passwordRepeat: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords must match")
+    .oneOf(
+      [Yup.ref("password")],
+      "Your passwords do not match. Please try again."
+    )
     .required("Please confirm your password"),
   role: Yup.string()
     .oneOf(["renter", "landlord"], "Select a valid role")
@@ -36,24 +41,19 @@ export default function TenantSignUpPage() {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setError("");
-    const { ...signupData } = values;
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/signup`,
-        signupData
+        values
       );
 
       localStorage.setItem("user", JSON.stringify(data));
       toast.success(
         "Signup successful! An OTP was sent to your email, please use it to verify your account",
-        {
-          position: "top-right",
-        }
+        { position: "top-right" }
       );
 
-      setTimeout(() => {
-        navigate("/otpverification");
-      }, 5000);
+      setTimeout(() => navigate("/otpverification"), 5000);
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");
     } finally {
@@ -85,7 +85,7 @@ export default function TenantSignUpPage() {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, resetForm }) => (
             <Form className="space-y-4">
               <h2 className="text-2xl font-semibold text-center text-gray-800">
                 Create Your MyHomeFinder Account
@@ -199,7 +199,19 @@ export default function TenantSignUpPage() {
               </div>
 
               {error && (
-                <div className="text-red-500 text-sm text-center">{error}</div>
+                <div className="text-red-500 text-sm text-center flex items-center justify-center gap-2">
+                  {error}
+                  <button
+                    type="button"
+                    data-tooltip-id="retry-tooltip"
+                    data-tooltip-content="Retry signup"
+                    onClick={() => resetForm()}
+                    className="text-green-500 hover:text-green-700"
+                  >
+                    <ArrowClockwise size={20} />
+                  </button>
+                  <Tooltip id="retry-tooltip" place="top" />
+                </div>
               )}
 
               <button

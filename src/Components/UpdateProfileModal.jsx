@@ -53,7 +53,7 @@ const UpdateProfileModal = ({ onClose }) => {
   const navigate = useNavigate();
   const [showSkipModal, setShowSkipModal] = useState(false);
   const userId = JSON.parse(localStorage.getItem("user")).user.id;
-  const user = JSON.parse(localStorage.getItem("user")).user;
+  const user = JSON.parse(localStorage.getItem("authUser")).tenantProfile;
   const token = JSON.parse(localStorage.getItem("user")).token.token;
 
   const handleSkip = () => {
@@ -96,7 +96,7 @@ const UpdateProfileModal = ({ onClose }) => {
       // phone: "",
       // city: "",
       // state: "",
-      NIN: "",
+      NIN: user.NIN || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting, setStatus }) => {
@@ -232,7 +232,7 @@ const UpdateProfileModal = ({ onClose }) => {
               <div className="relative flex-1">
                 <input
                   name="phone"
-                  value={user.phone}
+                  value={user.phoneNumber}
                   disabled
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
