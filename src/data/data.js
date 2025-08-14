@@ -1,0 +1,145 @@
+export const messages = [
+  {
+    text: "Hey! Are we still on for the meeting tomorrow?",
+    contact: "Sarah",
+    time: "9:15 am",
+    badge: 3,
+    profile: "/profiles/sarah.jpg",
+  },
+  {
+    text: "Got it, thanks for the update.",
+    contact: "David",
+    time: "11:42 am",
+    badge: 1,
+    profile: "/profiles/david.jpg",
+  },
+  {
+    text: "Can you send over the project files?",
+    contact: "Emily",
+    time: "1:27 pm",
+    badge: 0,
+    profile: "/profiles/emily.jpg",
+  },
+  {
+    text: "I'll call you back in 10 minutes.",
+    contact: "James",
+    time: "4:05 pm",
+    badge: 2,
+    profile: "/profiles/james.jpg",
+  },
+  {
+    text: "Check out the design I just shared!",
+    contact: "Mia",
+    time: "5:33 pm",
+    badge: 5,
+    profile: "/profiles/mia.jpg",
+  },
+  {
+    text: "Let’s grab coffee this weekend.",
+    contact: "Daniel",
+    time: "6:48 pm",
+    badge: 0,
+    profile: "/profiles/daniel.jpg",
+  },
+  {
+    text: "That’s awesome news 🎉",
+    contact: "Sophia",
+    time: "7:22 pm",
+    badge: 4,
+    profile: "/profiles/sophia.jpg",
+  },
+  {
+    text: "Don’t forget to send the invoice.",
+    contact: "Michael",
+    time: "8:10 pm",
+    badge: 1,
+    profile: "/profiles/michael.jpg",
+  },
+  {
+    text: "I'll be late to the team lunch.",
+    contact: "Olivia",
+    time: "8:45 am",
+    badge: 2,
+    profile: "/profiles/olivia.jpg",
+  },
+  {
+    text: "The client approved the new layout.",
+    contact: "Liam",
+    time: "10:22 am",
+    badge: 0,
+    profile: "/profiles/liam.jpg",
+  },
+  {
+    text: "Running a bit behind, sorry!",
+    contact: "Ava",
+    time: "12:05 pm",
+    badge: 1,
+    profile: "/profiles/ava.jpg",
+  },
+  {
+    text: "Can we push the deadline to next week?",
+    contact: "Noah",
+    time: "2:30 pm",
+    badge: 3,
+    profile: "/profiles/noah.jpg",
+  },
+  {
+    text: "Sent the signed contract!",
+    contact: "Isabella",
+    time: "3:45 pm",
+    badge: 0,
+    profile: "/profiles/isabella.jpg",
+  },
+  {
+    text: "Need help with the new API?",
+    contact: "Ethan",
+    time: "4:50 pm",
+    badge: 2,
+    profile: "/profiles/ethan.jpg",
+  },
+  {
+    text: "Thanks for covering my shift.",
+    contact: "Charlotte",
+    time: "6:00 pm",
+    badge: 1,
+    profile: "/profiles/charlotte.jpg",
+  },
+  {
+    text: "Final edits are done — ready to publish.",
+    contact: "Lucas",
+    time: "7:18 pm",
+    badge: 0,
+    profile: "/profiles/lucas.jpg",
+  },
+  {
+    text: "On my way now!",
+    contact: "Amelia",
+    time: "8:40 pm",
+    badge: 5,
+    profile: "/profiles/amelia.jpg",
+  },
+  {
+    text: "Let’s schedule a follow-up meeting.",
+    contact: "Benjamin",
+    time: "9:00 pm",
+    badge: 2,
+    profile: "/profiles/benjamin.jpg",
+  },
+];
+
+export const nav_links = [
+  { text: "Home", path: "/", scroll: false },
+  { text: "About Us", path: "about", scroll: true },
+  { text: "How it Works", path: "how-it-works", scroll: true },
+  { text: "Explore", path: "/explore", scroll: false },
+];
+
+const role = JSON.parse(localStorage.getItem("user"))?.user;
+export const auth_links = [
+  { text: "Home", path: "/" },
+  {
+    text: "Overview",
+    path: role?.role.name === "LANDLORD" ? "/landlordListing" : "tenantlisting",
+  },
+  { text: "Explore", path: "/explore" },
+];

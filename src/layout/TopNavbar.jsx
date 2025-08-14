@@ -1,9 +1,7 @@
 import { useState } from "react";
-import topNav from "./TopNavbar.module.css";
-import userImg from "../assets/user.png";
-import { MdOutlineMessage, IoIosArrowDown, RxHamburgerMenu } from "../icons";
+import userImg from "/images/User.png";
 
-import logo from "../assets/HeroLogo.png";
+import logo from "/images/HeroLogo.png";
 
 const TopNavbar = ({ toggleMenu, showMenu }) => {
   const [showDropdown, setShowDropdown] = useState(false);
